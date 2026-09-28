@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wedding's · Coral & Orquestra</title>
+<meta name="description" content="Música ao vivo para cerimônias de casamento de alto padrão na Baixada Santista. Curadoria musical, arranjos exclusivos e direção artística do Maestro João Rocha.">
+<meta property="og:title" content="Wedding's · Coral & Orquestra">
+<meta property="og:description" content="A trilha sonora do seu “sim”. Curadoria musical e arranjos exclusivos para cerimônias na Baixada Santista.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0b1633; --navy-2:#13224a; --ink:#1d1d1f; --muted:#6b6b72;
+  --gold:#b8964f; --gold-2:#d9c28e; --ivory:#faf7f1; --line:#e7e0d2; --ok:#2d6a4f;
+  --serif:'Cormorant Garamond',Georgia,serif; --sans:'Inter',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--ink);background:var(--ivory);line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.15}
+h2{font-size:clamp(1.9rem,4vw,2.6rem);margin-bottom:.6rem}
+.eyebrow{font-size:.75rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.lead{color:var(--muted);max-width:640px}
+section{padding:84px 0}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:14px 26px;border-radius:999px;border:1px solid var(--gold);background:var(--gold);color:#fff;font-weight:600;font-size:.95rem;text-decoration:none;cursor:pointer;transition:.2s}
+.btn:hover{background:#a3833f}
+.btn.ghost{background:transparent;color:var(--gold-2);border-color:var(--gold-2)}
+.btn.ghost:hover{background:rgba(217,194,142,.12)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* NAV */
+nav{position:fixed;inset:0 0 auto 0;z-index:40;transition:.3s;padding:16px 0}
+nav.scrolled{background:rgba(11,22,51,.94);backdrop-filter:blur(8px);padding:10px 0}
+nav .wrap{display:flex;align-items:center;justify-content:space-between}
+.brand{font-family:var(--serif);font-size:1.5rem;color:#fff;text-decoration:none;letter-spacing:.02em}
+.brand small{display:block;font-family:var(--sans);font-size:.6rem;letter-spacing:.3em;color:var(--gold-2);text-transform:uppercase;margin-top:-4px}
+nav .links{display:flex;gap:26px;align-items:center}
+nav .links a{color:#e9e4d8;text-decoration:none;font-size:.88rem}
+nav .links a.btn{color:#fff;padding:10px 18px}
+@media(max-width:760px){nav .links a:not(.btn){display:none}nav .links a.btn{padding:8px 14px;font-size:.8rem}}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;background:radial-gradient(ellipse at 50% 30%,#1c2f63 0%,var(--navy) 60%,#060c1f 100%);color:#fff;text-align:center;position:relative;overflow:hidden;padding:120px 0 80px}
+.hero::after{content:"";position:absolute;inset:0;background:repeating-conic-gradient(from 0deg at 50% 120%,rgba(217,194,142,.05) 0 6deg,transparent 6deg 18deg);pointer-events:none}
+.hero .wrap{position:relative;z-index:1}
+.hero h1{font-size:clamp(2.6rem,7vw,4.6rem);font-weight:400;margin:18px 0}
+.hero h1 em{color:var(--gold-2)}
+.hero p{color:#cfd5e6;max-width:620px;margin:0 auto 34px;font-size:1.08rem}
+.hero .ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.hero .proof{margin-top:54px;display:flex;gap:30px;justify-content:center;flex-wrap:wrap;color:#9fa8c3;font-size:.82rem;letter-spacing:.06em}
+.hero .proof b{color:var(--gold-2);font-weight:500}
+
+/* PAINS */
+.grid{display:grid;gap:22px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:28px}
+.card h3{font-size:1.35rem;margin:8px 0}
+.card p{color:var(--muted);font-size:.95rem}
+.num{font-family:var(--serif);color:var(--gold);font-size:1.6rem}
+
+/* PACKAGES */
+.dark{background:var(--navy);color:#fff}
+.dark .lead{color:#b9c1d9}
+.pkg{background:var(--navy-2);border:1px solid rgba(217,194,142,.25);border-radius:16px;padding:30px;display:flex;flex-direction:column}
+.pkg.featured{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+.pkg .tag{align-self:flex-start;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;background:var(--gold);color:#fff;padding:4px 10px;border-radius:999px;margin-bottom:12px}
+.pkg h3{font-size:1.8rem;color:#fff}
+.pkg .price{color:var(--gold-2);margin:6px 0 16px;font-size:.95rem}
+.pkg ul{list-style:none;color:#cfd5e6;font-size:.93rem;flex:1}
+.pkg li{padding:7px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.pkg li::before{content:"♪ ";color:var(--gold-2)}
+.pkg .btn{margin-top:22px;justify-content:center}
+
+/* STEPS */
+.steps{counter-reset:s;display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:34px}
+.step{padding:22px;border-left:2px solid var(--gold)}
+.step h3{font-size:1.25rem}
+.step p{color:var(--muted);font-size:.92rem}
+
+/* MAESTRO */
+.maestro{display:grid;grid-template-columns:1fr 1.3fr;gap:44px;align-items:center}
+.portrait{aspect-ratio:4/5;border-radius:14px;background:linear-gradient(160deg,#1c2f63,#0b1633);display:flex;align-items:flex-end;padding:20px;color:#d9c28e;font-family:var(--serif);font-size:1.1rem;background-size:cover;background-position:center}
+.creds{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+.creds span{border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.8rem;color:var(--muted);background:#fff}
+@media(max-width:760px){.maestro{grid-template-columns:1fr}}
+
+/* FAQ */
+details{border-bottom:1px solid var(--line);padding:18px 0}
+summary{cursor:pointer;font-weight:500;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::after{content:"+";color:var(--gold);font-size:1.3rem;line-height:1}
+details[open] summary::after{content:"–"}
+details p{color:var(--muted);margin-top:10px;font-size:.95rem}
+
+/* WIZARD */
+#consulta{background:linear-gradient(180deg,var(--ivory),#f1ebdf)}
+.wizard{max-width:680px;margin:34px auto 0;background:#fff;border:1px solid var(--line);border-radius:18px;padding:34px;box-shadow:0 20px 60px -30px rgba(11,22,51,.35)}
+.bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin-bottom:26px}
+.bar i{display:block;height:100%;background:var(--gold);width:0;transition:.35s}
+.counter{font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.pane{display:none;animation:fade .35s}
+.pane.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.pane h3{font-size:1.7rem;margin-bottom:18px}
+label.f{display:block;font-size:.82rem;font-weight:500;margin:14px 0 6px}
+input[type=text],input[type=email],input[type=tel],select,textarea{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fdfcf9}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--gold-2);border-color:var(--gold)}
+textarea{min-height:92px;resize:vertical}
+.opts{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.opt{border:1px solid var(--line);border-radius:10px;padding:13px 14px;cursor:pointer;font-size:.93rem;background:#fdfcf9;transition:.15s;text-align:left;font-family:inherit}
+.opt:hover{border-color:var(--gold-2)}
+.opt.sel{border-color:var(--gold);background:#f8f1e1;font-weight:500}
+.hint{font-size:.8rem;color:var(--muted);margin-top:6px}
+.nav-w{display:flex;justify-content:space-between;margin-top:28px;gap:12px}
+.nav-w .btn.back{background:transparent;color:var(--muted);border-color:var(--line)}
+.err{color:#a4161a;font-size:.85rem;margin-top:10px;min-height:1.2em}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:.82rem;color:var(--muted);margin-top:16px}
+.consent input{margin-top:3px}
+.done{text-align:center}
+.done .ico{font-size:2.6rem;color:var(--gold)}
+.done h3{margin:8px 0}
+.done p{color:var(--muted)}
+.done .btn{margin-top:22px}
+.sr{position:absolute;left:-9999px}
+
+footer{background:#060c1f;color:#9fa8c3;padding:44px 0;font-size:.85rem}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer a{color:var(--gold-2);text-decoration:none}
+
+.wa{position:fixed;right:18px;bottom:18px;z-index:50;width:56px;height:56px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.wa svg{width:28px;height:28px;fill:#fff}
+</style>
+</head>
+<body>
+
+<nav id="nav"><div class="wrap">
+  <a class="brand" href="#top">Wedding's<small>Coral &amp; Orquestra</small></a>
+  <div class="links">
+    <a href="#experiencia">Experiência</a>
+    <a href="#formacoes">Formações</a>
+    <a href="#maestro">O Maestro</a>
+    <a href="#faq">Dúvidas</a>
+    <a class="btn" href="#consulta">Consulta de Curadoria</a>
+  </div>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap">
+  <div class="eyebrow">Baixada Santista · Cerimônias de alto padrão</div>
+  <h1>A trilha sonora<br>do seu <em>“sim”</em>.</h1>
+  <p>Coral e orquestra ao vivo, com curadoria musical e arranjos exclusivos assinados pelo Maestro João Rocha — para que a entrada, as alianças e a saída soem exatamente como vocês sonharam.</p>
+  <div class="ctas">
+    <a class="btn" href="#consulta">Agendar Consulta de Curadoria</a>
+    <a class="btn ghost" href="#formacoes">Conhecer as formações</a>
+  </div>
+  <div class="proof" id="proof"></div>
+</div></header>
+
+<section id="experiencia"><div class="wrap">
+  <div class="eyebrow">Por que Wedding's</div>
+  <h2>Vocês cuidam de viver o momento.<br>Nós cuidamos de cada nota.</h2>
+  <p class="lead">O que tira o sono dos noivos não é “qual música tocar”. É o silêncio constrangedor, o cortejo fora de tempo, o veto do padre na véspera, o som que some na nave da igreja. É isso que resolvemos.</p>
+  <div class="grid g3" style="margin-top:34px">
+    <div class="card"><div class="num">01</div><h3>Timing perfeito do cortejo</h3><p>O maestro acompanha o passo da noiva ao vivo e ajusta a música para que o acorde final chegue junto com ela ao altar. Nada de silêncio, nada de música sobrando.</p></div>
+    <div class="card"><div class="num">02</div><h3>Curadoria, não catálogo</h3><p>Montamos com vocês um roteiro musical por momento — do cortejo à saída — que cresce em emoção e respeita as regras de cada igreja ou espaço.</p></div>
+    <div class="card"><div class="num">03</div><h3>Arranjos exclusivos</h3><p>A música de vocês — clássica, pop ou trilha de filme — reescrita para a formação escolhida. O casamento de vocês não vai soar igual a nenhum outro.</p></div>
+    <div class="card"><div class="num">04</div><h3>Protocolo impecável</h3><p>Músicos titulares e reservas, dress code de gala, chegada antecipada com registro de presença e passagem de som. Zero improviso.</p></div>
+    <div class="card"><div class="num">05</div><h3>Conhecimento das igrejas</h3><p>Experiência de mais de uma década nas igrejas e espaços da Baixada: sabemos o que cada pároco aceita e como adaptar sem abrir mão do sonho.</p></div>
+    <div class="card"><div class="num">06</div><h3>Menos reuniões, mais certeza</h3><p>Um diagnóstico musical online de poucos minutos e uma única conversa de curadoria. Vocês recebem uma proposta pensada para o casamento de vocês.</p></div>
+  </div>
+</div></section>
+
+<section class="dark" id="formacoes"><div class="wrap">
+  <div class="eyebrow">Formações</div>
+  <h2>Do intimista ao grandioso</h2>
+  <p class="lead">Toda formação inclui curadoria de repertório, direção musical e coordenação no dia. O investimento final depende do local, da data e dos arranjos escolhidos.</p>
+  <div class="grid g3" style="margin-top:34px" id="pkgs"></div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="eyebrow">Como funciona</div>
+  <h2>Quatro passos até o grande dia</h2>
+  <div class="steps">
+    <div class="step"><h3>1 · Diagnóstico musical</h3><p>Vocês respondem a um questionário rápido sobre data, local, estilo e a música que marcou a história de vocês.</p></div>
+    <div class="step"><h3>2 · Consulta de curadoria</h3><p>Uma conversa de 15 minutos com a nossa equipe. Chegamos com sugestões de repertório já pensadas para vocês.</p></div>
+    <div class="step"><h3>3 · Proposta e contrato</h3><p>Proposta personalizada, contrato digital e reserva da data com sinal. Simples e transparente.</p></div>
+    <div class="step"><h3>4 · Ensaios e cerimônia</h3><p>Arranjos, ensaios e logística ficam conosco. No dia, vocês só precisam dizer “sim”.</p></div>
+  </div>
+</div></section>
+
+<section id="maestro" style="background:#fff"><div class="wrap maestro">
+  <div class="portrait" id="portrait">Maestro João Rocha</div>
+  <div>
+    <div class="eyebrow">Direção artística</div>
+    <h2>Maestro João Rocha</h2>
+    <p class="lead">Regente e compositor formado pela UNICAMP, com carreira internacional em palcos como o Carnegie Hall (Nova York), o Estates Theatre (Praga) e a Sala São Paulo. Antes de se radicar no exterior, foi por mais de uma década arranjador e regente de coral e orquestra para cerimônias de casamento em Santos e na Baixada Santista.</p>
+    <p class="lead" style="margin-top:12px">Na Wedding's, cada cerimônia recebe o mesmo rigor das grandes salas de concerto — com a delicadeza de um momento que só acontece uma vez.</p>
+    <div class="creds"><span>UNICAMP</span><span>Carnegie Hall</span><span>Estates Theatre</span><span>Sala São Paulo</span><span>+10 anos em casamentos na Baixada</span></div>
+  </div>
+</div></section>
+
+<section id="faq"><div class="wrap" style="max-width:780px">
+  <div class="eyebrow">Dúvidas frequentes</div>
+  <h2>Antes de conversarmos</h2>
+  <details><summary>Com quanta antecedência devemos reservar?</summary><p>O ideal é entre 6 e 12 meses antes. Para datas mais próximas, consulte: sempre que a agenda permite, montamos a formação com a mesma qualidade.</p></details>
+  <details><summary>Podemos escolher músicas fora do repertório tradicional?</summary><p>Sim — é justamente o nosso diferencial. Criamos arranjos exclusivos de canções pop, MPB ou trilhas de filme para a formação escolhida, respeitando as orientações de cada igreja.</p></details>
+  <details><summary>Vocês atendem fora da Baixada Santista?</summary><p>Nosso foco é Santos, São Vicente, Guarujá e Praia Grande. Atendemos outras cidades mediante consulta, com taxa de deslocamento.</p></details>
+  <details><summary>Como funciona o pagamento?</summary><p>Reserva da data com sinal na assinatura do contrato e saldo parcelado até a semana do casamento, via PIX, boleto ou cartão.</p></details>
+  <details><summary>E se um músico ficar doente?</summary><p>Trabalhamos com músicos reservas pré-aprovados para cada naipe. A formação contratada é garantida em contrato.</p></details>
+  <details><summary>Vocês tocam na recepção também?</summary><p>Sim. Oferecemos formações para coquetel e recepção como complemento da cerimônia.</p></details>
+</div></section>
+
+<section id="consulta"><div class="wrap">
+  <div style="text-align:center">
+    <div class="eyebrow">Diagnóstico musical · 3 minutos</div>
+    <h2>Vamos desenhar a trilha sonora de vocês</h2>
+    <p class="lead" style="margin:0 auto">Responda algumas perguntas e chegaremos à consulta de curadoria com sugestões pensadas para o casamento de vocês.</p>
+  </div>
+
+  <form class="wizard" id="wizard" novalidate>
+    <div class="counter" id="counter"></div>
+    <div class="bar"><i id="barFill"></i></div>
+
+    <div class="pane" data-step="1">
+      <h3>Com quem estamos falando?</h3>
+      <label class="f" for="nome">Nome</label>
+      <input type="text" id="nome" name="nome" autocomplete="name" placeholder="Como gostaria de ser chamado(a)?">
+      <label class="f">Vocês são…</label>
+      <div class="opts" data-field="papel" data-single>
+        <button type="button" class="opt">A noiva</button><button type="button" class="opt">O noivo</button>
+        <button type="button" class="opt">O casal</button><button type="button" class="opt">Cerimonialista / assessoria</button>
+        <button type="button" class="opt">Família</button>
+      </div>
+    </div>
+
+    <div class="pane" data-step="2">
+      <h3>Quando será o grande dia?</h3>
+      <div class="opts" data-field="horizonte" data-single>
+        <button type="button" class="opt">Nos próximos 3 meses</button><button type="button" class="opt">Em 3 a 6 meses</button>
+        <button type="button" class="opt">Em 6 a 12 meses</button><button type="button" class="opt">Em mais de 1 ano</button>
+        <button type="button" class="opt">Ainda sem data</button>
+      </div>
+      <label class="f" for="data">Data (se já tiverem)</label>
+      <input type="text" id="data" name="data" placeholder="dd/mm/aaaa" inputmode="numeric">
+    </div>
+
+    <div class="pane" data-step="3">
+      <h3>Onde será a cerimônia?</h3>
+      <label class="f" for="cidade">Cidade</label>
+      <select id="cidade" name="cidade"><option value="">Selecione…</option></select>
+      <label class="f" for="local">Igreja ou espaço</label>
+      <select id="local" name="local"><option value="">Selecione a cidade primeiro</option></select>
+      <div id="localOutroBox" style="display:none">
+        <label class="f" for="localOutro">Qual o nome do local?</label>
+        <input type="text" id="localOutro" name="localOutro" placeholder="Nome da igreja, espaço ou cidade">
+      </div>
+      <label class="f" for="convidados">Número aproximado de convidados</label>
+      <select id="convidados" name="convidados">
+        <option value="">Selecione…</option><option>Até 80</option><option>80 a 150</option><option>150 a 300</option><option>Mais de 300</option>
+      </select>
+    </div>
+
+    <div class="pane" data-step="4">
+      <h3>Como vocês imaginam a cerimônia?</h3>
+      <div class="opts" data-field="estilo" data-single>
+        <button type="button" class="opt">Essencialmente tradicional</button>
+        <button type="button" class="opt">Equilíbrio entre clássico e moderno</button>
+        <button type="button" class="opt">Totalmente moderna / personalizada</button>
+      </div>
+      <label class="f">Formação que vocês imaginam</label>
+      <div class="opts" data-field="formacao" data-single>
+        <button type="button" class="opt">Intimista (4–6 músicos)</button>
+        <button type="button" class="opt">Câmara com vozes (8–12)</button>
+        <button type="button" class="opt">Grandiosa (orquestra + coral)</button>
+        <button type="button" class="opt">Ainda não sei</button>
+      </div>
+    </div>
+
+    <div class="pane" data-step="5">
+      <h3>A música de vocês</h3>
+      <label class="f" for="musica">Qual música marcou a história de vocês?</label>
+      <input type="text" id="musica" name="musica" placeholder="Aquela do primeiro beijo, do pedido…">
+      <label class="f">Gostariam de um arranjo exclusivo dela?</label>
+      <div class="opts" data-field="arranjo" data-single>
+        <button type="button" class="opt">Sim, com certeza</button><button type="button" class="opt">Talvez</button><button type="button" class="opt">Não é necessário</button>
+      </div>
+      <label class="f" for="visao">Algo que não pode faltar (ou que não querem de jeito nenhum)?</label>
+      <textarea id="visao" name="visao" placeholder="Ex.: entrada da noiva com cordas e trompete; nada de Marcha Nupcial tradicional…"></textarea>
+    </div>
+
+    <div class="pane" data-step="6">
+      <h3>Investimento previsto para a música da cerimônia</h3>
+      <div class="opts" data-field="investimento" data-single id="investOpts"></div>
+      <p class="hint">Essa informação nos ajuda a indicar a formação ideal — não é um compromisso.</p>
+    </div>
+
+    <div class="pane" data-step="7">
+      <h3>Para onde enviamos as sugestões?</h3>
+      <label class="f" for="whatsapp">WhatsApp</label>
+      <input type="tel" id="whatsapp" name="whatsapp" autocomplete="tel" placeholder="(13) 99999-9999">
+      <label class="f" for="email">E-mail</label>
+      <input type="email" id="email" name="email" autocomplete="email" placeholder="voces@email.com">
+      <label class="f" for="origem">Como conheceram a Wedding's?</label>
+      <select id="origem" name="origem">
+        <option value="">Selecione…</option><option>Instagram</option><option>Casamentos.com.br</option><option>Google</option>
+        <option>Indicação de cerimonialista</option><option>Indicação de amigos</option><option>Igreja / espaço</option><option>Outro</option>
+      </select>
+      <input class="sr" type="text" name="website" id="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="consent"><input type="checkbox" id="lgpd"> <span>Autorizo a Wedding's a entrar em contato por WhatsApp e e-mail sobre este pedido. Meus dados serão usados apenas para esse fim, conforme a LGPD, e posso pedir a exclusão a qualquer momento.</span></label>
+    </div>
+
+    <div class="pane done" data-step="8">
+      <div class="ico">♪</div>
+      <h3 id="doneTitle">Recebemos o diagnóstico de vocês!</h3>
+      <p id="doneMsg"></p>
+      <a class="btn" id="doneWa" href="#" target="_blank" rel="noopener" style="display:none">Falar agora no WhatsApp</a>
+    </div>
+
+    <div class="err" id="err" role="alert"></div>
+    <div class="nav-w" id="navW">
+      <button type="button" class="btn back" id="back">Voltar</button>
+      <button type="button" class="btn" id="next">Continuar</button>
+    </div>
+  </form>
+</div></section>
+
+<footer><div class="wrap">
+  <div><strong style="font-family:var(--serif);font-size:1.2rem;color:#fff">Wedding's</strong> · Coral &amp; Orquestra<br>Santos · São Vicente · Guarujá · Praia Grande</div>
+  <div id="contacts"></div>
+  <div>© <span id="yr"></span> Wedding's · Um selo Studio Kephra</div>
+</div></footer>
+
+<a class="wa" id="waFloat" href="#" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M.06 24l1.69-6.16A11.87 11.87 0 010 11.9C0 5.34 5.34 0 11.9 0a11.9 11.9 0 0111.9 11.9c0 6.56-5.34 11.9-11.9 11.9-2 0-3.97-.5-5.72-1.46L.06 24zm6.6-3.8c1.67.99 3.27 1.59 5.23 1.59 5.45 0 9.89-4.43 9.89-9.88 0-5.46-4.42-9.89-9.88-9.89-5.46 0-9.89 4.43-9.89 9.88 0 2.23.65 3.9 1.75 5.64l-1 3.64 3.9-.98zm11.38-5.46c-.08-.12-.28-.2-.57-.35-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.23-.64.08-.3-.15-1.26-.46-2.4-1.48-.88-.79-1.48-1.76-1.66-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.44-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.3 1.27.49 1.7.63.72.23 1.37.2 1.88.12.58-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41z"/></svg></a>
+
+<script>
+/* ============================================================
+   CONFIGURAÇÃO — edite apenas este bloco
+   ============================================================ */
+const CONFIG = {
+  // URL /exec da implantação do Apps Script (ver apps-script/README). Vazio = modo teste (só console).
+  APPS_SCRIPT_URL: "",
+  // WhatsApp comercial no formato internacional, só dígitos (ex.: 5513999999999).
+  WHATSAPP: "",
+  EMAIL: "musica.weddings@gmail.com",
+  INSTAGRAM: "https://www.instagram.com/weddings.musica/",
+  // Foto do maestro (URL pública). Vazio = placeholder.
+  FOTO_MAESTRO: "",
+  // Provas sociais exibidas no hero. Só use números reais.
+  PROVAS: ["Direção do Maestro João Rocha", "Arranjos exclusivos", "Baixada Santista"],
+  // Formações. "desde" vazio = não mostra preço.
+  PACOTES: [
+    { nome: "Essencial", desde: "R$ 7.900", itens: ["Quarteto de cordas + soprano", "Teclado ou órgão", "Curadoria de repertório", "Coordenação no dia"] },
+    { nome: "Premium", tag: "Mais escolhido", desde: "R$ 12.900", itens: ["Conjunto de câmara (8 instrumentistas)", "4 a 8 vozes", "1 arranjo exclusivo incluso", "Regência ao vivo do Maestro", "Ensaio geral dedicado"] },
+    { nome: "Grandioso", desde: "R$ 19.900", itens: ["Orquestra + coral (16 vozes)", "Clarinada de trompetes na entrada", "2 arranjos exclusivos inclusos", "Regência ao vivo do Maestro", "Sonorização e técnico dedicados"] }
+  ],
+  INVESTIMENTO: ["Até R$ 8.000", "R$ 8.000 a R$ 13.000", "R$ 13.000 a R$ 20.000", "Acima de R$ 20.000", "Prefiro conversar antes"],
+  CIDADES: {
+    "Santos": ["Basílica do Embaré", "Catedral de Santos", "Santuário do Valongo", "Igreja do Coração de Maria", "Capela da Santa Casa"],
+    "Guarujá": ["Matriz de Guarujá", "Paróquia Nossa Senhora de Fátima"],
+    "São Vicente": ["Matriz de São Vicente Mártir", "Igreja Nossa Senhora das Graças"],
+    "Praia Grande": ["Matriz Santo Antônio", "Paróquia Nossa Senhora das Graças"]
+  }
+};
+
+/* ============================================================ */
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const OUTRO = "Outro local";
+
+$("#yr").textContent = new Date().getFullYear();
+addEventListener("scroll", () => $("#nav").classList.toggle("scrolled", scrollY > 40), { passive: true });
+
+// Hero proof, packages, contacts
+$("#proof").innerHTML = CONFIG.PROVAS.map(p => `<span><b>♪</b> ${p}</span>`).join("");
+$("#pkgs").innerHTML = CONFIG.PACOTES.map(p => `
+  <div class="pkg${p.tag ? " featured" : ""}">
+    ${p.tag ? `<span class="tag">${p.tag}</span>` : ""}
+    <h3>${p.nome}</h3>
+    <div class="price">${p.desde ? "Investimento a partir de " + p.desde : "Sob consulta"}</div>
+    <ul>${p.itens.map(i => `<li>${i}</li>`).join("")}</ul>
+    <a class="btn${p.tag ? "" : " ghost"}" href="#consulta">Quero esta formação</a>
+  </div>`).join("");
+if (CONFIG.FOTO_MAESTRO) { const el = $("#portrait"); el.style.backgroundImage = `url('${CONFIG.FOTO_MAESTRO}')`; el.textContent = ""; }
+const waLink = msg => CONFIG.WHATSAPP ? `https://wa.me/${CONFIG.WHATSAPP}?text=${encodeURIComponent(msg)}` : "#consulta";
+$("#waFloat").href = waLink("Olá! Vim pelo site da Wedding's e gostaria de conversar sobre a música do nosso casamento.");
+if (!CONFIG.WHATSAPP) $("#waFloat").removeAttribute("target");
+$("#contacts").innerHTML = [
+  CONFIG.EMAIL && `<a href="mailto:${CONFIG.EMAIL}">${CONFIG.EMAIL}</a>`,
+  CONFIG.INSTAGRAM && `<a href="${CONFIG.INSTAGRAM}" target="_blank" rel="noopener">Instagram</a>`
+].filter(Boolean).join("<br>");
+
+// Wizard
+const TOTAL = 7;
+let step = 1;
+const data = {};
+
+$("#investOpts").innerHTML = CONFIG.INVESTIMENTO.map(v => `<button type="button" class="opt">${v}</button>`).join("");
+$("#cidade").innerHTML = `<option value="">Selecione…</option>` + Object.keys(CONFIG.CIDADES).map(c => `<option>${c}</option>`).join("") + `<option>Outra cidade</option>`;
+$("#cidade").addEventListener("change", e => {
+  const c = e.target.value, list = CONFIG.CIDADES[c] || [];
+  $("#local").innerHTML = c === "Outra cidade"
+    ? `<option>${OUTRO}</option>`
+    : `<option value="">Selecione…</option>` + list.map(l => `<option>${l}</option>`).join("") + `<option>Espaço de eventos / sítio</option><option>${OUTRO}</option>`;
+  toggleOutro();
+});
+$("#local").addEventListener("change", toggleOutro);
+function toggleOutro() {
+  const v = $("#local").value;
+  $("#localOutroBox").style.display = (v === OUTRO || v === "Espaço de eventos / sítio") ? "block" : "none";
+}
+
+$$(".opts").forEach(group => group.addEventListener("click", e => {
+  const b = e.target.closest(".opt"); if (!b) return;
+  $$(".opt", group).forEach(o => o.classList.remove("sel"));
+  b.classList.add("sel");
+  data[group.dataset.field] = b.textContent.trim();
+  $("#err").textContent = "";
+}));
+
+const val = id => ($("#" + id).value || "").trim();
+const REQUIRED = {
+  1: () => !!(val("nome").length >= 2 && data.papel) || "Conte-nos seu nome e quem é você no casamento.",
+  2: () => !!data.horizonte || "Escolha quando será o casamento.",
+  3: () => !!(val("cidade") && val("local") && (($("#localOutroBox").style.display === "none") || val("localOutro"))) || "Informe a cidade e o local da cerimônia.",
+  4: () => !!(data.estilo && data.formacao) || "Escolha o estilo e a formação.",
+  5: () => true,
+  6: () => !!data.investimento || "Escolha uma faixa — ela nos ajuda a indicar a formação ideal.",
+  7: () => {
+    const phone = val("whatsapp").replace(/\D/g, "");
+    if (phone.length < 10) return "Informe um WhatsApp válido com DDD.";
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(val("email"))) return "Informe um e-mail válido.";
+    if (!$("#lgpd").checked) return "Precisamos da sua autorização para entrar em contato.";
+    return true;
+  }
+};
+
+function render() {
+  $$(".pane").forEach(p => p.classList.toggle("on", +p.dataset.step === step));
+  const done = step > TOTAL;
+  $("#counter").textContent = done ? "" : `Passo ${step} de ${TOTAL}`;
+  $("#barFill").style.width = (Math.min(step, TOTAL) / TOTAL * 100) + "%";
+  $("#navW").style.display = done ? "none" : "flex";
+  $("#back").style.visibility = step > 1 ? "visible" : "hidden";
+  $("#next").textContent = step === TOTAL ? "Enviar diagnóstico" : "Continuar";
+}
+
+// Score de afinidade (espelhado no Apps Script, que é a fonte da verdade)
+function score(d) {
+  let s = 0;
+  s += { "Acima de R$ 20.000": 40, "R$ 13.000 a R$ 20.000": 32, "R$ 8.000 a R$ 13.000": 22, "Prefiro conversar antes": 12, "Até R$ 8.000": 5 }[d.investimento] || 0;
+  s += CONFIG.CIDADES[d.cidade] ? 20 : 8;
+  s += { "Em 6 a 12 meses": 20, "Em 3 a 6 meses": 18, "Em mais de 1 ano": 12, "Nos próximos 3 meses": 10, "Ainda sem data": 4 }[d.horizonte] || 0;
+  s += { "Grandiosa (orquestra + coral)": 10, "Câmara com vozes (8–12)": 8, "Intimista (4–6 músicos)": 5, "Ainda não sei": 5 }[d.formacao] || 0;
+  s += d.arranjo === "Sim, com certeza" ? 10 : d.arranjo === "Talvez" ? 5 : 0;
+  return Math.min(100, s);
+}
+
+async function submit() {
+  const payload = {
+    ...data,
+    nome: val("nome"), data: val("data"), cidade: val("cidade"),
+    local: val("localOutro") ? `${val("local")} — ${val("localOutro")}` : val("local"),
+    convidados: val("convidados"), musica: val("musica"), visao: val("visao"),
+    whatsapp: val("whatsapp"), email: val("email"), origem: val("origem"),
+    website: val("website"), consentimentoLGPD: true,
+    pagina: location.href, userAgent: navigator.userAgent, enviadoEm: new Date().toISOString()
+  };
+  payload.score = score(payload);
+  const btn = $("#next"); btn.disabled = true; btn.textContent = "Enviando…";
+  try {
+    if (CONFIG.APPS_SCRIPT_URL) {
+      await fetch(CONFIG.APPS_SCRIPT_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
+    } else {
+      console.info("[Wedding's] modo teste — configure APPS_SCRIPT_URL. Payload:", payload);
+    }
+    const first = payload.nome.split(" ")[0];
+    const hot = payload.score >= 70;
+    $("#doneTitle").textContent = `Obrigado, ${first}!`;
+    $("#doneMsg").textContent = hot
+      ? "Seu diagnóstico indica uma ótima sintonia com o nosso trabalho. Nossa equipe fala com vocês pelo WhatsApp em até 24 horas — ou, se preferirem, comecem a conversa agora."
+      : "Recebemos tudo. Em até 48 horas enviaremos por e-mail ou WhatsApp as primeiras sugestões de repertório para vocês.";
+    if (hot && CONFIG.WHATSAPP) {
+      const w = $("#doneWa"); w.style.display = "inline-flex";
+      w.href = waLink(`Olá! Sou ${payload.nome} e acabei de enviar o diagnóstico musical da Wedding's (casamento em ${payload.cidade}, ${payload.horizonte.toLowerCase()}).`);
+    }
+    step = TOTAL + 1; render();
+  } catch (e) {
+    $("#err").textContent = "Não foi possível enviar agora. Verifique sua conexão ou fale conosco pelo WhatsApp.";
+  } finally { btn.disabled = false; }
+}
+
+$("#next").addEventListener("click", () => {
+  const ok = REQUIRED[step]();
+  if (ok !== true) { $("#err").textContent = ok; return; }
+  $("#err").textContent = "";
+  if (step === TOTAL) return submit();
+  step++; render();
+});
+$("#back").addEventListener("click", () => { if (step > 1) { step--; $("#err").textContent = ""; render(); } });
+render();
+</script>
+</body>
+</html>
