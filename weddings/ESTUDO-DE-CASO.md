@@ -10,8 +10,8 @@
 Em 20 meses (jan/2025 → set/2026) foram produzidos ~25 documentos de estratégia, 3 versões de plataforma e 0 vídeos, 0 depoimentos, 0 leads reais e 0 contratos. O gargalo é: *nenhuma noiva AAA nem cerimonialista viu ou ouviu a Wedding's tocar.*
 
 Como agir, em ordem:
-1. **Esta semana:** fechar a questão societária com o Isaac, trocar as senhas expostas, publicar a plataforma nova (já está no repo) e formalizar a Cida.
-2. **Até 25/10:** gravar a **Sessão Vitrine** — 3 vídeos profissionais (entrada da noiva, alianças, saída) numa igreja de Santos. É o maior investimento do trimestre (~R$ 4–5 mil) e destrava todo o resto.
+1. **Esta semana:** enviar a proposta ao Marcos (coordenador de orquestra — `propostas/`), trocar as senhas expostas, publicar a plataforma nova (já está no repo) e formalizar a Cida.
+2. **24–25/10:** gravar a **Sessão Vitrine** com o Marcos coordenando — 3 vídeos profissionais (entrada da noiva, alianças, saída) numa igreja de Santos, com os arranjos que já existem em áudio. Custo entre ~R$ 1 mil (permuta) e ~R$ 3,5 mil (ajuda de custo). Destrava todo o resto.
 3. **Out–nov:** vender **para cerimonialistas, não para noivas**. 30 contatos → 10 cafés → 3 parceiras ativas (10% de comissão).
 4. **Dezembro:** **"Natal da Wedding's"** (concerto à luz de velas em igreja de Santos) para gerar caixa ainda em 2026, conteúdo e uma lista de público de alto padrão.
 5. **Meta até 31/12:** 2 contratos com sinal pago (casamentos de 2027), 30 leads qualificados, 3 cerimonialistas indicando.
@@ -105,11 +105,11 @@ Conclusão: todo esforço que não aumenta **prova** ou **acesso a leads** tem r
 
 **4.1 Cerimonialistas (o jogo que decide tudo).** É um jogo repetido: indicar um fornecedor desconhecido arrisca a reputação dela em todos os casamentos seguintes. Ela só coopera se: (a) viu/ouviu a qualidade (vídeo + convite para a gravação), (b) o risco dela for reduzido (reservas por naipe, contrato, pontualidade garantida), (c) houver incentivo (10% do pacote, pago no sinal). **Movimento dominante: reduzir o risco dela antes de pedir a indicação.**
 
-**4.2 Concorrentes.** A "vaga do Baccarelli" precisa de verificação: há presença online ativa do *Coral e Orquestra Baccarelli Santos* e do *Baccarelli Elizete Costa* (40+ anos, em São Paulo). No Casamentos.com.br, a faixa típica em Santos vai de R$ 4,5 mil a R$ 12 mil (ex.: Sonoros, R$ 6–12 mil). Leitura: **o incumbente existe, mas é tradicional e pouco digital; a vaga real é a do "grupo AAA com maestro-arranjador de nome, curadoria e arranjos autorais"**. Não brigar por preço (jogo de soma negativa); brigar por categoria. *Não usar a marca "Baccarelli" na comunicação* — dizer "músicos com décadas de experiência nas cerimônias da Baixada".
+**4.2 Concorrentes.** *Atualização 28/09:* o Baccarelli Santos está **inativo** (confirmado pelo João; a página no Facebook e o *Baccarelli Elizete Costa*, de São Paulo, seguem online, o que pode confundir noivas que pesquisam). A vaga AAA na Baixada está aberta, e os clientes, cerimonialistas e músicos que atendiam o Baccarelli estão sem referência. No Casamentos.com.br, a faixa típica em Santos vai de R$ 4,5 mil a R$ 12 mil (ex.: Sonoros, R$ 6–12 mil). Leitura: **ocupar a vaga como "grupo AAA com maestro-arranjador de nome, curadoria e arranjos autorais"**, antes que um concorrente de SP ou do Casamentos.com.br o faça. Não brigar por preço (jogo de soma negativa); brigar por categoria. *Não usar a marca "Baccarelli" na comunicação* — dizer "músicos com décadas de experiência nas cerimônias da Baixada".
 
 **4.3 Músicos (jogo de coordenação).** O músico escolhe o contratante que paga em dia e chama com frequência. Ponto focal: tabela de cachês fixa, pagamento em até 48h após o evento, prioridade de escalação para quem tem score de confiança maior. Isso já estava previsto; só precisa ser comunicado.
 
-**4.4 Isaac.** Os incentivos se desalinharam: ele recusou a sociedade (14/01), aceitou 50/50 como teste até julho (17/02), o teste venceu sem venda, sua agenda migrou para o Porto Seguro e sua praça é o interior — que saiu do foco. Ambiguidade é o pior equilíbrio (a descrição no Casamentos.com.br ainda o apresenta como sócio). **Propor, com gratidão e por escrito, uma de duas saídas:**
+**4.4 Isaac.** *Atualização 28/09: o João é o único proprietário e está dedicado só à Wedding's; a coordenação de orquestra passa ao Marcos (ver `propostas/`). O que segue fica como registro.* Os incentivos se desalinharam: ele recusou a sociedade (14/01), aceitou 50/50 como teste até julho (17/02), o teste venceu sem venda, sua agenda migrou para o Porto Seguro e sua praça é o interior — que saiu do foco. Ambiguidade é o pior equilíbrio (a descrição no Casamentos.com.br ainda o apresenta como sócio). **Propor, com gratidão e por escrito, uma de duas saídas:**
 - (A) *Parceiro associado:* sem participação societária; cachê de regência + 10% de comissão sobre eventos que ele originar; livre para liderar uma futura praça no interior.
 - (B) *Encerramento amigável:* agradecimento público, ajuste de textos e acessos.
 Os dois mantêm a amizade e a parceria no Porto Seguro. Decisão dele até 05/10.
@@ -163,7 +163,8 @@ Valor = (Resultado dos sonhos × Probabilidade percebida) ÷ (Tempo × Esforço)
 
 ### Semana 0 · 29/09–05/10 — Higiene e decisões (dono: João)
 - [ ] **Segurança:** senhas foram compartilhadas em texto no WhatsApp e em documentos (e-mail da Wedding's, Casamentos.com.br, Mercado Pago). Trocar todas, ativar 2FA, guardar num gerenciador. Unificar e-mail: hoje coexistem `musica.weddings@` e `weddings.musica@`.
-- [ ] Conversa com o Isaac (4.4) e mensagem escrita com as opções A/B.
+- [ ] Enviar a proposta ao Marcos (`propostas/2026-09-proposta-marcos-coordenador.md`); resposta até 04/10.
+- [ ] Ajustar textos do Casamentos.com.br que apresentam o Isaac como sócio.
 - [ ] Termo de uma página com a Cida (4.5).
 - [ ] **Publicar a plataforma** (`weddings/plataforma/README.md`: Apps Script público + Netlify + domínio). Testar no celular em aba anônima.
 - [ ] WhatsApp Business com número próprio da Wedding's (mensagem de ausência + catálogo com as 3 formações).
@@ -172,7 +173,7 @@ Valor = (Resultado dos sonhos × Probabilidade percebida) ÷ (Tempo × Esforço)
 - [ ] Notas fiscais pela SK: confirmar com o contador que o CNAE da SK cobre apresentação musical (ex.: 9001-9/02).
 
 ### Semanas 1–4 · 06/10–01/11 — Prova (dono: João; produção: Cida)
-- [ ] **Sessão Vitrine** (até 25/10): formação Premium, igreja de Santos (Valongo ou Embaré), 3 momentos + 1 arranjo pop autoral, videomaker de casamento. Orçamento ~R$ 4–5 mil (músicos em cachê de ensaio + espaço + vídeo). Convidar 5–10 cerimonialistas para assistir à gravação.
+- [ ] **Sessão Vitrine** (24–25/10, coordenação: Marcos): ~12 músicos, igreja de Santos (Valongo ou Embaré, contrapartida musical), 3 momentos + 1 arranjo pop autoral dos áudios existentes, videomaker de casamento. Custo: R$ 0–150 por músico (permuta ou ajuda de custo) + R$ 300 de coordenação + vídeo. Convidar 5–10 cerimonialistas para assistir à gravação.
 - [ ] Reaproveitar o que existe: fotos regendo, samples de arranjo, vídeo do Assessment.
 - [ ] Planilha de elenco (naipe, cachê, disponibilidade, score de confiança) — reservas definidas para cada naipe.
 - [ ] Repertório-base: 15 músicas por momento (a lista do Isaac de 16/02) + 5 arranjos autorais prontos.
@@ -220,9 +221,9 @@ Valor = (Resultado dos sonhos × Probabilidade percebida) ÷ (Tempo × Esforço)
 | Sem vídeo, ninguém confia | Vitrine até 25/10 é inegociável |
 | Preço acima do mercado sem prova | Escada com Essencial R$ 7,9k; Condição de Fundação |
 | Link quebrado / login / senha | Checagem mensal em aba anônima; senhas em gerenciador |
-| Sociedade ambígua | Decisão com o Isaac até 05/10 |
+| Coordenação de elenco sem dono | Marcos como coordenador formalizado até 04/10 |
 | Músico falta | Reservas por naipe + garantia contratual |
-| Incumbente (Baccarelli) reage | Não competir em preço; competir em categoria (maestro-arranjador + curadoria) |
+| Outro grupo ocupa a vaga do Baccarelli primeiro | Vitrine em outubro; abordar primeiro as cerimonialistas que trabalhavam com o Baccarelli |
 
 ---
 
