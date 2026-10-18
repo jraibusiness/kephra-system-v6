@@ -5,6 +5,7 @@
 | 2014–16 | Alemanha (DAAD, HMT Rostock) | — | CV |
 | 2016–2023 | EUA (CCM, UK, carreira) | Tudo regular, sem overstay `[CONFIRMADO]` | João |
 | 20/03/2020 | Licença de casamento, Butler County, OH | **IR1 elegível** | Drive |
+| 14/04/2022 | Processo judicial em Ohio: documentos assinados em audiência (Order, Plea NG, Firearm Notice, Consent to Magistrate, **Time Waiver**). Advogada: Jennifer Mullins Holmes | ⚠️ disposição final `[ABERTO]` — chave para o I-601 | Gmail `1802ebfb100a0e86` |
 | 02/02/2023 | Pagamento US$150 Bartlett & Weigle (consulta imigração) | — | Gmail |
 | fev–nov/2023 | Processo de GC por casamento (AOS) | — | Tab 3 |
 | 24/07/2023 | I-485 enviado de Oxford, OH (USPS) | — | Gmail |

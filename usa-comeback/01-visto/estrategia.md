@@ -1,6 +1,6 @@
 # Estratégia de visto e retorno aos EUA
 
-Base: snapshot do Tab 3 do doc "Usa" (18/10/2026) + achados do Gmail/Drive em 18/10. 🔒 **Só João** — não enviar à Paula sem aprovação.
+Base: snapshot do Tab 3 do doc "Usa" (18/10/2026) + achados do Gmail/Drive em 18/10. Compartilhável com a Paula (liberado em 18/10).
 
 ---
 
@@ -12,7 +12,10 @@ Base: snapshot do Tab 3 do doc "Usa" (18/10/2026) + achados do Gmail/Drive em 18
 3. **Ação imediata (depois do item 0):** Paula protocola **I-130 novo**. I-130 não bloqueia O-1 (dual intent).
 4. **Regra crítica:** **não** protocolar I-485 enquanto houver agenda Rouanet em 2027 (sair com I-485 pendente sem Advance Parole = abandono — o que matou 2023).
 5. **Gargalo real:** itinerário, não visto. Canal acadêmico via rede da Paula > pódio orquestral.
-6. **Novo `[ABERTO]`:** por que a Santos Lloyd cotou **I-601 waiver** em 2024? Esclarecer antes de protocolar qualquer coisa.
+6. **Novo `[ABERTO]`:** a Santos Lloyd cotou **I-601 waiver** em 2024. O "waiver de 2022" lembrado pelo João parece ser o *Time Waiver* de um processo em Ohio (abr/2022) — não é perdão de imigração. A **disposição final** desse processo decide se há inadmissibilidade.
+
+### O Green Card sai rápido? `[INFERÊNCIA]`
+**Não.** Nenhum waiver acelera o I-130. O relógio é: I-130 (~13 meses) → NVC + entrevista no Rio (~6 meses) = **meados de 2028**. Se houver inadmissibilidade, o I-601 é pedido **depois** da entrevista e acrescenta meses. Se o processo de 2022 terminou sem condenação relevante, provavelmente nem precisa de waiver — o melhor cenário.
 
 ---
 

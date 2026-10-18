@@ -6,9 +6,9 @@ Legenda: 🔴 bloqueante · 🟠 alta · 🟡 normal · ⛔ bloqueado por regra
 
 - [ ] 🔴 **João ↔ Paula:** (EM ANDAMENTO 18/10 — João vai pedir o cancelamento) conversar sobre o divórcio DR25030206 pendente → Paula protocola **Notice of Voluntary Dismissal** antes do decreto — *Paula* — [detalhes](01-visto/divorcio-DR25030206.md)
 - [ ] 🔴 Checar docket em clerkofcourts.bcohio.gov (já há decreto?) — *João*
-- [ ] 🔴 Perguntar à Santos Lloyd (Flávia) **por que** o contrato de 2024 incluía **I-601 waiver** — *João*
-- [ ] 🟠 Confirmar e-mail da Paula para automações (gandarp@gmail.com vs gandarp107@gmail.com) — *João*
-- [ ] 🟠 Aprovar início do alerta diário de voos (08h, seg–sáb) — *João* → *Claude*
+- [ ] 🔴 Obter a **disposição final** do processo de Ohio de 14/04/2022 (Law Office of Steven R. Adams) e perguntar à Santos Lloyd (Flávia) **por que** cotou **I-601 waiver** em 2024 — *João*
+- [x] Confirmar e-mail da Paula para automações → gandarp@gmail.com
+- [x] Alerta diário de voos (Kayak, ~08h seg–sáb) agendado em 18/10
 
 ## 🟠 Até 15/11
 
@@ -34,6 +34,6 @@ Legenda: 🔴 bloqueante · 🟠 alta · 🟡 normal · ⛔ bloqueado por regra
 - [ ] Tradução juramentada da Portaria 017/2026 — *João*
 - [ ] 🟡 Pendência financeira pessoal com a Paula (e-mail 23/09/2026) — resolver na conversa — *João*
 
-## ⛔ Bloqueado
+## Liberado
 
-- [ ] ⛔ Enviar análise de visto à Paula — **só após aprovação do João**
+- [x] Análise de visto pode ser compartilhada com a Paula (liberado pelo João em 18/10)

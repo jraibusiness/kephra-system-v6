@@ -1,28 +1,42 @@
 # Alerta diário de voos — CVG → GRU
 
-## Especificação (do briefing)
+## Especificação
 
 | Campo | Valor |
 |---|---|
-| Rota | **CVG** (Cincinnati/N. Kentucky) → **GRU** (Guarulhos), ida e volta |
-| Ida | 2ª semana de dez/2026 (07–13/12) |
-| Volta | penúltima / última semana de jan/2027 (18–31/01) |
-| Envio | **08h BRT, seg–sáb** (domingo folga) |
-| Para | jr.conductor83@gmail.com + e-mail da Paula `[ABERTO: gandarp@gmail.com ou gandarp107@gmail.com?]` |
-| Conteúdo | Tabela com melhores tarifas (Google Flights + outros) + recomendação: **comprar já / esperar / oportunidade fora da curva** |
-| Log | Cada envio grava uma linha por tarifa em [`precos.csv`](precos.csv) para ver a tendência |
+| Rota | **CVG** → **GRU**, ida e volta, 1 adulto, econômica |
+| Grade de datas | ida 08, 09, 10, 12/12/2026 × volta 19, 20, 26/01/2027 (12 combinações) |
+| Envio | ~**08h BRT, seg–sáb** (domingo folga) — tarefa agendada no Claude Code |
+| Para | jr.conductor83@gmail.com + gandarp@gmail.com |
+| Fonte | **Kayak** via navegador headless ([`scraper/kayak.js`](scraper/kayak.js)) |
+| Histórico | [`precos.csv`](precos.csv) (uma linha por data × métrica, todo dia) |
+| E-mail | [`scraper/report.js`](scraper/report.js) gera o HTML (veredito, 3 indicadores, tabela, link por data) |
 
-## Aeroportos alternativos a comparar
+**Google Flights:** testado em 18/10 — bloqueia acesso automatizado (captcha "unusual traffic"). Por isso a fonte é o Kayak. Complemento recomendado: ativar o **"Acompanhar preços"** do Google Flights nas datas finais (o próprio Google manda e-mail quando o preço muda).
 
-Ida da Paula (Oxford, OH): **CVG** (~1 h), **DAY** Dayton (~1 h), **CMH** Columbus (~2 h), **IND** Indianápolis (~2 h). Conexões típicas: ATL (Delta, direto ATL–GRU), MIA (American/LATAM), IAH (United), JFK/EWR, CLT.
+## Como rodar
 
-## Limitação honesta
+```bash
+cd usa-comeback/03-voos/scraper
+NODE_PATH=$(npm root -g) node kayak.js > /tmp/grid.json      # ~5 min
+node report.js /tmp/grid.json > /tmp/email.html               # grava precos.csv
+```
 
-Não há API de tarifas conectada a esta sessão. A busca diária usa **pesquisa web** (Google Flights, Kayak, Momondo, Expedia, Skyscanner). Resultado: faixas e snapshots, não cotação ao vivo com datas exatas. Para preço exato: usar o **alerta de preço do próprio Google Flights** (grátis) com as datas — o relatório diário complementa com análise e tendência.
+## Regras do veredito (report.js)
 
-## Leitura inicial (18/10) `[PESQUISA + INFERÊNCIA]`
+| Condição | Veredito |
+|---|---|
+| Melhor 1 escala ≤ US$ 1.250 | 🟢 OPORTUNIDADE — comprar hoje |
+| Faltam ≤ 45 dias para 08/12, ou 1 escala subiu vs. ontem | 🟠 COMPRAR JÁ |
+| Caso contrário | 🔵 MONITORAR |
 
-- Snapshots da rota fora de temporada: **US$ 680–1.100** ida e volta (Expedia, Cheapflights, AA, Google Flights).
-- Dez–jan é alta temporada (férias BR + festas) → esperar **US$ 1.000–1.600**.
-- Para internacional de fim de ano, a janela boa de compra costuma ser **2–4 meses antes** → **estamos dentro dela agora**. Recomendação preliminar: definir datas exatas e comprar até **meados de novembro**; esperar além disso tende a encarecer.
-- Voar ida em **ter/qua** e evitar volta no 1º fim de semana de jan.
+## 1ª leitura real — 18/10/2026 (Kayak)
+
+| | US$ | Datas | Detalhe |
+|---|---|---|---|
+| Mais barato | **1.112** | 09/12 → 20/01 | Copa, 2 escalas, 25h |
+| Melhor 1 escala | **1.284** | 08/12 → 26/01 · 09/12 → 20/01 · 10/12 → 19/01 | — |
+| Mais rápido | **1.322** | 08 ou 09/12 | ~13h (LATAM) |
+| Sábado 12/12 | +US$ 100–400 | — | evitar |
+
+**Leitura:** a diferença entre o mais barato (2 escalas, 18–25h) e o voo de ~13h é de só **US$ 150–200** → vale pagar o voo rápido. Ida **ter/qua 08–10/12**, nunca no sábado. Preços dentro do esperado para a temporada; comprar quando as datas estiverem fechadas, idealmente antes de **~24/10 (45 dias)**.
