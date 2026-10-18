@@ -8,7 +8,7 @@ Legenda: 🔴 bloqueante · 🟠 alta · 🟡 normal · ⛔ bloqueado por regra
 - [ ] 🔴 Checar docket em clerkofcourts.bcohio.gov (já há decreto?) — *João*
 - [ ] 🔴 Obter a **disposição final** do processo de Ohio de 14/04/2022 (Law Office of Steven R. Adams) e perguntar à Santos Lloyd (Flávia) **por que** cotou **I-601 waiver** em 2024 — *João*
 - [x] Confirmar e-mail da Paula para automações → gandarp@gmail.com
-- [x] Alerta diário de voos (Kayak, ~08h seg–sáb) agendado em 18/10
+- [ ] 🟠 Agendar alerta diário de voos (scraper Kayak pronto; aguardando autorização para criar a tarefa agendada)
 
 ## 🟠 Até 15/11
 
