@@ -8,7 +8,7 @@ Legenda: 🔴 bloqueante · 🟠 alta · 🟡 normal · ⛔ bloqueado por regra
 - [ ] 🔴 Checar docket em clerkofcourts.bcohio.gov (já há decreto?) — *João*
 - [ ] 🔴 Obter a **disposição final** do processo de Ohio de 14/04/2022 (Law Office of Steven R. Adams) e perguntar à Santos Lloyd (Flávia) **por que** cotou **I-601 waiver** em 2024 — *João*
 - [x] Confirmar e-mail da Paula para automações → gandarp@gmail.com
-- [x] Alerta diário de voos agendado (seg–sáb 07h58 BRT, `trig_01T4ERXZ3BVb7SKpFwBMyj8f`) — ⚠️ falta anexar o conector Gmail na tarefa pelo claude.ai
+- [x] Gerente do projeto ativo: rodadas seg–sáb 07h56 e 17h56 BRT (`trig_01TUnzsJrGqkCPoyzaYrD6FF`); alerta de voos incluído na rodada da manhã — ver [pm/](pm/)
 - [x] 18/10: enviados 3 e-mails (voos, destino/orçamento, visto) para João + Paula — cópias em `emails/`
 
 ## 🟠 Até 15/11

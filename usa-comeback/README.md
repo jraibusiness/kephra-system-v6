@@ -25,6 +25,7 @@
 | [`01-visto/`](01-visto/) | Estratégia consolidada, divórcio, histórico migratório |
 | [`02-viagem/`](02-viagem/) | Requisitos, destinos candidatos, orçamento |
 | [`03-voos/`](03-voos/) | Spec do alerta diário, log de preços (`precos.csv`) |
+| [`pm/`](pm/) | Gerente do projeto: protocolo, estado das decisões, gerador de e-mails |
 | [`TASKS.md`](TASKS.md) | Pendências com dono e prazo |
 | [`fontes.md`](fontes.md) | Índice de documentos no Drive / threads no Gmail |
 
