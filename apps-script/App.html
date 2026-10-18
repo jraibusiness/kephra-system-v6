@@ -45,6 +45,7 @@ async function boot() {
   S.d = await call('bootstrap');
   S.day = S.d.todayISO; S.dayView = S.d.today;
   render();
+  if (window.OPEN_VIEW && ['hoje', 'tarefas', 'projetos', 'metas', 'estrategia', 'analise', 'ajustes'].indexOf(window.OPEN_VIEW) >= 0) { S.view = window.OPEN_VIEW; render(); }
   if (window.OPEN_TASK && task(window.OPEN_TASK)) openTask(window.OPEN_TASK);
 }
 
@@ -53,13 +54,14 @@ async function reload(silent) {
   S.d = d;
   S.dayView = S.day === d.todayISO ? d.today : await call('day', { day: S.day });
   if (S.view === 'analise') S.stats = await call('stats', { days: S.statsDays });
+  if (S.reviewIdx >= (d.reviews || []).length) S.reviewIdx = 0;
   render();
   if (!silent) toast('Atualizado');
 }
 
 function render() {
   document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.v === S.view));
-  const views = { hoje: vHoje, tarefas: vTarefas, projetos: vProjetos, metas: vMetas, analise: vAnalise, ajustes: vAjustes };
+  const views = { hoje: vHoje, tarefas: vTarefas, projetos: vProjetos, metas: vMetas, estrategia: vEstrategia, analise: vAnalise, ajustes: vAjustes };
   $('#view').innerHTML = (views[S.view] || vHoje)();
   renderTimer();
   if (S.view === 'analise' && !S.stats) call('stats', { days: S.statsDays }).then(st => { S.stats = st; if (S.view === 'analise') render(); });
@@ -375,19 +377,44 @@ const SENSES = [
   ['emotion', 'A emoção', 'Qual emoção domina e onde ela aparece no corpo.'],
 ];
 
+const hz = k => (S.d.horizons[k] || {}).label || k || '—';
+
+// Árvore em profundidade: filhas logo abaixo da mãe, irmãs pela ordem (rank)
+function goalTree() {
+  const all = S.d.goals, ids = {}; all.forEach(g => ids[g.id] = g);
+  const kids = pid => all.filter(g => (ids[g.parentId] ? g.parentId : '') === pid).sort((a, b) => (a.rank || 99) - (b.rank || 99));
+  const out = [], seen = {};
+  const walk = (pid, depth) => kids(pid).forEach((g, i, arr) => {
+    if (seen[g.id]) return; seen[g.id] = true;
+    out.push({ g, depth, first: i === 0, last: i === arr.length - 1 });
+    walk(g.id, depth + 1);
+  });
+  walk('', 0);
+  all.forEach(g => { if (!seen[g.id]) out.push({ g, depth: 0, first: true, last: true }); });
+  return out;
+}
+
+function descendants(id) {
+  const out = [id];
+  for (let i = 0; i < out.length; i++) S.d.goals.forEach(g => { if (g.parentId === out[i] && out.indexOf(g.id) < 0) out.push(g.id); });
+  return out;
+}
+
 function vMetas() {
   const goals = S.d.goals.slice().sort((a, b) => a.rank - b.rank);
   const fmap = {}; S.d.focus.forEach(f => fmap[f.key] = f);
   const gOpts = sel => '<option value="">—</option>' + goals.map(g => '<option value="' + g.id + '"' + (sel === g.id ? ' selected' : '') + '>' + esc(g.title) + '</option>').join('');
   const st = S.d.settings;
   return '<div class="row between"><h2>Metas</h2><button class="btn small" data-act="new-goal">＋ Meta</button></div>' +
-    '<div class="sub" style="margin-bottom:10px">A ordem define a prioridade. O agendador favorece tarefas das metas do topo e do foco do dia.</div>' +
-    goals.map((g, i) => {
+    '<div class="sub" style="margin-bottom:10px">Cascata: visão de 10 anos → semana. Cada meta serve à de cima; o foco de uma meta vale para todas as suas filhas. ▲▼ ordena entre irmãs.</div>' +
+    goalTree().map(x => {
+      const g = x.g;
       const filled = SENSES.filter(s => g[s[0]]).length;
       const nP = S.d.projects.filter(p => p.goalId === g.id && p.status === 'ativo').length;
-      return '<div class="card row"><div class="goal-rank">' + g.rank + '</div><div class="grow tap" data-act="open-goal" data-id="' + g.id + '"><b>' + esc(g.title) + '</b>' +
-        '<div class="t-meta"><span>' + nP + ' projetos</span>' + (g.deadline ? '<span>📌 ' + ddmm(g.deadline) + '/' + g.deadline.slice(2, 4) + '</span>' : '') + '<span>' + filled + '/9 detalhes RPM</span>' + (g.status !== 'ativa' ? '<span>' + esc(g.status) + '</span>' : '') + '</div></div>' +
-        '<div style="display:flex;flex-direction:column;gap:4px"><button class="btn small ghost" data-act="move-goal" data-id="' + g.id + '" data-v="-1"' + (i === 0 ? ' disabled' : '') + '>▲</button><button class="btn small ghost" data-act="move-goal" data-id="' + g.id + '" data-v="1"' + (i === goals.length - 1 ? ' disabled' : '') + '>▼</button></div></div>';
+      return '<div class="card row" style="margin-left:' + Math.min(x.depth, 5) * 14 + 'px' + (x.depth ? ';border-left:3px solid var(--border-strong)' : '') + '">' +
+        '<div class="grow tap" data-act="open-goal" data-id="' + g.id + '"><span class="pill">' + esc(hz(g.horizon)) + '</span> <b>' + esc(g.title) + '</b>' +
+        '<div class="t-meta"><span>' + nP + ' projetos</span>' + (g.deadline ? '<span>📌 ' + ddmm(g.deadline) + '/' + g.deadline.slice(2, 4) + '</span>' : '') + '<span>' + filled + '/9 RPM</span>' + (g.status !== 'ativa' ? '<span>' + esc(g.status) + '</span>' : '') + '</div></div>' +
+        '<div style="display:flex;flex-direction:column;gap:4px"><button class="btn small ghost" data-act="move-goal" data-id="' + g.id + '" data-v="-1"' + (x.first ? ' disabled' : '') + '>▲</button><button class="btn small ghost" data-act="move-goal" data-id="' + g.id + '" data-v="1"' + (x.last ? ' disabled' : '') + '>▼</button></div></div>';
     }).join('') +
     '<h3>Meta-mestra do período</h3><div class="card"><div class="sub" style="margin-bottom:8px">Ex.: "neste mês, fazer caixa". Ganha bônus em todos os dias até a data.</div>' +
     '<div class="two"><select data-set="periodFocusGoalId">' + gOpts(st.periodFocusGoalId) + '</select><input type="date" data-set="periodFocusUntil" value="' + esc(st.periodFocusUntil) + '"></div></div>' +
@@ -401,12 +428,15 @@ function vMetas() {
 }
 
 function openGoal(id) {
-  const g = id ? Object.assign({}, goal(id)) : { title: '', tier: 'curto', deadline: '', status: 'ativa', metric: '', notes: '' };
+  const g = id ? Object.assign({}, goal(id)) : { title: '', horizon: '3m', parentId: '', deadline: '', status: 'ativa', metric: '', notes: '' };
+  const blocked = id ? descendants(id) : [];
   S.form = g;
   const ai = S.d.aiKeys.claude || S.d.aiKeys.gemini;
   openSheet(id ? 'Meta' : 'Nova meta',
     '<label class="f"><span>Meta</span><input type="text" name="title" value="' + esc(g.title) + '"></label>' +
-    '<div class="two"><label class="f"><span>Horizonte</span><select name="tier">' + [['curto', 'Curto prazo'], ['medio', 'Médio prazo'], ['longo', 'Longo prazo'], ['continuo', 'Contínua']].map(o => '<option value="' + o[0] + '"' + (g.tier === o[0] ? ' selected' : '') + '>' + o[1] + '</option>').join('') + '</select></label>' +
+    '<label class="f"><span>Serve a qual meta maior?</span><select name="parentId"><option value="">— topo da cascata —</option>' +
+      goalTree().filter(x => blocked.indexOf(x.g.id) < 0).map(x => '<option value="' + x.g.id + '"' + (g.parentId === x.g.id ? ' selected' : '') + '>' + '· '.repeat(x.depth) + esc(hz(x.g.horizon) + ' — ' + x.g.title) + '</option>').join('') + '</select></label>' +
+    '<div class="two"><label class="f"><span>Horizonte</span><select name="horizon">' + Object.keys(S.d.horizons).map(k => '<option value="' + k + '"' + (g.horizon === k ? ' selected' : '') + '>' + S.d.horizons[k].label + '</option>').join('') + '</select></label>' +
     '<label class="f"><span>Prazo</span><input type="date" name="deadline" value="' + esc(g.deadline) + '"></label></div>' +
     '<div class="two"><label class="f"><span>Status</span><select name="status">' + ['ativa', 'pausada', 'concluida'].map(s => '<option' + (g.status === s ? ' selected' : '') + '>' + s + '</option>').join('') + '</select></label>' +
     '<label class="f"><span>Métrica</span><input type="text" name="metric" value="' + esc(g.metric) + '"></label></div>' +
@@ -425,6 +455,58 @@ function vision(id) {
   $('#overlay').innerHTML = '<div class="vision" data-act="close-vision"><div class="sub" style="color:#9FB0C8;letter-spacing:.14em;text-transform:uppercase;font-size:11px;margin-bottom:6px">Feche os olhos depois de ler</div>' +
     '<h1>' + esc(g.title) + '</h1>' + SENSES.filter(s => g[s[0]]).map(s => '<div class="sense"><b>' + s[1] + '</b><p>' + esc(g[s[0]]) + '</p></div>').join('') +
     (SENSES.some(s => g[s[0]]) ? '' : '<p>Ainda sem descrição sensorial. Preencha os campos da meta.</p>') + '<p style="color:#9FB0C8;font-size:13px;margin-top:30px">Toque para fechar</p></div>';
+}
+
+// ============================================================
+// ESTRATÉGIA — o secretário que julga
+// ============================================================
+const SH = { semana: 'Semana', mes: 'Mês', trimestre: 'Trimestre', ano: 'Ano · 5–10 anos' };
+const VERDICT_COLOR = { acelerar: 'var(--green)', manter: 'var(--p3)', reduzir: 'var(--p2)', pausar: 'var(--p4)' };
+
+function vEstrategia() {
+  const ai = S.d.aiKeys.claude || S.d.aiKeys.gemini;
+  const reviews = S.d.reviews || [];
+  const r = reviews[S.reviewIdx || 0];
+  let h = '<h2>Estratégia</h2>';
+  if (!ai) return h + '<div class="card">O estrategista precisa de uma chave de IA (ANTHROPIC_API_KEY ou GEMINI_API_KEY). Veja ⚙ → Inteligência artificial.</div>';
+
+  h += '<div class="card"><b>Consultar</b><div class="sub" style="margin:2px 0 8px">Uma decisão pontual, julgada com todo o seu contexto. Ex.: "aceito este cliente a R$ 300/h?"</div>' +
+    '<textarea id="ask" placeholder="Sua pergunta…">' + esc(S.askText || '') + '</textarea>' +
+    '<button class="btn navy block" style="margin-top:8px" data-act="ask">✦ Perguntar</button>' +
+    (S.askAnswer ? '<div style="margin-top:12px;white-space:pre-wrap;font-size:14px;line-height:1.55">' + esc(S.askAnswer) + '</div>' : '') + '</div>';
+
+  h += '<h3>Revisão estratégica</h3><div class="chips" style="margin-bottom:8px">' + Object.keys(SH).map(k => '<button class="chip' + ((S.horizon || 'semana') === k ? ' on' : '') + '" data-act="horizon" data-v="' + k + '">' + SH[k] + '</button>').join('') + '</div>' +
+    '<button class="btn primary block" data-act="strategy">✦ Gerar conselho · ' + SH[S.horizon || 'semana'] + '</button>' +
+    '<div class="hint">Lê metas, projetos, tarefas, tempo real e capacidade. Leva de 30 s a 2 min. Revisões automáticas: domingo (semana) e dia 1 (mês, trimestre, ano), com e-mail.</div>';
+
+  if (!r) return h + '<div class="empty">Nenhuma revisão ainda. Gere a primeira.</div>';
+  const d = r.data || {};
+  const pname = id => (proj(id) || {}).name || '(sem projeto)';
+  const tname = id => (task(id) || {}).title || '(tarefa já removida)';
+  const gname = id => (goal(id) || {}).title || '—';
+  const applied = r.applied;
+  const box = (k, i, label, sub) => '<label class="check-row card" style="margin-bottom:8px;align-items:flex-start"><input type="checkbox" data-sel="' + k + '" data-i="' + i + '"' + (applied ? ' disabled' : ' checked') + '><span class="grow"><b>' + label + '</b>' + (sub ? '<br><span class="sub">' + sub + '</span>' : '') + '</span></label>';
+
+  if (reviews.length > 1) h += '<div class="chips" style="margin:14px 0 0">' + reviews.map((x, i) => '<button class="chip' + ((S.reviewIdx || 0) === i ? ' on' : '') + '" data-act="review-idx" data-v="' + i + '">' + ddmm(x.date) + ' · ' + (SH[x.horizon] || x.horizon) + '</button>').join('') + '</div>';
+  h += '<div class="card focus-card" style="margin-top:12px"><div class="label">' + (SH[r.horizon] || r.horizon) + ' · ' + ddmm(r.date) + (applied ? ' · aplicada' : '') + '</div><div style="font-size:15px;line-height:1.5;margin-top:4px;white-space:pre-wrap">' + esc(d.summary) + '</div></div>';
+  h += '<div class="card"><div class="tl-kind">Gargalo</div><b style="font-size:16px">' + esc(d.constraint) + '</b></div>';
+  if (d.question) h += '<div class="card" style="border-left:4px solid var(--gold)"><div class="tl-kind">A pergunta que destrava</div><b>' + esc(d.question) + '</b></div>';
+  h += '<h3>Primeiros princípios</h3><div class="card" style="white-space:pre-wrap;font-size:14px">' + esc(d.firstPrinciples) + '</div>';
+  h += '<h3>Sistema</h3><div class="card" style="white-space:pre-wrap;font-size:14px">' + esc(d.systemLoops) + '</div>';
+  if ((d.gameTheory || []).length) h += '<h3>Teoria dos jogos</h3>' + d.gameTheory.map(g => '<div class="card"><b>' + esc(g.actor) + '</b><div class="sub">Quer: ' + esc(g.incentive) + '</div><div style="font-size:14px;margin-top:4px">→ ' + esc(g.bestMove) + '</div></div>').join('');
+  if ((d.leverage || []).length) h += '<h3>Alavancagem dos projetos</h3><div class="card">' + d.leverage.map(l => '<div style="margin-bottom:10px"><div class="row between"><b>' + esc(pname(l.projectId)) + '</b><span class="pill" style="background:' + (VERDICT_COLOR[l.verdict] || 'var(--surface-2)') + ';color:#fff">' + esc(l.verdict) + ' · ' + l.score + '/10</span></div><div class="sub">' + esc(l.rationale) + '</div></div>').join('') + '</div>';
+
+  h += '<h3>Ações' + (applied ? ' (já aplicadas)' : ' · desmarque o que não quiser') + '</h3>';
+  if ((d.newGoals || []).length) h += '<div class="tl-kind" style="margin:8px 0 6px">Novas metas</div>' + d.newGoals.map((g, i) => box('newGoals', i, esc(hz(g.horizon) + ' · ' + g.title), esc('serve a: ' + gname(g.parentId) + ' · ' + g.metric + ' — ' + g.rationale))).join('');
+  if ((d.newTasks || []).length) h += '<div class="tl-kind" style="margin:8px 0 6px">Novas tarefas · ' + fmtMin(d.newTasks.reduce((a, t) => a + (t.estimateMin || 0), 0)) + '</div>' + d.newTasks.map((t, i) => box('newTasks', i, esc(t.title), 'P' + t.priority + ' · ' + fmtMin(t.estimateMin) + ' · ' + esc(pname(t.projectId)) + (t.deadline ? ' · 📌 ' + ddmm(t.deadline) : '') + '<br>' + esc(t.rationale))).join('');
+  if ((d.reprioritize || []).some(x => task(x.taskId))) h += '<div class="tl-kind" style="margin:8px 0 6px">Repriorizar</div>' + d.reprioritize.map((x, i) => !task(x.taskId) ? '' : box('reprioritize', i, esc(tname(x.taskId)) + ' → P' + x.priority, esc(x.rationale))).join('');
+  if ((d.drop || []).some(x => task(x.taskId))) h += '<div class="tl-kind" style="margin:8px 0 6px">Cortar</div>' + d.drop.map((x, i) => !task(x.taskId) ? '' : box('drop', i, '✕ ' + esc(tname(x.taskId)), esc(x.rationale))).join('');
+  if ((d.weeklyFocus || []).length) h += '<div class="tl-kind" style="margin:8px 0 6px">Foco da semana</div>' + box('weeklyFocus', 0, 'Aplicar foco por dia', d.weeklyFocus.filter(f => goal(f.goalId)).sort((a, b) => ((a.weekday + 6) % 7) - ((b.weekday + 6) % 7)).map(f => WD[f.weekday].slice(0, 3) + ': ' + esc(gname(f.goalId))).join(' · '));
+  if (d.periodGoalId && goal(d.periodGoalId)) h += box('period', 0, 'Meta-mestra: ' + esc(gname(d.periodGoalId)), d.periodUntil ? 'até ' + ddmm(d.periodUntil) : '');
+  if (!applied) h += '<button class="btn primary block" style="margin-top:6px" data-act="apply-strategy" data-id="' + r.id + '">Aplicar selecionadas e replanejar hoje</button>';
+  else h += '<div class="hint">Aplicado em ' + ddmm(applied.at) + ': ' + applied.newTasks + ' tarefas, ' + applied.reprioritize + ' repriorizações, ' + applied.drop + ' cortes, ' + applied.newGoals + ' metas.</div>';
+  if ((d.risks || []).length) h += '<h3>Riscos</h3><div class="card"><ul style="margin:0;padding-left:18px;font-size:14px">' + d.risks.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul></div>';
+  return h;
 }
 
 // ============================================================
@@ -559,6 +641,31 @@ const ACT = {
   },
   'add-focus': async () => { const d = $('#fx-date').value, g = $('#fx-goal').value; if (!d || !g) return toast('Escolha data e meta', true); S.d.focus = await call('saveFocus', { rows: [{ key: d, goalId: g, note: '' }] }); render(); },
   'del-focus': async el => { S.d.focus = await call('deleteFocus', { key: el.dataset.v }); render(); },
+  horizon: el => { S.horizon = el.dataset.v; render(); },
+  'review-idx': el => { S.reviewIdx = Number(el.dataset.v); render(); },
+  strategy: async el => {
+    el.disabled = true; el.textContent = 'Pensando… (até 2 min)';
+    try { S.d.reviews = await call('strategy', { horizon: S.horizon || 'semana' }); S.reviewIdx = 0; toast('Conselho pronto'); }
+    finally { render(); }
+  },
+  'apply-strategy': async el => {
+    const sel = { newTasks: [], reprioritize: [], drop: [], newGoals: [], weeklyFocus: false, period: false };
+    document.querySelectorAll('[data-sel]').forEach(cb => {
+      if (!cb.checked) return;
+      const k = cb.dataset.sel;
+      if (k === 'weeklyFocus' || k === 'period') sel[k] = true; else sel[k].push(Number(cb.dataset.i));
+    });
+    el.disabled = true;
+    const log = await call('applyStrategy', { id: el.dataset.id, sel });
+    await reload(true);
+    toast('Aplicado: ' + log.newTasks + ' tarefas, ' + log.drop + ' cortes. Dia replanejado.');
+  },
+  ask: async el => {
+    const q = ($('#ask') || {}).value || '';
+    if (!q.trim()) return toast('Escreva a pergunta', true);
+    S.askText = q; el.disabled = true; el.textContent = 'Pensando…';
+    try { S.askAnswer = await call('ask', { question: q }); } finally { render(); }
+  },
   'stats-days': async el => { S.statsDays = Number(el.dataset.v); S.stats = null; render(); },
   'open-routine': el => openRoutine(el.dataset.id),
   'new-routine': () => openRoutine(null),

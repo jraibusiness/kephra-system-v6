@@ -24,6 +24,7 @@
     <button data-act="nav" data-v="tarefas"><span class="ic">✅</span>Tarefas</button>
     <button data-act="nav" data-v="projetos"><span class="ic">🗂️</span>Projetos</button>
     <button data-act="nav" data-v="metas"><span class="ic">🎯</span>Metas</button>
+    <button data-act="nav" data-v="estrategia"><span class="ic">🧭</span>Estratégia</button>
     <button data-act="nav" data-v="analise"><span class="ic">📊</span>Análise</button>
   </nav>
 
@@ -32,7 +33,7 @@
   <div id="toast"></div>
   <div id="loading" class="loading hidden"></div>
 
-  <script>window.OPEN_TASK = <?= openTask ?>;</script>
+  <script>window.OPEN_TASK = <?= openTask ?>; window.OPEN_VIEW = <?= openView ?>;</script>
   <?!= include('App'); ?>
 </body>
 </html>

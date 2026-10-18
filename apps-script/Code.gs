@@ -5,6 +5,7 @@
 function doGet(e) {
   const t = HtmlService.createTemplateFromFile('Index');
   t.openTask = (e && e.parameter && e.parameter.task) || '';
+  t.openView = (e && e.parameter && e.parameter.view) || '';
   return t.evaluate()
     .setTitle('Kephra')
     .addMetaTag('viewport', 'width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover')
@@ -54,13 +55,14 @@ function setup() {
 }
 
 function installTriggers() {
-  const handlers = ['morningPlan', 'dailyEmail', 'eveningPlan'];
+  const handlers = ['morningPlan', 'dailyEmail', 'eveningPlan', 'strategyCron'];
   ScriptApp.getProjectTriggers().forEach(t => { if (handlers.indexOf(t.getHandlerFunction()) >= 0) ScriptApp.deleteTrigger(t); });
   const emailHour = Number(settings_().emailHour || 6);
   // O Apps Script dispara dentro de uma janela de ~15 min em torno do horário pedido
   ScriptApp.newTrigger('morningPlan').timeBased().atHour(Math.max(0, emailHour - 2)).nearMinute(15).everyDays(1).inTimezone(TZ).create();
   ScriptApp.newTrigger('dailyEmail').timeBased().atHour(emailHour).nearMinute(0).everyDays(1).inTimezone(TZ).create();
   ScriptApp.newTrigger('eveningPlan').timeBased().atHour(20).nearMinute(30).everyDays(1).inTimezone(TZ).create();
+  ScriptApp.newTrigger('strategyCron').timeBased().atHour(Number(settings_().strategyHour || 16)).nearMinute(0).everyDays(1).inTimezone(TZ).create();
 }
 
 // Antes de acordar: monta o dia e escreve no Calendar
@@ -71,7 +73,7 @@ function eveningPlan() { planDay(addDays_(ymd_(), 1), true); }
 // ------------------------------------------------------------
 // API — único ponto de entrada do front-end
 // ------------------------------------------------------------
-const READ_ACTIONS = ['bootstrap', 'day', 'stats', 'preview'];
+const READ_ACTIONS = ['bootstrap', 'day', 'stats', 'preview', 'reviews'];
 
 function api(action, payload) {
   const lock = READ_ACTIONS.indexOf(action) >= 0 ? null : LockService.getScriptLock();
@@ -110,7 +112,7 @@ const API = {
   bootstrap: () => ({
     goals: all_('Goals'), projects: all_('Projects'), tasks: all_('Tasks'),
     routine: all_('Routine'), focus: all_('Focus'), settings: settings_(),
-    effortTypes: EFFORT_TYPES, priorities: PRIORITIES, routineKinds: ROUTINE_KINDS,
+    effortTypes: EFFORT_TYPES, priorities: PRIORITIES, routineKinds: ROUTINE_KINDS, horizons: HORIZONS, reviews: reviewsList_(5),
     today: dayView_(ymd_()), todayISO: ymd_(), timer: activeLog_(), actual: actualByTask_(),
     factors: realityFactors_(), aiKeys: aiKeys_(), sheetUrl: ss_().getUrl(),
   }),
@@ -147,16 +149,25 @@ const API = {
 
   saveGoal: p => {
     const g = Object.assign({}, p.goal);
-    if (!g.id) { g.createdAt = iso_(new Date()); g.status = g.status || 'ativa'; g.rank = all_('Goals').length + 1; }
+    if (!g.id) { g.createdAt = iso_(new Date()); g.status = g.status || 'ativa'; g.horizon = g.horizon || '3m'; g.rank = all_('Goals').length + 1; }
+    if (g.parentId && g.parentId === g.id) g.parentId = '';
     return upsert_('Goals', g);
   },
-  deleteGoal: p => { remove_('Goals', p.id); return true; },
+  deleteGoal: p => {
+    all_('Goals').filter(g => g.parentId === p.id).forEach(g => update_('Goals', g.id, { parentId: '' }));
+    remove_('Goals', p.id);
+    return true;
+  },
   moveGoal: p => {
-    const goals = all_('Goals').slice().sort((a, b) => (a.rank || 99) - (b.rank || 99));
-    const i = goals.findIndex(g => g.id === p.id), j = i + p.dir;
-    if (i < 0 || j < 0 || j >= goals.length) return goals;
-    const tmp = goals[i]; goals[i] = goals[j]; goals[j] = tmp;
-    goals.forEach((g, k) => { if (g.rank !== k + 1) update_('Goals', g.id, { rank: k + 1 }); });
+    // Reordena entre irmãs (mesma meta-mãe), trocando os ranks
+    const g0 = find_('Goals', p.id);
+    if (!g0) return all_('Goals');
+    const sibs = all_('Goals').filter(g => (g.parentId || '') === (g0.parentId || '')).sort((a, b) => (a.rank || 99) - (b.rank || 99));
+    const i = sibs.findIndex(g => g.id === p.id), j = i + p.dir;
+    if (j < 0 || j >= sibs.length) return all_('Goals');
+    const ri = sibs[i].rank, rj = sibs[j].rank;
+    update_('Goals', sibs[i].id, { rank: rj === ri ? rj + p.dir : rj });
+    update_('Goals', sibs[j].id, { rank: ri });
     return all_('Goals');
   },
 
@@ -168,7 +179,7 @@ const API = {
   deleteFocus: p => { remove_('Focus', p.key); return all_('Focus'); },
   saveSettings: p => {
     Object.keys(p.settings).forEach(k => setSetting_(k, p.settings[k]));
-    if (p.settings.emailHour !== undefined) installTriggers();
+    if (p.settings.emailHour !== undefined || p.settings.strategyHour !== undefined) installTriggers();
     return settings_();
   },
 
@@ -194,6 +205,11 @@ const API = {
   testEmail: () => { dailyEmail(); return true; },
 
   stats: p => stats_(p.days || 30),
+
+  strategy: p => { aiStrategy(p.horizon); return reviewsList_(5); },
+  applyStrategy: p => applyStrategy_(p.id, p.sel || {}),
+  ask: p => aiAsk(p.question),
+  reviews: () => reviewsList_(20),
 };
 
 // ------------------------------------------------------------

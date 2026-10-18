@@ -1,6 +1,6 @@
 # Kephra System v7 · Google Apps Script
 
-Um app pessoal de tarefas no celular (uma mistura de Todoist e Notion) que monta a sua agenda no Google Calendar em torno das suas metas.
+Um app pessoal de tarefas no celular (uma mistura de Todoist e Notion) que monta a sua agenda no Google Calendar em torno das suas metas, com um estrategista de IA que julga a melhor estratégia da visão de 10 anos até a semana.
 
 - **Banco de dados:** uma planilha Google criada automaticamente, com as abas Goals, Projects, Tasks, TimeLogs, Routine, Focus, Plan e Settings.
 - **App:** um Web App do Apps Script, pensado para o celular. Você salva o atalho na tela inicial.
@@ -18,6 +18,23 @@ Um app pessoal de tarefas no celular (uma mistura de Todoist e Notion) que monta
 | **Metas** | A ordem das metas define a prioridade. Tem a meta-mestra do período (ex.: fazer caixa até 30/11), o foco por dia da semana e exceções por data. Cada meta pode ser descrita no método **RPM de Tony Robbins** (Resultado, Propósito, Evidência) e com **evidências sensoriais**: o que vejo, ouço, sinto no corpo, que cheiro, que gosto e qual emoção. O botão **◉ Visualizar** abre a meta em tela cheia, para ler antes de fechar os olhos. |
 | **Análise** | Tempo por tipo de esforço, por meta, por projeto e por dia. Também mostra **previsto × real** por tipo de esforço. |
 | **⚙ Ajustes** | Rotina base editável, parâmetros do agendador, IA, e-mail de teste e link para a planilha. |
+
+## O estrategista (aba Estratégia)
+
+Duas camadas trabalham juntas:
+
+- **Estrategista (IA, semanal/mensal/trimestral/anual)** — decide *o quê* e *por quê*. Lê o sistema inteiro: a cascata de metas, projetos, tarefas abertas, minutos reais gastos por projeto (7 e 28 dias), capacidade real dos próximos 14 dias, seu fator previsto × real e as revisões anteriores com o que você aplicou (para corrigir a rota). Aplica, nesta ordem:
+  1. **Primeiros princípios** — reduz a meta-mestra às variáveis fundamentais (ex.: faturamento = conversas × fechamento × ticket) e aponta qual tem mais folga por hora.
+  2. **Pensamento sistêmico** — o **gargalo único** (Teoria das Restrições), laços de reforço/equilíbrio, ponto de alavancagem (Meadows), tempo real × ideal.
+  3. **Teoria dos jogos** — atores, incentivos e sua melhor jogada (dominantes, reputação em jogos repetidos, apostas assimétricas, BATNA).
+  4. **Decisão** — alavancagem de cada projeto (acelerar / manter / reduzir / pausar), tarefas novas que *cabem* na capacidade, repriorizações, **cortes**, metas novas mais concretas, foco por dia, meta-mestra do período, riscos e **a pergunta** que você precisa responder.
+
+  Nada muda sem você: cada ação tem checkbox → **Aplicar** → o dia é replanejado.
+  Automático: **domingo** (semana) e **dia 1** (mês; trimestre em jan/abr/jul/out; ano em janeiro), por volta das 16h, com e-mail.
+- **Consultar** — pergunta pontual ("aceito este cliente a R$ 300/h?") julgada com todo o contexto: veredito, porquê, próximo passo.
+- **Agendador (determinístico, diário)** — decide *quando*, seguindo as prioridades que o estrategista ajustou. O briefing das 6h usa a estratégia vigente para apontar a tarefa que mais move o gargalo.
+
+> A qualidade do julgamento depende da qualidade dos dados. Mínimo para funcionar bem: escrever a visão de 10 anos, metas com métrica e prazo, e usar o cronômetro.
 
 ## Como o agendador decide
 
@@ -76,7 +93,8 @@ clasp push
 2. O `setup` cria a planilha, as duas agendas, a rotina no Calendar e três gatilhos diários:
    - **morningPlan**: ~4h, monta o dia;
    - **dailyEmail**: ~6h, envia o plano;
-   - **eveningPlan**: ~20h30, deixa o dia seguinte pronto.
+   - **eveningPlan**: ~20h30, deixa o dia seguinte pronto;
+   - **strategyCron**: ~16h, revisão estratégica aos domingos e no dia 1 do mês.
 
    O Google dispara cada gatilho dentro de uma janela de ~15 min em torno do horário pedido.
 
@@ -87,7 +105,7 @@ Vá em **Configurações do projeto → Propriedades do script → Adicionar pro
 - `ANTHROPIC_API_KEY`: gere em <https://console.anthropic.com>
 - `GEMINI_API_KEY` (opcional): gere em <https://aistudio.google.com/apikey>
 
-O modelo padrão é `claude-opus-5-5`, e dá para trocar em ⚙.
+O modelo padrão é `claude-opus-5-5`, e dá para trocar em ⚙. O estrategista roda com esforço `medium` (configurável na aba Settings da planilha: `strategyEffort`). Se a revisão estourar o tempo, use `low`; se houver chave do Gemini, ele assume automaticamente.
 
 ### 4. Publicar o app
 

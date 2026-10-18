@@ -33,6 +33,13 @@ const PRIORITIES = {
   4: { label: 'P4 · Baixa', weight: 10 },
 };
 
+// Horizontes da cascata de metas: 10 anos → semana (o dia é o plano de tarefas)
+const HORIZONS = {
+  '10a': { label: '10 anos', days: 3650 }, '5a': { label: '5 anos', days: 1825 }, '2a': { label: '2 anos', days: 730 },
+  '1a': { label: '1 ano', days: 365 }, '6m': { label: 'Semestre', days: 182 }, '3m': { label: 'Trimestre', days: 91 },
+  '2m': { label: 'Bimestre', days: 61 }, '1m': { label: 'Mês', days: 30 }, '1s': { label: 'Semana', days: 7 },
+};
+
 const ROUTINE_KINDS = ['ritual', 'refeicao', 'compromisso', 'saude', 'livre', 'sono', 'casa', 'revisao'];
 
 // ------------------------------------------------------------
@@ -40,8 +47,8 @@ const ROUTINE_KINDS = ['ritual', 'refeicao', 'compromisso', 'saude', 'livre', 's
 // ------------------------------------------------------------
 const SCHEMA = {
   Goals: {
-    cols: ['id', 'title', 'rank', 'tier', 'deadline', 'status', 'metric',
-      'result', 'purpose', 'evidence', 'see', 'hear', 'feel', 'smell', 'taste', 'emotion', 'notes', 'createdAt'],
+    cols: ['id', 'title', 'rank', 'horizon', 'deadline', 'status', 'metric',
+      'result', 'purpose', 'evidence', 'see', 'hear', 'feel', 'smell', 'taste', 'emotion', 'notes', 'createdAt', 'parentId'],
     num: ['rank'],
   },
   Projects: {
@@ -72,6 +79,10 @@ const SCHEMA = {
   Settings: {
     cols: ['key', 'value'],
   },
+  Reviews: {
+    // Conselhos do estrategista: data = JSON da análise, applied = JSON do que foi aplicado
+    cols: ['id', 'date', 'horizon', 'data', 'applied'],
+  },
 };
 
 const DEFAULT_SETTINGS = {
@@ -90,6 +101,8 @@ const DEFAULT_SETTINGS = {
   geminiModel: 'gemini-2.5-flash',
   periodFocusGoalId: '',          // meta-mestra do período (ex.: fazer caixa)
   periodFocusUntil: '',
+  strategyEffort: 'medium',       // profundidade do estrategista (low | medium | high)
+  strategyHour: '16',             // revisão automática: domingo (semana), dia 1 (mês/trimestre/ano)
 };
 
 // ------------------------------------------------------------
@@ -99,18 +112,21 @@ function seedData_() {
   const now = new Date().toISOString();
   return {
     Goals: [
-      { id: 'g_caixa', rank: 1, tier: 'curto', title: 'Fazer caixa · aumentar o faturamento', deadline: '', status: 'ativa',
+      { id: 'g_visao', rank: 1, horizon: '10a', parentId: '', title: 'Visão de 10 anos (escreva a sua)', deadline: '2036-12-31', status: 'ativa',
+        metric: '', result: '', purpose: '', evidence: '', see: '', hear: '', feel: '', smell: '', taste: '', emotion: '',
+        notes: 'O topo da cascata. Quem você é, onde mora, o que construiu, quanto fatura. Todo o resto deriva daqui.', createdAt: now },
+      { id: 'g_eua', rank: 2, horizon: '2a', parentId: 'g_visao', title: 'Voltar a morar nos Estados Unidos', deadline: '', status: 'ativa',
+        metric: 'Visto aprovado + renda em USD + mudança feita', result: '', purpose: '', evidence: '', see: '', hear: '', feel: '', smell: '', taste: '', emotion: '', notes: '', createdAt: now },
+      { id: 'g_caixa', rank: 3, horizon: '3m', parentId: 'g_eua', title: 'Fazer caixa · aumentar o faturamento', deadline: '', status: 'ativa',
         metric: 'Faturamento mensal recorrente (R$) e caixa acumulado',
         result: 'Faturamento recorrente que paga o custo fixo com folga e acumula caixa para a mudança para os EUA.',
         purpose: 'É o combustível de todos os outros projetos. Sem caixa nada anda.',
         evidence: '', see: '', hear: '', feel: '', smell: '', taste: '', emotion: '', notes: 'Meta-mestra: alimenta todas as outras.', createdAt: now },
-      { id: 'g_eua', rank: 2, tier: 'medio', title: 'Voltar a morar nos Estados Unidos', deadline: '', status: 'ativa',
-        metric: 'Visto aprovado + renda em USD + mudança feita', result: '', purpose: '', evidence: '', see: '', hear: '', feel: '', smell: '', taste: '', emotion: '', notes: '', createdAt: now },
-      { id: 'g_paula', rank: 3, tier: 'medio', title: 'Reconstruir a relação com a Paula', deadline: '', status: 'ativa',
+      { id: 'g_paula', rank: 4, horizon: '1a', parentId: 'g_visao', title: 'Reconstruir a relação com a Paula', deadline: '', status: 'ativa',
         metric: '', result: '', purpose: '', evidence: '', see: '', hear: '', feel: '', smell: '', taste: '', emotion: '', notes: '', createdAt: now },
-      { id: 'g_saude', rank: 4, tier: 'continuo', title: 'Corpo e energia em ordem', deadline: '', status: 'ativa',
+      { id: 'g_saude', rank: 5, horizon: '1a', parentId: 'g_visao', title: 'Corpo e energia em ordem', deadline: '', status: 'ativa',
         metric: '2 caminhadas/semana + refeições preparadas no domingo', result: '', purpose: 'Energia física sustenta o resto.', evidence: '', see: '', hear: '', feel: '', smell: '', taste: '', emotion: '', notes: '', createdAt: now },
-      { id: 'g_casa', rank: 5, tier: 'curto', title: 'Casa funcional', deadline: '', status: 'ativa',
+      { id: 'g_casa', rank: 6, horizon: '1m', parentId: 'g_saude', title: 'Casa funcional', deadline: '', status: 'ativa',
         metric: 'Reparos resolvidos', result: '', purpose: '', evidence: '', see: '', hear: '', feel: '', smell: '', taste: '', emotion: '', notes: 'Só entra na agenda quando não competir com caixa.', createdAt: now },
     ],
     Projects: [
@@ -153,6 +169,7 @@ function seedData_() {
       { key: '6', goalId: 'g_eua', note: '' },
     ],
     Plan: [],
+    Reviews: [],
     Settings: Object.keys(DEFAULT_SETTINGS).map(k => ({ key: k, value: DEFAULT_SETTINGS[k] })),
   };
 }

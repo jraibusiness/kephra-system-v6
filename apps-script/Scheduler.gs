@@ -51,13 +51,22 @@ function realityFactors_() {
   return out;
 }
 
+// A meta e todas as suas metas-mãe, até a visão de 10 anos
+function goalChain_(goalId, goals) {
+  const out = [];
+  let id = goalId;
+  while (id && goals[id] && out.indexOf(id) < 0) { out.push(id); id = goals[id].parentId; }
+  return out;
+}
+
 function scoreTask_(t, ctx) {
   let s = (PRIORITIES[t.priority] || PRIORITIES[3]).weight;
   const p = ctx.projects[t.projectId];
   const g = p ? ctx.goals[p.goalId] : null;
   if (g) {
-    if (ctx.focus && g.id === ctx.focus.goalId) s += 45;
-    if (ctx.periodGoal && g.id === ctx.periodGoal) s += 25;
+    const chain = goalChain_(g.id, ctx.goals);
+    if (ctx.focus && chain.indexOf(ctx.focus.goalId) >= 0) s += 45;
+    if (ctx.periodGoal && chain.indexOf(ctx.periodGoal) >= 0) s += 25;
     if (g.rank) s += Math.max(0, 6 - g.rank) * 4;
     if (g.status === 'pausada') s -= 40;
   }

@@ -147,7 +147,7 @@ body.has-timer { padding-bottom: calc(var(--tabbar) + env(safe-area-inset-bottom
 
 /* Abas */
 .tabs { position: fixed; bottom: 0; left: 0; right: 0; z-index: 30; background: var(--surface); border-top: 1px solid var(--border); display: flex; padding-bottom: env(safe-area-inset-bottom); }
-.tabs button { flex: 1; border: 0; background: transparent; height: var(--tabbar); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 11px; font-weight: 600; color: var(--dim); }
+.tabs button { flex: 1; min-width: 0; border: 0; background: transparent; height: var(--tabbar); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 10px; letter-spacing: -.01em; font-weight: 600; color: var(--dim); }
 .tabs button .ic { font-size: 20px; line-height: 1; filter: grayscale(1); opacity: .7; }
 .tabs button.on { color: var(--accent); }
 .tabs button.on .ic { filter: none; opacity: 1; }

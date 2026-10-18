@@ -90,7 +90,7 @@ function aiContext_() {
   const goals = all_('Goals').filter(g => g.status !== 'concluida').sort((a, b) => (a.rank || 99) - (b.rank || 99));
   const projects = all_('Projects').filter(p => p.status === 'ativo');
   return 'METAS (ordem de prioridade):\n' +
-    goals.map(g => '- [' + g.id + '] #' + g.rank + ' ' + g.title + (g.deadline ? ' (prazo ' + g.deadline + ')' : '')).join('\n') +
+    goals.map(g => '- [' + g.id + '] #' + g.rank + ' ' + ((HORIZONS[g.horizon] || {}).label || '') + ' · ' + g.title + (g.parentId ? ' (serve a ' + g.parentId + ')' : '') + (g.deadline ? ' (prazo ' + g.deadline + ')' : '')).join('\n') +
     '\n\nPROJETOS ATIVOS:\n' +
     projects.map(p => '- [' + p.id + '] ' + p.name + ' → meta ' + p.goalId + ' · P' + p.priority).join('\n') +
     '\n\nTIPOS DE ESFORÇO:\n' +
@@ -173,11 +173,13 @@ function aiGoalSensory(goalId) {
 
 // Parágrafo estratégico para o e-mail da manhã
 function aiBriefing(view) {
+  const last = reviewsList_(1)[0];
+  const strategy = last && last.data.summary ? '\n\nESTRATÉGIA VIGENTE (' + last.horizon + ', ' + last.date.slice(0, 10) + '):\n' + last.data.summary + '\nGargalo: ' + last.data.constraint : '';
   const lines = view.timeline.map(x => x.startHM + '–' + x.endHM + ' ' + x.title + (x.kind === 'tarefa' ? ' [P' + x.priority + ']' : ' (' + x.kind + ')'));
   return ai_({
     system: SYSTEM_BASE + ' Escreva o briefing da manhã: no máximo 5 linhas, sem saudação longa. Diga qual é a UMA coisa que, ' +
-      'se feita hoje, torna o dia um sucesso, e um alerta concreto se o plano estiver apertado ou houver prazo vencendo. Sem emojis.',
-    prompt: aiContext_() + '\n\nFOCO DO DIA: ' + (view.focus ? view.focus.title : '-') +
+      'se feita hoje, mais move o gargalo da estratégia vigente, e um alerta concreto se o plano estiver apertado ou houver prazo vencendo. Sem emojis.',
+    prompt: aiContext_() + strategy + '\n\nFOCO DO DIA: ' + (view.focus ? view.focus.title : '-') +
       '\nCAPACIDADE: ' + view.plannedMin + ' min planejados de ' + (view.freeMin || '?') + ' min livres' +
       '\n\nAGENDA:\n' + lines.join('\n') +
       (view.overflow && view.overflow.length ? '\n\nNÃO COUBE HOJE:\n' + view.overflow.map(o => '- ' + o.title).join('\n') : ''),
