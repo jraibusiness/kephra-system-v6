@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <meta name="theme-color" content="#1A365D">
+  <title>Kephra</title>
+  <?!= include('Styles'); ?>
+</head>
+<body>
+  <header class="top">
+    <div class="brand">KEPHRA<small>sistema de execução</small></div>
+    <div class="spacer"></div>
+    <button class="icon-btn" data-act="refresh" aria-label="Atualizar">↻</button>
+    <button class="icon-btn" data-act="nav" data-v="ajustes" aria-label="Ajustes">⚙</button>
+  </header>
+
+  <main id="view"><div class="splash"><div><div class="brand">KEPHRA</div><p>Carregando…</p></div></div></main>
+
+  <div id="timer"></div>
+
+  <nav class="tabs" id="tabs">
+    <button data-act="nav" data-v="hoje"><span class="ic">☀️</span>Hoje</button>
+    <button data-act="nav" data-v="tarefas"><span class="ic">✅</span>Tarefas</button>
+    <button data-act="nav" data-v="projetos"><span class="ic">🗂️</span>Projetos</button>
+    <button data-act="nav" data-v="metas"><span class="ic">🎯</span>Metas</button>
+    <button data-act="nav" data-v="analise"><span class="ic">📊</span>Análise</button>
+  </nav>
+
+  <div id="sheet"></div>
+  <div id="overlay"></div>
+  <div id="toast"></div>
+  <div id="loading" class="loading hidden"></div>
+
+  <script>window.OPEN_TASK = <?= openTask ?>;</script>
+  <?!= include('App'); ?>
+</body>
+</html>

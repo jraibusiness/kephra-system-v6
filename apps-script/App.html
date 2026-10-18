@@ -1,0 +1,635 @@
+<script>
+// ============================================================
+// KEPHRA — front-end (vanilla JS, sem build)
+// ============================================================
+const S = { d: null, view: 'hoje', day: null, dayView: null, taskFilter: 'abertas', taskProject: '', taskQuery: '', statsDays: 30, stats: null, form: null };
+const $ = sel => document.querySelector(sel);
+
+// ---------- ponte com o Apps Script ----------
+let pending = 0;
+function call(action, payload) {
+  pending++; $('#loading').classList.remove('hidden');
+  return new Promise((resolve, reject) => {
+    const done = () => { if (--pending <= 0) { pending = 0; $('#loading').classList.add('hidden'); } };
+    google.script.run
+      .withSuccessHandler(raw => { done(); const r = JSON.parse(raw); r.ok ? resolve(r.data) : (toast(r.error, true), reject(new Error(r.error))); })
+      .withFailureHandler(err => { done(); toast(err.message || String(err), true); reject(err); })
+      .api(action, payload || {});
+  });
+}
+
+// ---------- utilidades ----------
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const ymd = d => { const z = n => String(n).padStart(2, '0'); return d.getFullYear() + '-' + z(d.getMonth() + 1) + '-' + z(d.getDate()); };
+const parseIso = s => { const m = String(s || '').match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2})(?::(\d{2}))?)?/); return m ? new Date(+m[1], +m[2] - 1, +m[3], +(m[4] || 0), +(m[5] || 0), +(m[6] || 0)) : null; };
+const addDays = (day, n) => { const d = parseIso(day); d.setDate(d.getDate() + n); return ymd(d); };
+const ddmm = s => s ? s.slice(8, 10) + '/' + s.slice(5, 7) : '';
+const daysTo = s => Math.round((parseIso(s.slice(0, 10)) - parseIso(ymd(new Date()))) / 86400000);
+const fmtMin = m => { m = Math.round(m || 0); if (m < 60) return m + ' min'; const h = Math.floor(m / 60), r = m % 60; return h + 'h' + (r ? String(r).padStart(2, '0') : ''); };
+const clock = sec => { const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = sec % 60; return (h ? h + ':' : '') + String(m).padStart(h ? 2 : 1, '0') + ':' + String(s).padStart(2, '0'); };
+const proj = id => S.d.projects.find(p => p.id === id);
+const goal = id => S.d.goals.find(g => g.id === id);
+const task = id => S.d.tasks.find(t => t.id === id);
+const et = k => S.d.effortTypes[k] || { icon: '•', label: 'Sem tipo' };
+const WD = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+const WDS = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
+
+function toast(msg, err) {
+  const el = $('#toast');
+  el.innerHTML = '<div class="toast' + (err ? ' err' : '') + '">' + esc(msg) + '</div>';
+  clearTimeout(toast._t); toast._t = setTimeout(() => el.innerHTML = '', err ? 5000 : 2200);
+}
+
+// ---------- ciclo principal ----------
+async function boot() {
+  S.d = await call('bootstrap');
+  S.day = S.d.todayISO; S.dayView = S.d.today;
+  render();
+  if (window.OPEN_TASK && task(window.OPEN_TASK)) openTask(window.OPEN_TASK);
+}
+
+async function reload(silent) {
+  const d = await call('bootstrap');
+  S.d = d;
+  S.dayView = S.day === d.todayISO ? d.today : await call('day', { day: S.day });
+  if (S.view === 'analise') S.stats = await call('stats', { days: S.statsDays });
+  render();
+  if (!silent) toast('Atualizado');
+}
+
+function render() {
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.v === S.view));
+  const views = { hoje: vHoje, tarefas: vTarefas, projetos: vProjetos, metas: vMetas, analise: vAnalise, ajustes: vAjustes };
+  $('#view').innerHTML = (views[S.view] || vHoje)();
+  renderTimer();
+  if (S.view === 'analise' && !S.stats) call('stats', { days: S.statsDays }).then(st => { S.stats = st; if (S.view === 'analise') render(); });
+}
+
+// ---------- cronômetro ----------
+function elapsedSec() { return S.d.timer ? Math.max(0, Math.floor((Date.now() - parseIso(S.d.timer.start)) / 1000)) : 0; }
+function renderTimer() {
+  const box = $('#timer');
+  const t = S.d.timer;
+  document.body.classList.toggle('has-timer', !!t && S.view !== 'hoje');
+  if (!t || S.view === 'hoje') { box.innerHTML = ''; return; }
+  const tk = task(t.taskId) || { title: '?' };
+  box.innerHTML = '<div class="timer-pill"><div class="grow" data-act="open-task" data-id="' + tk.id + '"><div class="tp-title">' + esc(tk.title) + '</div>' +
+    '<div class="sub" style="font-size:12px">' + (tk.estimateMin ? 'previsto ' + fmtMin(tk.estimateMin) : '') + '</div></div>' +
+    '<div class="tp-time" data-elapsed>' + clock(elapsedSec()) + '</div>' +
+    '<button class="btn-round" data-act="timer-stop" title="Pausar">❚❚</button><button class="btn-round" data-act="timer-done" title="Concluir">✓</button></div>';
+}
+setInterval(() => {
+  if (!S.d || !S.d.timer) return;
+  const s = elapsedSec();
+  document.querySelectorAll('[data-elapsed]').forEach(el => el.textContent = clock(s));
+  const est = (task(S.d.timer.taskId) || {}).estimateMin;
+  const over = document.querySelector('[data-over]');
+  if (over && est) over.textContent = s / 60 > est ? 'passou ' + fmtMin(s / 60 - est) + ' do previsto' : 'faltam ' + fmtMin(est - s / 60) + ' do previsto';
+}, 1000);
+
+async function timerStart(id) {
+  const log = await call('timerStart', { taskId: id });
+  S.d.timer = log;
+  const t = task(id); if (t && t.status === 'todo') t.status = 'doing';
+  closeSheet(); render(); toast('Cronômetro iniciado');
+}
+async function timerStop(done) {
+  const id = S.d.timer && S.d.timer.taskId;
+  await call('timerStop', { done: !!done });
+  S.d.timer = null;
+  await reload(true);
+  toast(done ? 'Concluída ✓' : 'Pausado');
+  if (done && id) maybeCelebrate(id);
+}
+function maybeCelebrate(id) {
+  const t = task(id), real = S.d.actual[id];
+  if (t && real && t.estimateMin) toast('Previsto ' + fmtMin(t.estimateMin) + ' · real ' + fmtMin(real));
+}
+
+// ============================================================
+// HOJE
+// ============================================================
+function vHoje() {
+  const v = S.dayView; if (!v) return '';
+  const isToday = v.day === S.d.todayISO;
+  const now = Date.now();
+  let h = '<div class="row between"><button class="btn-round" data-act="day" data-v="-1">‹</button>' +
+    '<div style="text-align:center"><h2 style="margin:0">' + v.weekday + ' ' + ddmm(v.day) + '</h2><div class="sub">' +
+    (isToday ? 'hoje' : daysTo(v.day) === 1 ? 'amanhã' : daysTo(v.day) === -1 ? 'ontem' : '') + (v.saved ? ' · plano no Calendar' : ' · prévia (não salvo)') + '</div></div>' +
+    '<button class="btn-round" data-act="day" data-v="1">›</button></div><div style="height:12px"></div>';
+
+  if (v.focus && v.focus.title) {
+    h += '<div class="card focus-card tap" data-act="nav" data-v="metas"><div class="label">Foco do dia</div><div class="title">' + esc(v.focus.title) + '</div>' +
+      (v.focus.note ? '<div style="font-size:13px;opacity:.8;margin-top:4px">' + esc(v.focus.note) + '</div>' : '') +
+      (v.periodGoal && v.periodGoal !== v.focus.title ? '<div style="font-size:12px;opacity:.65;margin-top:6px">Meta-mestra do período: ' + esc(v.periodGoal) + '</div>' : '') + '</div>';
+  }
+
+  if (S.d.timer && isToday) {
+    const tk = task(S.d.timer.taskId) || { title: '?' };
+    h += '<div class="card timer-big"><div class="sub">em execução</div><div class="t-title" style="margin:4px 0 10px">' + esc(tk.title) + '</div>' +
+      '<div class="tp-time" data-elapsed>' + clock(elapsedSec()) + '</div><div class="sub" data-over style="margin-top:6px"></div>' +
+      '<div class="row" style="margin-top:14px"><button class="btn block" data-act="timer-stop">❚❚ Pausar</button><button class="btn primary block" data-act="timer-done">✓ Concluir</button></div></div>';
+  }
+
+  if (v.isWorkDay) {
+    const cap = v.capacityMin || v.freeMin || 0;
+    const pct = cap ? Math.min(100, Math.round(v.plannedMin / cap * 100)) : 0;
+    h += '<div class="card"><div class="row between"><b>Carga do dia</b><span class="mono sub">' + fmtMin(v.plannedMin) + (cap ? ' / ' + fmtMin(cap) : '') + '</span></div>' +
+      '<div class="bar' + (pct >= 100 ? ' warn' : '') + '" style="margin-top:8px"><i style="width:' + pct + '%"></i></div>' +
+      (v.freeMin ? '<div class="hint">Tempo livre real: ' + fmtMin(v.freeMin) + ' · capacidade planejável (' + S.d.settings.capacityPct + '%): ' + fmtMin(v.capacityMin) + (v.deepMin ? ' · profundo: ' + fmtMin(v.deepMin) : '') + '</div>' : '') + '</div>';
+  } else {
+    h += '<div class="card sub">Dia sem trabalho planejado (só rotina e compromissos). Ajuste os dias úteis em ⚙.</div>';
+  }
+
+  h += '<div class="row" style="margin:6px 0 4px"><button class="btn primary grow" data-act="plan">' + (v.saved ? '↻ Replanejar' : '⚡ Planejar e enviar ao Calendar') + '</button>' +
+    '<button class="btn" data-act="quick-add">＋ Tarefa</button></div>';
+
+  h += '<h3>Sequência</h3>';
+  if (!v.timeline.length) h += '<div class="empty">Nada na agenda.</div>';
+  h += '<div class="tl">' + v.timeline.map(x => {
+    const past = isToday && x.end < now, cur = isToday && x.start <= now && x.end > now;
+    const t = x.taskId ? task(x.taskId) : null;
+    const running = S.d.timer && x.taskId && S.d.timer.taskId === x.taskId;
+    const done = t && t.status === 'done';
+    let body = '<div class="tl-kind">' + (x.kind === 'tarefa' ? et(x.effortType).icon + ' P' + x.priority + (x.project ? ' · ' + esc(x.project) : '') : x.kind === 'agenda' ? '📅 agenda' : 'rotina') + '</div>' +
+      '<div class="t-title"' + (done ? ' style="text-decoration:line-through;opacity:.6"' : '') + '>' + esc(x.title) + '</div>';
+    let act = '';
+    if (x.kind === 'tarefa' && t && !done) {
+      act = '<div class="tl-actions">' + (running ? '' : '<button class="btn-round play" data-act="timer-start" data-id="' + t.id + '">▶</button>') +
+        '<button class="btn-round check" data-act="complete" data-id="' + t.id + '">✓</button></div>';
+    }
+    return '<div class="tl-item ' + x.kind + (past && !cur ? ' past' : '') + (cur ? ' now' : '') + '"' + (t ? ' data-act="open-task" data-id="' + t.id + '"' : '') + '>' +
+      '<div class="tl-time"><b>' + x.startHM + '</b>' + x.endHM + '</div><div class="tl-body">' + body + '</div>' + act + '</div>';
+  }).join('') + '</div>';
+
+  if (v.overflow && v.overflow.length) {
+    h += '<h3>Não coube neste dia</h3><div class="sub" style="margin-bottom:8px">Ordem de prioridade calculada. Corte, adie ou mude o prazo.</div>' +
+      v.overflow.map(o => taskCard(task(o.taskId), o.minutes)).join('');
+  }
+  return h;
+}
+
+// ============================================================
+// TAREFAS
+// ============================================================
+function taskCard(t, plannedMin) {
+  if (!t) return '';
+  const p = proj(t.projectId);
+  const real = S.d.actual[t.id];
+  const running = S.d.timer && S.d.timer.taskId === t.id;
+  const meta = [];
+  if (p) meta.push('<span><i class="dot" style="background:' + esc(p.color || '#999') + '"></i>' + esc(p.name) + '</span>');
+  meta.push('<span>⏱ ' + fmtMin(t.estimateMin) + (real ? ' · real ' + fmtMin(real) : '') + (plannedMin ? ' · bloco ' + fmtMin(plannedMin) : '') + '</span>');
+  meta.push('<span>' + et(t.effortType).icon + ' ' + '●'.repeat(t.effortLevel || 1) + '○'.repeat(3 - (t.effortLevel || 1)) + '</span>');
+  if (t.deadline) { const d = daysTo(t.deadline); meta.push('<span class="' + (d < 0 && t.status !== 'done' ? 'late' : '') + '">📌 ' + ddmm(t.deadline) + (t.status !== 'done' ? (d < 0 ? ' (atrasada)' : d === 0 ? ' (hoje)' : d === 1 ? ' (amanhã)' : '') : '') + '</span>'); }
+  if (t.fixedStart) meta.push('<span>🕘 ' + ddmm(t.fixedStart) + ' ' + t.fixedStart.slice(11, 16) + '</span>');
+  const done = t.status === 'done';
+  return '<div class="task p' + (t.priority || 3) + (done ? ' done' : '') + (running ? ' running' : '') + '" data-act="open-task" data-id="' + t.id + '">' +
+    '<div class="grow"><div class="t-title">' + esc(t.title) + '</div><div class="t-meta">' + meta.join('') + '</div></div>' +
+    (done ? '<button class="btn-round" data-act="reopen" data-id="' + t.id + '" title="Reabrir">↺</button>'
+      : (running ? '' : '<button class="btn-round play" data-act="timer-start" data-id="' + t.id + '">▶</button>') +
+        '<button class="btn-round check" data-act="complete" data-id="' + t.id + '">✓</button>') + '</div>';
+}
+
+function filteredTasks() {
+  const q = S.taskQuery.trim().toLowerCase();
+  const plannedToday = {}; (S.d.today.timeline || []).forEach(x => { if (x.taskId) plannedToday[x.taskId] = true; });
+  let list = S.d.tasks.filter(t => {
+    if (S.taskProject && t.projectId !== S.taskProject) return false;
+    if (q && (t.title + ' ' + t.keywords + ' ' + t.notes).toLowerCase().indexOf(q) < 0) return false;
+    if (S.taskFilter === 'concluidas') return t.status === 'done';
+    if (t.status === 'done' || t.status === 'dropped') return false;
+    if (S.taskFilter === 'hoje') return plannedToday[t.id];
+    if (S.taskFilter === 'prazo') return !!t.deadline;
+    if (S.taskFilter === 'sem-projeto') return !t.projectId;
+    return true;
+  });
+  const sorters = {
+    prazo: (a, b) => a.deadline.localeCompare(b.deadline),
+    concluidas: (a, b) => (b.doneAt || '').localeCompare(a.doneAt || ''),
+  };
+  return list.sort(sorters[S.taskFilter] || ((a, b) => (a.priority - b.priority) || (a.deadline || '9').localeCompare(b.deadline || '9')));
+}
+
+function vTarefas() {
+  const filters = [['abertas', 'Abertas'], ['hoje', 'No plano de hoje'], ['prazo', 'Com prazo'], ['sem-projeto', 'Sem projeto'], ['concluidas', 'Concluídas']];
+  const list = filteredTasks();
+  const totalMin = list.filter(t => t.status !== 'done').reduce((a, t) => a + (t.estimateMin || 0), 0);
+  return '<h2>Tarefas</h2>' +
+    '<div class="quick"><input type="text" id="quick" placeholder="Nova tarefa… ex.: ligar pro Frank amanhã 10h, 30min, urgente" enterkeyhint="done">' +
+    '<button class="btn" data-act="quick-add" title="Adicionar">＋</button>' +
+    (S.d.aiKeys.claude || S.d.aiKeys.gemini ? '<button class="btn navy" data-act="quick-ai" title="Interpretar com IA">✦ IA</button>' : '') + '</div>' +
+    '<div class="chips">' + filters.map(f => '<button class="chip' + (S.taskFilter === f[0] ? ' on' : '') + '" data-act="task-filter" data-v="' + f[0] + '">' + f[1] + '</button>').join('') + '</div>' +
+    '<div class="two" style="margin:10px 0 12px"><select data-act="task-project"><option value="">Todos os projetos</option>' +
+    S.d.projects.filter(p => p.status !== 'arquivado').map(p => '<option value="' + p.id + '"' + (S.taskProject === p.id ? ' selected' : '') + '>' + esc(p.name) + '</option>').join('') +
+    '</select><input type="search" data-act="task-query" placeholder="Buscar / palavra-chave" value="' + esc(S.taskQuery) + '"></div>' +
+    '<div class="sub" style="margin-bottom:8px">' + list.length + ' tarefas' + (totalMin ? ' · ' + fmtMin(totalMin) + ' estimados' : '') + '</div>' +
+    (list.length ? list.map(t => taskCard(t)).join('') : '<div class="empty">Nenhuma tarefa aqui.</div>');
+}
+
+// ---------- formulário de tarefa ----------
+function openTask(id, preset) {
+  const t = id ? Object.assign({}, task(id)) : Object.assign({ title: '', keywords: '', projectId: S.taskProject || '', estimateMin: 30, effortLevel: 2, priority: 3, deadline: '', effortType: 'mental_profundo', status: 'todo', fixedStart: '', splittable: false, notes: '' }, preset || {});
+  S.form = t;
+  const real = id ? S.d.actual[id] : 0;
+  const projOpts = '<option value="">— sem projeto —</option>' + S.d.goals.slice().sort((a, b) => a.rank - b.rank).map(g => {
+    const ps = S.d.projects.filter(p => p.goalId === g.id && p.status !== 'arquivado');
+    return ps.length ? '<optgroup label="' + esc(g.title) + '">' + ps.map(p => '<option value="' + p.id + '"' + (t.projectId === p.id ? ' selected' : '') + '>' + esc(p.name) + '</option>').join('') + '</optgroup>' : '';
+  }).join('') + S.d.projects.filter(p => !goal(p.goalId) && p.status !== 'arquivado').map(p => '<option value="' + p.id + '"' + (t.projectId === p.id ? ' selected' : '') + '>' + esc(p.name) + '</option>').join('');
+  const etOpts = Object.keys(S.d.effortTypes).map(k => '<option value="' + k + '"' + (t.effortType === k ? ' selected' : '') + '>' + S.d.effortTypes[k].icon + ' ' + S.d.effortTypes[k].label + '</option>').join('');
+  const f = S.d.factors[t.effortType] || S.d.factors._global;
+  const ai = S.d.aiKeys.claude || S.d.aiKeys.gemini;
+
+  openSheet((id ? 'Tarefa' : 'Nova tarefa'),
+    '<label class="f"><span>Nome da tarefa</span><input type="text" name="title" value="' + esc(t.title) + '" placeholder="Começe com um verbo: Enviar, Ligar, Escrever…"></label>' +
+    '<label class="f"><span>Projeto</span><select name="projectId">' + projOpts + '</select></label>' +
+    '<div class="f"><span>Tempo estimado <em>(minutos)</em></span><div class="chips" style="margin-bottom:6px">' + [15, 30, 45, 60, 90, 120, 180].map(m => '<button class="chip' + (t.estimateMin === m ? ' on' : '') + '" data-act="est" data-v="' + m + '">' + fmtMin(m) + '</button>').join('') + '</div>' +
+    '<input type="number" name="estimateMin" min="5" step="5" value="' + (t.estimateMin || '') + '">' +
+    '<div class="hint" id="realistic">' + realisticHint(t.estimateMin, f) + (real ? ' · já cronometrado: ' + fmtMin(real) : '') + '</div></div>' +
+    '<div class="f"><span>Prioridade</span><div class="seg prio" data-seg="priority">' + [1, 2, 3, 4].map(n => '<button data-v="' + n + '" class="' + (t.priority === n ? 'on' : '') + '">P' + n + '</button>').join('') + '</div></div>' +
+    '<div class="f"><span>Nível de esforço</span><div class="seg" data-seg="effortLevel">' + [[1, 'Leve'], [2, 'Médio'], [3, 'Pesado']].map(n => '<button data-v="' + n[0] + '" class="' + (t.effortLevel === n[0] ? 'on' : '') + '">' + n[1] + '</button>').join('') + '</div></div>' +
+    '<label class="f"><span>Tipo de esforço</span><select name="effortType">' + etOpts + '</select><div class="hint" id="etdesc">' + esc(et(t.effortType).desc || '') + '</div></label>' +
+    '<div class="two"><label class="f"><span>Prazo final</span><input type="date" name="deadline" value="' + esc((t.deadline || '').slice(0, 10)) + '"></label>' +
+    '<label class="f"><span>Horário fixo <em>(opcional)</em></span><input type="datetime-local" name="fixedStart" value="' + esc((t.fixedStart || '').slice(0, 16)) + '"></label></div>' +
+    '<label class="f"><span>Palavras-chave</span><input type="text" name="keywords" value="' + esc(t.keywords) + '" placeholder="separadas por vírgula"></label>' +
+    '<label class="check-row"><input type="checkbox" name="splittable"' + (t.splittable ? ' checked' : '') + '> Pode ser dividida em blocos</label>' +
+    '<label class="f"><span>Notas</span><textarea name="notes">' + esc(t.notes) + '</textarea></label>' +
+    (id ? '<label class="f"><span>Status</span><select name="status">' + [['todo', 'A fazer'], ['doing', 'Em andamento'], ['done', 'Concluída'], ['dropped', 'Descartada']].map(s => '<option value="' + s[0] + '"' + (t.status === s[0] ? ' selected' : '') + '>' + s[1] + '</option>').join('') + '</select></label>' : ''),
+    '<button class="btn primary" data-act="save-task">Salvar</button>' +
+    (id && t.status !== 'done' ? '<button class="btn" data-act="timer-start" data-id="' + id + '">▶ Iniciar</button>' : '') +
+    (id && ai ? '<button class="btn navy" data-act="ai-breakdown" data-id="' + id + '">✦ Quebrar em passos</button>' : '') +
+    (id ? '<button class="btn ghost" data-act="log-manual" data-id="' + id + '">＋ Tempo manual</button><button class="btn danger" data-act="delete-task" data-id="' + id + '">Excluir</button>' : ''));
+}
+
+function realisticHint(est, f) {
+  if (!est || !f) return '';
+  const r = Math.round(est * f.factor / 5) * 5;
+  return 'Duração realista para o agendador: <b>' + fmtMin(r) + '</b> (fator ' + f.factor.toFixed(2) + (f.n ? ', ' + f.n + ' tarefas de histórico' : ', sem histórico ainda') + ')';
+}
+
+function readForm() {
+  const box = $('#sheet');
+  const t = S.form;
+  box.querySelectorAll('[name]').forEach(el => {
+    const k = el.name;
+    if (el.type === 'checkbox') t[k] = el.checked;
+    else if (el.type === 'number') t[k] = el.value === '' ? null : Number(el.value);
+    else t[k] = el.value;
+  });
+  box.querySelectorAll('[data-seg]').forEach(seg => { const on = seg.querySelector('.on'); if (on) t[seg.dataset.seg] = isNaN(on.dataset.v) ? on.dataset.v : Number(on.dataset.v); });
+  return t;
+}
+
+async function saveTask() {
+  const t = readForm();
+  if (!t.title.trim()) return toast('Dê um nome à tarefa', true);
+  await call('saveTask', { task: t });
+  closeSheet(); await reload(true); toast('Tarefa salva');
+}
+
+async function quickAdd(useAI) {
+  const input = $('#quick');
+  const text = input ? input.value.trim() : '';
+  if (!useAI) return openTask(null, { title: text });
+  if (!text) return toast('Escreva a tarefa primeiro', true);
+  toast('Interpretando…');
+  const parsed = await call('aiParse', { text });
+  if (parsed.projectId && !proj(parsed.projectId)) parsed.projectId = '';
+  input.value = '';
+  openTask(null, parsed);
+}
+
+async function aiBreakdown(id) {
+  toast('Quebrando em passos…');
+  const steps = await call('aiBreakdown', { taskId: id });
+  const parent = task(id);
+  S.steps = steps.map(s => Object.assign(s, { on: true }));
+  openSheet('Passos sugeridos',
+    '<div class="sub" style="margin-bottom:10px">Viram tarefas novas no projeto <b>' + esc((proj(parent.projectId) || {}).name || '—') + '</b>. Desmarque o que não quiser.</div>' +
+    S.steps.map((s, i) => '<label class="check-row card" style="margin-bottom:8px"><input type="checkbox" data-step="' + i + '" checked><span class="grow"><b>' + esc(s.title) + '</b><br><span class="sub">' + fmtMin(s.estimateMin) + ' · ' + et(s.effortType).icon + ' ' + et(s.effortType).label + '</span></span></label>').join(''),
+    '<button class="btn primary" data-act="create-steps" data-id="' + id + '">Criar tarefas</button><button class="btn" data-act="close">Cancelar</button>');
+}
+
+async function createSteps(id) {
+  const parent = task(id);
+  const chosen = S.steps.filter((s, i) => { const cb = document.querySelector('[data-step="' + i + '"]'); return cb && cb.checked; });
+  const tasks = chosen.map((s, i) => ({ title: s.title, estimateMin: s.estimateMin, effortType: s.effortType, projectId: parent.projectId, priority: parent.priority, effortLevel: parent.effortLevel, deadline: parent.deadline, keywords: parent.keywords, notes: 'Passo ' + (i + 1) + ' de: ' + parent.title, splittable: false }));
+  await call('saveTasks', { tasks });
+  closeSheet(); await reload(true); toast(tasks.length + ' tarefas criadas');
+}
+
+// ============================================================
+// PROJETOS
+// ============================================================
+function projectStats(p) {
+  const ts = S.d.tasks.filter(t => t.projectId === p.id);
+  const open = ts.filter(t => t.status === 'todo' || t.status === 'doing');
+  const done = ts.filter(t => t.status === 'done');
+  const min = ts.reduce((a, t) => a + (S.d.actual[t.id] || 0), 0);
+  return { open: open.length, done: done.length, openMin: open.reduce((a, t) => a + (t.estimateMin || 0), 0), min };
+}
+
+function vProjetos() {
+  const goals = S.d.goals.slice().sort((a, b) => a.rank - b.rank);
+  const groups = goals.map(g => ({ g, ps: S.d.projects.filter(p => p.goalId === g.id) })).concat([{ g: { title: 'Sem meta' }, ps: S.d.projects.filter(p => !goal(p.goalId)) }]);
+  return '<div class="row between"><h2>Projetos</h2><button class="btn small" data-act="new-project">＋ Projeto</button></div>' +
+    groups.filter(x => x.ps.length).map(x => '<h3>' + esc(x.g.title) + '</h3>' + x.ps.sort((a, b) => (a.status === 'ativo' ? 0 : 1) - (b.status === 'ativo' ? 0 : 1) || a.priority - b.priority).map(p => {
+      const st = projectStats(p);
+      const pct = st.open + st.done ? Math.round(st.done / (st.open + st.done) * 100) : 0;
+      return '<div class="card tap" data-act="open-project" data-id="' + p.id + '" style="border-left:4px solid ' + esc(p.color || '#999') + (p.status !== 'ativo' ? ';opacity:.6' : '') + '">' +
+        '<div class="row between"><b>' + esc(p.name) + '</b><span class="pill">P' + p.priority + (p.status !== 'ativo' ? ' · ' + esc(p.status) : '') + '</span></div>' +
+        '<div class="t-meta"><span>' + st.open + ' abertas (' + fmtMin(st.openMin) + ')</span><span>' + st.done + ' concluídas</span><span>⏱ ' + fmtMin(st.min) + ' rastreados</span>' + (p.weeklyHours ? '<span>meta ' + p.weeklyHours + 'h/sem</span>' : '') + '</div>' +
+        '<div class="bar" style="margin-top:8px"><i style="width:' + pct + '%"></i></div></div>';
+    }).join('')).join('');
+}
+
+function openProject(id) {
+  const p = id ? Object.assign({}, proj(id)) : { name: '', goalId: (S.d.goals[0] || {}).id || '', status: 'ativo', priority: 3, color: '#B85A38', weeklyHours: 0, notes: '' };
+  S.form = p;
+  const tasks = id ? S.d.tasks.filter(t => t.projectId === id && t.status !== 'done' && t.status !== 'dropped') : [];
+  openSheet(id ? 'Projeto' : 'Novo projeto',
+    '<label class="f"><span>Nome</span><input type="text" name="name" value="' + esc(p.name) + '"></label>' +
+    '<label class="f"><span>Meta que este projeto alimenta</span><select name="goalId"><option value="">—</option>' + S.d.goals.slice().sort((a, b) => a.rank - b.rank).map(g => '<option value="' + g.id + '"' + (p.goalId === g.id ? ' selected' : '') + '>#' + g.rank + ' ' + esc(g.title) + '</option>').join('') + '</select></label>' +
+    '<div class="f"><span>Prioridade do projeto</span><div class="seg prio" data-seg="priority">' + [1, 2, 3, 4].map(n => '<button data-v="' + n + '" class="' + (p.priority === n ? 'on' : '') + '">P' + n + '</button>').join('') + '</div></div>' +
+    '<div class="two"><label class="f"><span>Status</span><select name="status">' + ['ativo', 'pausado', 'arquivado'].map(s => '<option' + (p.status === s ? ' selected' : '') + '>' + s + '</option>').join('') + '</select></label>' +
+    '<label class="f"><span>Horas/semana <em>(meta)</em></span><input type="number" name="weeklyHours" min="0" step="0.5" value="' + (p.weeklyHours || 0) + '"></label></div>' +
+    '<label class="f"><span>Cor</span><input type="text" name="color" value="' + esc(p.color) + '" placeholder="#B85A38"></label>' +
+    '<label class="f"><span>Notas</span><textarea name="notes">' + esc(p.notes) + '</textarea></label>' +
+    (id ? '<h3>Tarefas abertas</h3>' + (tasks.length ? tasks.map(t => taskCard(t)).join('') : '<div class="sub">Nenhuma.</div>') +
+      '<button class="btn block" style="margin-top:8px" data-act="new-task-in" data-id="' + id + '">＋ Tarefa neste projeto</button>' : ''),
+    '<button class="btn primary" data-act="save-project">Salvar</button>' + (id ? '<button class="btn danger" data-act="delete-project" data-id="' + id + '">Excluir</button>' : ''));
+}
+
+// ============================================================
+// METAS — RPM (Tony Robbins) + evidências sensoriais
+// ============================================================
+const SENSES = [
+  ['result', 'Resultado', 'O que exatamente quero? Concreto e mensurável.'],
+  ['purpose', 'Propósito', 'Por que quero isso? O que isso me dá?'],
+  ['evidence', 'Evidência', 'Como vou saber, sem dúvida, que foi atingida?'],
+  ['see', 'O que vejo', 'A cena exata: lugar, pessoas, objetos, números na tela.'],
+  ['hear', 'O que ouço', 'Sons, vozes, frases que alguém me diz.'],
+  ['feel', 'O que sinto no corpo', 'Sensação física: postura, temperatura, textura.'],
+  ['smell', 'Que cheiro tem', 'O aroma do ambiente nesse momento.'],
+  ['taste', 'Que gosto tem', 'O que estou comendo ou bebendo para celebrar.'],
+  ['emotion', 'A emoção', 'Qual emoção domina e onde ela aparece no corpo.'],
+];
+
+function vMetas() {
+  const goals = S.d.goals.slice().sort((a, b) => a.rank - b.rank);
+  const fmap = {}; S.d.focus.forEach(f => fmap[f.key] = f);
+  const gOpts = sel => '<option value="">—</option>' + goals.map(g => '<option value="' + g.id + '"' + (sel === g.id ? ' selected' : '') + '>' + esc(g.title) + '</option>').join('');
+  const st = S.d.settings;
+  return '<div class="row between"><h2>Metas</h2><button class="btn small" data-act="new-goal">＋ Meta</button></div>' +
+    '<div class="sub" style="margin-bottom:10px">A ordem define a prioridade. O agendador favorece tarefas das metas do topo e do foco do dia.</div>' +
+    goals.map((g, i) => {
+      const filled = SENSES.filter(s => g[s[0]]).length;
+      const nP = S.d.projects.filter(p => p.goalId === g.id && p.status === 'ativo').length;
+      return '<div class="card row"><div class="goal-rank">' + g.rank + '</div><div class="grow tap" data-act="open-goal" data-id="' + g.id + '"><b>' + esc(g.title) + '</b>' +
+        '<div class="t-meta"><span>' + nP + ' projetos</span>' + (g.deadline ? '<span>📌 ' + ddmm(g.deadline) + '/' + g.deadline.slice(2, 4) + '</span>' : '') + '<span>' + filled + '/9 detalhes RPM</span>' + (g.status !== 'ativa' ? '<span>' + esc(g.status) + '</span>' : '') + '</div></div>' +
+        '<div style="display:flex;flex-direction:column;gap:4px"><button class="btn small ghost" data-act="move-goal" data-id="' + g.id + '" data-v="-1"' + (i === 0 ? ' disabled' : '') + '>▲</button><button class="btn small ghost" data-act="move-goal" data-id="' + g.id + '" data-v="1"' + (i === goals.length - 1 ? ' disabled' : '') + '>▼</button></div></div>';
+    }).join('') +
+    '<h3>Meta-mestra do período</h3><div class="card"><div class="sub" style="margin-bottom:8px">Ex.: "neste mês, fazer caixa". Ganha bônus em todos os dias até a data.</div>' +
+    '<div class="two"><select data-set="periodFocusGoalId">' + gOpts(st.periodFocusGoalId) + '</select><input type="date" data-set="periodFocusUntil" value="' + esc(st.periodFocusUntil) + '"></div></div>' +
+    '<h3>Foco por dia da semana</h3><div class="card">' + [1, 2, 3, 4, 5, 6, 0].map(d => {
+      const f = fmap[String(d)] || {};
+      return '<div class="row" style="margin-bottom:8px"><b style="width:74px">' + WD[d] + '</b><select class="grow" data-focus="' + d + '">' + gOpts(f.goalId) + '</select></div>';
+    }).join('') + '<div class="hint">Muda na hora; o próximo planejamento já usa.</div></div>' +
+    '<h3>Exceções por data</h3><div class="card">' + S.d.focus.filter(f => f.key.length === 10).sort((a, b) => a.key.localeCompare(b.key)).map(f =>
+      '<div class="row" style="margin-bottom:8px"><span class="mono" style="width:74px">' + ddmm(f.key) + '</span><span class="grow">' + esc((goal(f.goalId) || {}).title || '—') + '</span><button class="btn small ghost" data-act="del-focus" data-v="' + f.key + '">✕</button></div>').join('') +
+    '<div class="two"><input type="date" id="fx-date"><select id="fx-goal">' + gOpts('') + '</select></div><button class="btn small block" style="margin-top:8px" data-act="add-focus">＋ Exceção</button></div>';
+}
+
+function openGoal(id) {
+  const g = id ? Object.assign({}, goal(id)) : { title: '', tier: 'curto', deadline: '', status: 'ativa', metric: '', notes: '' };
+  S.form = g;
+  const ai = S.d.aiKeys.claude || S.d.aiKeys.gemini;
+  openSheet(id ? 'Meta' : 'Nova meta',
+    '<label class="f"><span>Meta</span><input type="text" name="title" value="' + esc(g.title) + '"></label>' +
+    '<div class="two"><label class="f"><span>Horizonte</span><select name="tier">' + [['curto', 'Curto prazo'], ['medio', 'Médio prazo'], ['longo', 'Longo prazo'], ['continuo', 'Contínua']].map(o => '<option value="' + o[0] + '"' + (g.tier === o[0] ? ' selected' : '') + '>' + o[1] + '</option>').join('') + '</select></label>' +
+    '<label class="f"><span>Prazo</span><input type="date" name="deadline" value="' + esc(g.deadline) + '"></label></div>' +
+    '<div class="two"><label class="f"><span>Status</span><select name="status">' + ['ativa', 'pausada', 'concluida'].map(s => '<option' + (g.status === s ? ' selected' : '') + '>' + s + '</option>').join('') + '</select></label>' +
+    '<label class="f"><span>Métrica</span><input type="text" name="metric" value="' + esc(g.metric) + '"></label></div>' +
+    '<fieldset><legend>RPM · Tony Robbins</legend>' + SENSES.slice(0, 3).map(senseField(g)).join('') + '</fieldset>' +
+    '<fieldset><legend>Quando eu chegar lá…</legend>' + SENSES.slice(3).map(senseField(g)).join('') + '</fieldset>' +
+    '<label class="f"><span>Notas</span><textarea name="notes">' + esc(g.notes) + '</textarea></label>',
+    '<button class="btn primary" data-act="save-goal">Salvar</button>' +
+    (id ? '<button class="btn navy" data-act="vision" data-id="' + id + '">◉ Visualizar</button>' : '') +
+    (id && ai ? '<button class="btn" data-act="ai-goal" data-id="' + id + '">✦ Detalhar com IA</button>' : '') +
+    (id ? '<button class="btn danger" data-act="delete-goal" data-id="' + id + '">Excluir</button>' : ''));
+}
+const senseField = g => s => '<label class="f"><span>' + s[1] + ' <em>· ' + s[2] + '</em></span><textarea name="' + s[0] + '">' + esc(g[s[0]]) + '</textarea></label>';
+
+function vision(id) {
+  const g = goal(id);
+  $('#overlay').innerHTML = '<div class="vision" data-act="close-vision"><div class="sub" style="color:#9FB0C8;letter-spacing:.14em;text-transform:uppercase;font-size:11px;margin-bottom:6px">Feche os olhos depois de ler</div>' +
+    '<h1>' + esc(g.title) + '</h1>' + SENSES.filter(s => g[s[0]]).map(s => '<div class="sense"><b>' + s[1] + '</b><p>' + esc(g[s[0]]) + '</p></div>').join('') +
+    (SENSES.some(s => g[s[0]]) ? '' : '<p>Ainda sem descrição sensorial. Preencha os campos da meta.</p>') + '<p style="color:#9FB0C8;font-size:13px;margin-top:30px">Toque para fechar</p></div>';
+}
+
+// ============================================================
+// ANÁLISE
+// ============================================================
+function hbars(map, total, color) {
+  const keys = Object.keys(map).sort((a, b) => map[b] - map[a]);
+  if (!keys.length) return '<div class="sub">Sem dados ainda. Use o cronômetro.</div>';
+  const max = map[keys[0]];
+  return keys.map(k => '<div class="hbar"><span class="name">' + (S.d.effortTypes[k] ? S.d.effortTypes[k].icon + ' ' + S.d.effortTypes[k].label : esc(k)) + '</span>' +
+    '<div class="bar"><i style="width:' + Math.round(map[k] / max * 100) + '%;background:' + (color || 'var(--accent)') + '"></i></div><span class="val">' + fmtMin(map[k]) + '</span></div>').join('');
+}
+
+function vAnalise() {
+  const st = S.stats;
+  let h = '<h2>Análise</h2><div class="chips" style="margin-bottom:12px">' + [7, 30, 90].map(n => '<button class="chip' + (S.statsDays === n ? ' on' : '') + '" data-act="stats-days" data-v="' + n + '">' + n + ' dias</button>').join('') + '</div>';
+  if (!st) return h + '<div class="empty">Calculando…</div>';
+  const acc = Object.keys(st.accuracy);
+  const est = acc.reduce((a, k) => a + st.accuracy[k].est, 0), act = acc.reduce((a, k) => a + st.accuracy[k].act, 0);
+  h += '<div class="stats"><div class="card"><div class="stat">' + fmtMin(st.total) + '</div><div class="sub">rastreado</div></div>' +
+    '<div class="card"><div class="stat">' + st.done + '</div><div class="sub">concluídas</div></div>' +
+    '<div class="card"><div class="stat">' + (est ? Math.round(act / est * 100) + '%' : '—') + '</div><div class="sub">real ÷ previsto</div></div></div>';
+  h += '<h3>Por tipo de esforço</h3><div class="card">' + hbars(st.byType, st.total) + '</div>';
+  h += '<h3>Previsto × real</h3><div class="card">' + (acc.length ? '<div class="hint" style="margin:0 0 10px">Acima de 100% = você subestima. O agendador já corrige pelo fator.</div>' + acc.sort((a, b) => st.accuracy[b].n - st.accuracy[a].n).map(k => {
+    const a = st.accuracy[k], pct = Math.round(a.act / a.est * 100);
+    return '<div class="hbar"><span class="name">' + et(k).icon + ' ' + et(k).label + '</span><div class="bar' + (pct > 130 ? ' warn' : '') + '"><i style="width:' + Math.min(100, pct / 2) + '%"></i></div><span class="val">' + pct + '%</span></div>';
+  }).join('') : '<div class="sub">Conclua tarefas com o cronômetro para medir.</div>') + '</div>';
+  h += '<h3>Por meta</h3><div class="card">' + hbars(st.byGoal, st.total, 'var(--navy)') + '</div>';
+  h += '<h3>Por projeto</h3><div class="card">' + hbars(st.byProject, st.total, 'var(--gold)') + '</div>';
+  const days = Object.keys(st.byDay).sort();
+  if (days.length) {
+    const max = Math.max.apply(null, days.map(d => st.byDay[d]));
+    h += '<h3>Por dia</h3><div class="card" style="display:flex;align-items:flex-end;gap:3px;height:120px">' + days.map(d => '<div title="' + ddmm(d) + ' · ' + fmtMin(st.byDay[d]) + '" style="flex:1;background:var(--accent);border-radius:3px 3px 0 0;height:' + Math.max(4, Math.round(st.byDay[d] / max * 100)) + '%"></div>').join('') + '</div>';
+  }
+  if (st.recent.length) {
+    h += '<h3>Últimas concluídas</h3>' + st.recent.map(r => '<div class="card row" style="padding:10px 12px"><span class="grow" style="font-size:14px">' + et(r.effortType).icon + ' ' + esc(r.title) + '</span><span class="mono sub">' + fmtMin(r.est) + ' → <b style="color:' + (r.act > r.est * 1.2 ? 'var(--danger)' : 'var(--green)') + '">' + fmtMin(r.act) + '</b></span></div>').join('');
+  }
+  return h;
+}
+
+// ============================================================
+// AJUSTES — rotina, agendador, integrações
+// ============================================================
+function vAjustes() {
+  const s = S.d.settings;
+  const routine = S.d.routine.slice().sort((a, b) => a.start.localeCompare(b.start));
+  const wd = s.workDays.split(',').map(Number);
+  return '<h2>Ajustes</h2>' +
+    '<h3>Rotina base</h3><div class="sub" style="margin-bottom:8px">Bloqueada no Google Calendar ("' + 'Kephra · Rotina' + '"). Clientes só veem o que sobra.</div>' +
+    routine.map(r => '<div class="card tap row" data-act="open-routine" data-id="' + r.id + '"><span class="mono" style="width:92px;font-size:13px">' + r.start + '–' + r.end + '</span><div class="grow"><b>' + esc(r.label) + '</b><div class="t-meta"><span>' +
+      [0, 1, 2, 3, 4, 5, 6].map(d => '<span style="' + (r.days.split(',').indexOf(String(d)) >= 0 ? 'color:var(--text);font-weight:700' : 'opacity:.35') + '">' + WDS[d] + '</span>').join(' ') + '</span><span>' + esc(r.kind) + '</span>' + (r.sync ? '' : '<span>não vai p/ Calendar</span>') + '</div></div></div>').join('') +
+    '<div class="row"><button class="btn grow" data-act="new-routine">＋ Bloco</button><button class="btn navy grow" data-act="sync-routine">↻ Enviar rotina ao Calendar</button></div>' +
+    '<h3>Agendador</h3><div class="card">' +
+    '<div class="f"><span>Dias de trabalho</span><div class="chips">' + [1, 2, 3, 4, 5, 6, 0].map(d => '<button class="chip' + (wd.indexOf(d) >= 0 ? ' on' : '') + '" data-act="workday" data-v="' + d + '">' + WD[d].slice(0, 3) + '</button>').join('') + '</div></div>' +
+    '<div class="two"><label class="f"><span>Início da janela</span><input type="time" data-set="workStart" value="' + s.workStart + '"></label><label class="f"><span>Fim da janela</span><input type="time" data-set="workEnd" value="' + s.workEnd + '"></label></div>' +
+    '<div class="two"><label class="f"><span>Trabalho profundo até</span><input type="time" data-set="deepUntil" value="' + s.deepUntil + '"></label><label class="f"><span>Capacidade planejável %</span><input type="number" min="40" max="100" step="5" data-set="capacityPct" value="' + s.capacityPct + '"></label></div>' +
+    '<div class="two"><label class="f"><span>Transição entre tarefas (min)</span><input type="number" min="0" step="5" data-set="bufferMin" value="' + s.bufferMin + '"></label><label class="f"><span>Bloco máximo (min)</span><input type="number" min="30" step="15" data-set="chunkMin" value="' + s.chunkMin + '"></label></div>' +
+    '<label class="f"><span>Agendas extras que contam como ocupado <em>(IDs, vírgula)</em></span><input type="text" data-set="sourceCalendars" value="' + esc(s.sourceCalendars) + '" placeholder="a agenda principal já entra"></label>' +
+    '<label class="f"><span>Hora do e-mail da manhã</span><input type="number" min="3" max="10" data-set="emailHour" value="' + s.emailHour + '"><div class="hint">O Google dispara em até ~15 min do horário. O plano do dia é montado 2h antes e o de amanhã às 20h30.</div></label></div>' +
+    '<h3>Inteligência artificial</h3><div class="card">' +
+    '<div class="row" style="margin-bottom:10px"><span class="grow">Claude</span><span class="pill">' + (S.d.aiKeys.claude ? 'conectado' : 'sem chave') + '</span></div>' +
+    '<div class="row" style="margin-bottom:12px"><span class="grow">Gemini</span><span class="pill">' + (S.d.aiKeys.gemini ? 'conectado' : 'sem chave') + '</span></div>' +
+    '<label class="f"><span>Provedor principal</span><select data-set="aiProvider"><option value="claude"' + (s.aiProvider === 'claude' ? ' selected' : '') + '>Claude</option><option value="gemini"' + (s.aiProvider === 'gemini' ? ' selected' : '') + '>Gemini</option></select><div class="hint">Se um falhar, o outro assume (quando houver chave).</div></label>' +
+    '<div class="two"><label class="f"><span>Modelo Claude</span><input type="text" data-set="claudeModel" value="' + esc(s.claudeModel) + '"></label><label class="f"><span>Modelo Gemini</span><input type="text" data-set="geminiModel" value="' + esc(s.geminiModel) + '"></label></div>' +
+    '<div class="hint">Chaves: editor do Apps Script → Configurações do projeto → Propriedades do script → ANTHROPIC_API_KEY / GEMINI_API_KEY.</div></div>' +
+    '<h3>Sistema</h3><div class="row wrap"><button class="btn grow" data-act="test-email">✉ Enviar e-mail de teste</button><a class="btn grow" href="' + esc(S.d.sheetUrl) + '" target="_blank" style="text-decoration:none">▦ Abrir banco (Sheets)</a></div>' +
+    '<div class="row wrap" style="margin-top:8px"><button class="btn grow" data-act="theme">◐ Tema claro/escuro</button></div>';
+}
+
+function openRoutine(id) {
+  const r = id ? Object.assign({}, S.d.routine.find(x => x.id === id)) : { label: '', days: '1,2,3,4,5', start: '09:00', end: '10:00', kind: 'compromisso', sync: true };
+  S.form = r;
+  const days = r.days.split(',');
+  openSheet(id ? 'Bloco da rotina' : 'Novo bloco',
+    '<label class="f"><span>Nome</span><input type="text" name="label" value="' + esc(r.label) + '"></label>' +
+    '<div class="f"><span>Dias</span><div class="chips" id="rdays">' + [1, 2, 3, 4, 5, 6, 0].map(d => '<button class="chip' + (days.indexOf(String(d)) >= 0 ? ' on' : '') + '" data-act="toggle-chip" data-v="' + d + '">' + WD[d].slice(0, 3) + '</button>').join('') + '</div></div>' +
+    '<div class="two"><label class="f"><span>Início</span><input type="time" name="start" value="' + r.start + '"></label><label class="f"><span>Fim</span><input type="time" name="end" value="' + r.end + '"></label></div>' +
+    '<label class="f"><span>Tipo</span><select name="kind">' + S.d.routineKinds.map(k => '<option' + (r.kind === k ? ' selected' : '') + '>' + k + '</option>').join('') + '</select></label>' +
+    '<label class="check-row"><input type="checkbox" name="sync"' + (r.sync ? ' checked' : '') + '> Bloquear no Google Calendar</label>',
+    '<button class="btn primary" data-act="save-routine">Salvar</button>' + (id ? '<button class="btn danger" data-act="delete-routine" data-id="' + id + '">Excluir</button>' : ''));
+}
+
+// ============================================================
+// FOLHA MODAL
+// ============================================================
+function openSheet(title, body, foot) {
+  $('#sheet').innerHTML = '<div class="sheet-bg" data-act="sheet-bg"><div class="sheet"><div class="sheet-handle"></div><div class="sheet-head"><h2>' + esc(title) + '</h2><button class="icon-btn" data-act="close" style="color:var(--text)">✕</button></div>' +
+    body + '<div class="sheet-foot">' + (foot || '') + '</div></div></div>';
+}
+function closeSheet() { $('#sheet').innerHTML = ''; S.form = null; }
+
+// ============================================================
+// EVENTOS (delegação)
+// ============================================================
+const ACT = {
+  nav: el => { S.view = el.dataset.v; closeSheet(); render(); window.scrollTo(0, 0); },
+  refresh: () => reload(),
+  day: async el => { S.day = addDays(S.day, Number(el.dataset.v)); S.dayView = await call('day', { day: S.day }); render(); },
+  plan: async () => { S.dayView = await call('plan', { day: S.day }); const d = await call('bootstrap'); S.d = d; render(); toast('Plano salvo no Google Calendar'); },
+  'quick-add': () => quickAdd(false),
+  'quick-ai': () => quickAdd(true),
+  'open-task': el => openTask(el.dataset.id),
+  'save-task': saveTask,
+  'delete-task': async el => { if (!confirm('Excluir esta tarefa?')) return; await call('deleteTask', { id: el.dataset.id }); closeSheet(); await reload(true); toast('Excluída'); },
+  complete: async el => { el.classList.add('on'); await call('completeTask', { id: el.dataset.id }); if (S.d.timer && S.d.timer.taskId === el.dataset.id) S.d.timer = null; await reload(true); toast('Concluída ✓'); maybeCelebrate(el.dataset.id); },
+  reopen: async el => { await call('reopenTask', { id: el.dataset.id }); await reload(true); },
+  'timer-start': el => timerStart(el.dataset.id),
+  'timer-stop': () => timerStop(false),
+  'timer-done': () => timerStop(true),
+  'log-manual': async el => { const m = Number(prompt('Quantos minutos você trabalhou nisso sem o cronômetro?')); if (!m) return; await call('logManual', { taskId: el.dataset.id, minutes: m }); closeSheet(); await reload(true); toast(fmtMin(m) + ' registrados'); },
+  est: el => { const inp = $('#sheet [name=estimateMin]'); inp.value = el.dataset.v; el.parentNode.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c === el)); updateRealistic(); },
+  'ai-breakdown': el => aiBreakdown(el.dataset.id),
+  'create-steps': el => createSteps(el.dataset.id),
+  'task-filter': el => { S.taskFilter = el.dataset.v; render(); },
+  'new-project': () => openProject(null),
+  'open-project': el => openProject(el.dataset.id),
+  'new-task-in': el => openTask(null, { projectId: el.dataset.id }),
+  'save-project': async () => { const p = readForm(); if (!p.name.trim()) return toast('Dê um nome', true); await call('saveProject', { project: p }); closeSheet(); await reload(true); toast('Projeto salvo'); },
+  'delete-project': async el => { if (!confirm('Excluir o projeto? As tarefas ficam sem projeto.')) return; await call('deleteProject', { id: el.dataset.id }); closeSheet(); await reload(true); },
+  'new-goal': () => openGoal(null),
+  'open-goal': el => openGoal(el.dataset.id),
+  'save-goal': async () => { const g = readForm(); if (!g.title.trim()) return toast('Dê um nome à meta', true); await call('saveGoal', { goal: g }); closeSheet(); await reload(true); toast('Meta salva'); },
+  'delete-goal': async el => { if (!confirm('Excluir esta meta?')) return; await call('deleteGoal', { id: el.dataset.id }); closeSheet(); await reload(true); },
+  'move-goal': async el => { S.d.goals = await call('moveGoal', { id: el.dataset.id, dir: Number(el.dataset.v) }); render(); },
+  vision: el => vision(el.dataset.id),
+  'close-vision': () => { $('#overlay').innerHTML = ''; },
+  'ai-goal': async el => {
+    toast('Pensando na sua meta…');
+    const sug = await call('aiGoal', { goalId: el.dataset.id });
+    Object.keys(sug).forEach(k => { const ta = $('#sheet [name=' + k + ']'); if (ta && !ta.value.trim()) ta.value = sug[k]; });
+    toast('Campos vazios preenchidos. Revise e salve.');
+  },
+  'add-focus': async () => { const d = $('#fx-date').value, g = $('#fx-goal').value; if (!d || !g) return toast('Escolha data e meta', true); S.d.focus = await call('saveFocus', { rows: [{ key: d, goalId: g, note: '' }] }); render(); },
+  'del-focus': async el => { S.d.focus = await call('deleteFocus', { key: el.dataset.v }); render(); },
+  'stats-days': async el => { S.statsDays = Number(el.dataset.v); S.stats = null; render(); },
+  'open-routine': el => openRoutine(el.dataset.id),
+  'new-routine': () => openRoutine(null),
+  'toggle-chip': el => el.classList.toggle('on'),
+  'save-routine': async () => {
+    const r = readForm();
+    r.days = Array.from(document.querySelectorAll('#rdays .chip.on')).map(c => c.dataset.v).join(',');
+    if (!r.label.trim() || !r.days) return toast('Nome e dias são obrigatórios', true);
+    await call('saveRoutine', { row: r }); closeSheet(); await reload(true); toast('Salvo. Toque em "Enviar rotina ao Calendar" quando terminar.');
+  },
+  'delete-routine': async el => { if (!confirm('Excluir este bloco (e a série no Calendar)?')) return; await call('deleteRoutine', { id: el.dataset.id }); closeSheet(); await reload(true); },
+  'sync-routine': async () => { await call('syncRoutine'); toast('Rotina enviada ao Google Calendar'); },
+  workday: async el => {
+    const set = new Set(S.d.settings.workDays.split(',').filter(Boolean));
+    set.has(el.dataset.v) ? set.delete(el.dataset.v) : set.add(el.dataset.v);
+    S.d.settings = await call('saveSettings', { settings: { workDays: Array.from(set).sort().join(',') } }); render();
+  },
+  'test-email': async () => { await call('testEmail'); toast('E-mail enviado'); },
+  theme: () => {
+    const root = document.documentElement;
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem('kephra-theme', root.dataset.theme); } catch (e) { /* armazenamento indisponível */ }
+  },
+  close: closeSheet,
+  'sheet-bg': (el, ev) => { if (ev.target === el) closeSheet(); },
+};
+
+function updateRealistic() {
+  if (!S.form) return;
+  const est = Number(($('#sheet [name=estimateMin]') || {}).value || 0);
+  const type = ($('#sheet [name=effortType]') || {}).value;
+  const box = $('#realistic');
+  if (box) box.innerHTML = realisticHint(est, S.d.factors[type] || S.d.factors._global);
+  const d = $('#etdesc'); if (d && type) d.textContent = et(type).desc;
+}
+
+document.addEventListener('click', ev => {
+  const seg = ev.target.closest('[data-seg] button');
+  if (seg) { ev.preventDefault(); seg.parentNode.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === seg)); return; }
+  const el = ev.target.closest('[data-act]');
+  if (!el || el.tagName === 'SELECT' || el.tagName === 'INPUT') return;
+  const fn = ACT[el.dataset.act];
+  if (!fn) return;
+  if (el.dataset.act !== 'sheet-bg') { ev.preventDefault(); ev.stopPropagation(); }
+  Promise.resolve(fn(el, ev)).catch(err => console.error(err));
+});
+
+document.addEventListener('change', async ev => {
+  const el = ev.target;
+  if (el.dataset.act === 'task-project') { S.taskProject = el.value; render(); return; }
+  if (el.dataset.focus !== undefined) { S.d.focus = await call('saveFocus', { rows: [{ key: el.dataset.focus, goalId: el.value, note: (S.d.focus.find(f => f.key === el.dataset.focus) || {}).note || '' }] }); toast('Foco atualizado'); return; }
+  if (el.dataset.set) { const patch = {}; patch[el.dataset.set] = el.value; S.d.settings = await call('saveSettings', { settings: patch }); toast('Ajuste salvo'); return; }
+  if (el.name === 'effortType' || el.name === 'estimateMin') updateRealistic();
+});
+
+document.addEventListener('input', ev => {
+  if (ev.target.dataset.act === 'task-query') {
+    S.taskQuery = ev.target.value;
+    clearTimeout(S._q); S._q = setTimeout(() => { const pos = ev.target.selectionStart; render(); const inp = document.querySelector('[data-act=task-query]'); if (inp) { inp.focus(); inp.setSelectionRange(pos, pos); } }, 250);
+  }
+});
+
+document.addEventListener('keydown', ev => {
+  if (ev.key === 'Enter' && ev.target.id === 'quick') { ev.preventDefault(); quickAdd(false); }
+  if (ev.key === 'Escape') { closeSheet(); $('#overlay').innerHTML = ''; }
+});
+
+// Ao voltar para o app (celular), sincroniza
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && S.d && !S.form) reload(true); });
+
+try { const th = localStorage.getItem('kephra-theme'); if (th) document.documentElement.dataset.theme = th; } catch (e) { /* armazenamento indisponível */ }
+boot();
+</script>
