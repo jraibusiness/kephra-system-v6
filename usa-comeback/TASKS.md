@@ -8,12 +8,13 @@ Legenda: 🔴 bloqueante · 🟠 alta · 🟡 normal · ⛔ bloqueado por regra
 - [ ] 🔴 Checar docket em clerkofcourts.bcohio.gov (já há decreto?) — *João*
 - [ ] 🔴 Obter a **disposição final** do processo de Ohio de 14/04/2022 (Law Office of Steven R. Adams) e perguntar à Santos Lloyd (Flávia) **por que** cotou **I-601 waiver** em 2024 — *João*
 - [x] Confirmar e-mail da Paula para automações → gandarp@gmail.com
-- [ ] 🟠 Agendar alerta diário de voos (scraper Kayak pronto; aguardando autorização para criar a tarefa agendada)
+- [x] Alerta diário de voos agendado (seg–sáb 07h58 BRT, `trig_01T4ERXZ3BVb7SKpFwBMyj8f`) — ⚠️ falta anexar o conector Gmail na tarefa pelo claude.ai
+- [x] 18/10: enviados 3 e-mails (voos, destino/orçamento, visto) para João + Paula — cópias em `emails/`
 
 ## 🟠 Até 15/11
 
 - [ ] 🟠 Definir datas exatas da Paula e **comprar passagem** — *Paula*
-- [ ] 🟠 Destino: pesquisa de preços reais + e-mail visual para os dois — *Claude*
+- [ ] 🟠 João + Paula escolhem opção 1, 2 ou 3 → Claude levanta 5 casas com fotos e preço final
 - [ ] 🟠 Decidir sobre o Sul após o 2º turno (25/10) — *João*
 - [ ] 🟠 Consulta com advogado(a) de imigração (histórico 2023 + waiver + estratégia IR1/O-1B) — *João*
 - [ ] 🟠 Paula protocola **I-130 novo** (só depois do dismissal) — *Paula*

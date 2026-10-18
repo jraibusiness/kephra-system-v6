@@ -36,6 +36,24 @@ Obs.: dez–jan é estação chuvosa na Mantiqueira (pancadas à tarde). Bom par
 
 **Formato recomendado** `[INFERÊNCIA]`: base fixa de 4–5 semanas em **uma** casa com boa piscina na Mantiqueira (Gonçalves / São Bento / Santo Antônio do Pinhal) + **1 semana de praia** (Paraty/Trindade via Cunha, ou litoral norte fora do Réveillon) para a Paula. Evitar trocar de hospedagem entre 26/12 e 02/01 (preço dobra).
 
+## Preços reais — Airbnb, 18/10/2026 (10/12→22/01, 2 adultos, filtro piscina, valor **mensal** com desconto)
+
+| Local | Anúncio | R$/mês (com desconto) | De |
+|---|---|---|---|
+| Santo Antônio do Pinhal | Sítio Vida Azul – Casa do Pai (2 qts) | 6.984 | 12.011 |
+| Gonçalves | Quinta das Araucárias (casa de campo, 2 qts, 4,92★) | 8.050 | 16.378 |
+| Gonçalves | Mataka'a 02 (microcasa, 4,99★) | 16.993 | 25.022 |
+| São Francisco Xavier | Chalé maior de Valfena (2 qts, 4,86★, 154 aval.) | 9.331 | 19.111 |
+| Cunha | Estalagem Asa Branca (2 qts) | 6.351 | 7.285 |
+| Cunha | Chácara Zurem (4,92★) | 9.621 | 11.032 |
+| Cunha | Estalagem Cachoeira do Pimenta | 11.864 | 12.243 |
+| São Bento do Sapucaí | Vilarejo São Francisco (chalé) | 16.087 | 33.792 |
+| Campos do Jordão | Duplex na Montanha (5,0★, 168 aval.) | 12.205 | 18.196 |
+
+43 noites ≈ 1,4 × valor mensal. Descontos mensais de 40–50% são a principal alavanca.
+
+**E-mail enviado em 18/10** com 3 opções (cópia: [`../emails/2026-10-18-destino.html`](../emails/2026-10-18-destino.html)): ① Sto. Antônio do Pinhal/Gonçalves (recomendada) ② Cunha + Paraty ③ São Francisco Xavier. Total opção 1 ≈ R$ 18,7 mil / 6 semanas.
+
 ## Próximos passos
 
 - [ ] Levantar 5–8 casas reais (Airbnb, Booking, temporada direta/OLX) com piscina, 30+ noites, desconto mensal
