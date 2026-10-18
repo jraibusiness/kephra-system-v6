@@ -58,19 +58,19 @@ if (min1 <= OPPORTUNITY_1STOP) {
 
 const row = r => `<tr>
   <td style="padding:6px 8px;border-bottom:1px solid #ddd">${r.dep.slice(8)}/${r.dep.slice(5, 7)} → ${r.ret.slice(8)}/${r.ret.slice(5, 7)}</td>
-  <td style="padding:6px 8px;border-bottom:1px solid #ddd;text-align:right;${r.cheapest.usd === minCheap ? `color:${OCHRE};font-weight:bold` : ''}">$${r.cheapest.usd.toLocaleString('en-US')}</td>
+  <td style="padding:6px 8px;border-bottom:1px solid #ddd;text-align:right;${r.cheapest.usd === minCheap ? `color:#A8520C;font-weight:bold` : ''}">$${r.cheapest.usd.toLocaleString('en-US')}</td>
   <td style="padding:6px 8px;border-bottom:1px solid #ddd">${airlineOf(r)} · ${r.cheapest.duration}</td>
-  <td style="padding:6px 8px;border-bottom:1px solid #ddd;text-align:right;${r.stopsMin && r.stopsMin.one_stop === min1 ? `color:${OCHRE};font-weight:bold` : ''}">${r.stopsMin && r.stopsMin.one_stop ? '$' + r.stopsMin.one_stop.toLocaleString('en-US') : '—'}</td>
+  <td style="padding:6px 8px;border-bottom:1px solid #ddd;text-align:right;${r.stopsMin && r.stopsMin.one_stop === min1 ? `color:#A8520C;font-weight:bold` : ''}">${r.stopsMin && r.stopsMin.one_stop ? '$' + r.stopsMin.one_stop.toLocaleString('en-US') : '—'}</td>
   <td style="padding:6px 8px;border-bottom:1px solid #ddd;text-align:right">${r.quickest ? '$' + r.quickest.usd.toLocaleString('en-US') + ' · ' + r.quickest.duration : '—'}</td>
   <td style="padding:6px 8px;border-bottom:1px solid #ddd"><a href="${r.url}" style="color:${TEAL}">ver</a></td></tr>`;
 
-const tile = (label, value, sub) => `<td style="background:${GRAY};padding:12px;width:33%;vertical-align:top">
+const tile = (label, value, sub) => `<td style="background-color:${GRAY};padding:12px;width:33%;vertical-align:top">
   <div style="font-size:12px;color:#666">${label}</div><div style="font-size:22px;font-weight:bold;color:${TEAL}">${value}</div><div style="font-size:12px;color:#666">${sub}</div></td>`;
 
 const html = `<div style="font-family:Arial,Helvetica,sans-serif;color:${TEXT};max-width:680px;margin:auto">
-<div style="background:${TEAL};color:#fff;padding:16px 20px"><div style="font-size:12px;letter-spacing:1px">ALERTA DE VOOS · ${day.split('-').reverse().join('/')}</div>
+<div style="background-color:${TEAL};color:#fff;padding:16px 20px"><div style="font-size:12px;letter-spacing:1px">ALERTA DE VOOS · ${day.split('-').reverse().join('/')}</div>
 <div style="font-size:20px;font-weight:bold">Cincinnati (CVG) → São Paulo (GRU) · ida e volta</div></div>
-<div style="background:${color};color:#fff;padding:12px 20px;font-size:16px;font-weight:bold">${verdict}</div>
+<div style="background-color:${color};color:#fff;padding:12px 20px;font-size:16px;font-weight:bold">${verdict}</div>
 <div style="padding:8px 20px;font-size:14px">${why}</div>
 <table style="width:100%;border-collapse:separate;border-spacing:8px"><tr>
 ${tile('Mais barato hoje', '$' + minCheap.toLocaleString('en-US'), `${delta(minCheap, prevCheap)} vs ontem · ${best.dep.slice(8)}/12 → ${best.ret.slice(8)}/01`)}
@@ -78,7 +78,7 @@ ${tile('Melhor com 1 escala', isFinite(min1) ? '$' + min1.toLocaleString('en-US'
 ${tile('Dias até a 1ª ida', String(daysOut), '08/12/2026')}
 </tr></table>
 <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:4px">
-<tr style="background:${GRAY};text-align:left"><th style="padding:6px 8px">Datas</th><th style="padding:6px 8px;text-align:right">Mais barato</th><th style="padding:6px 8px">Cia · duração</th><th style="padding:6px 8px;text-align:right">1 escala</th><th style="padding:6px 8px;text-align:right">Mais rápido</th><th></th></tr>
+<tr style="background-color:${GRAY};text-align:left"><th style="padding:6px 8px">Datas</th><th style="padding:6px 8px;text-align:right">Mais barato</th><th style="padding:6px 8px">Cia · duração</th><th style="padding:6px 8px;text-align:right">1 escala</th><th style="padding:6px 8px;text-align:right">Mais rápido</th><th></th></tr>
 ${ok.map(row).join('\n')}
 </table>
 <!--ANALISE-->

@@ -20,3 +20,10 @@ Nenhuma decisão avança sem **resposta dos dois** (João **e** Paula) e, depois
 - Nunca mencionar outras mulheres / relacionamentos do João no Brasil.
 - Transparência total entre os dois: toda resposta vai com cópia para ambos.
 - Canal: Gmail (HTML com botões mailto). Brevo avaliado e descartado: o conector disponível não envia e-mail transacional avulso e as respostas sairiam da thread.
+
+## QA obrigatório de e-mail (desde 18/10, após falha no Gmail iOS)
+Nenhum e-mail sai sem passar por:
+1. **Gerar** pelo `pm/pm_email.py` (decisões) ou `03-voos/scraper/report.js` (voos). Só `background-color:` — nunca `background:` abreviado (o Gmail apaga). Em HTML avulso, rodar `python3 pm/sanitize.py arquivo.html`.
+2. **QA:** `NODE_PATH=$(npm root -g) node pm/qa_email.js arquivo.html` → precisa dar `QA OK`. Ele simula o Gmail (remove `background:`), checa contraste de todo texto e link (≥ 3), barras que sumiriam, link sem href e e-mail vazio. Gera prints claro/escuro em 390 px; **olhar o print** antes de enviar.
+3. **Botões:** sempre com fallback de código (D2-A, D2-B…) para responder por texto.
+4. **Pós-envio:** buscar a mensagem enviada (`get_message`) e conferir que o HTML guardado manteve cores e links.

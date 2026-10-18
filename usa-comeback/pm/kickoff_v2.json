@@ -1,0 +1,98 @@
+{
+ "kicker": "GERENTE DO PROJETO · 18/10/2026 · VERSÃO FINAL",
+ "title": "Paula, o que estamos fazendo — e 4 decisões",
+ "intro": "Desculpem a repetição: nos e-mails de hoje os <b>botões e o cabeçalho não apareciam</b> no celular (o Gmail remove certas cores). Corrigi tudo e reenvio também “Nossa viagem” e “Visto”. A partir de agora, todo e-mail passa por um teste automático de leitura — no claro, no escuro e simulando o Gmail — antes de sair.",
+ "decisions": [
+  {
+   "id": "D2",
+   "title": "✈️ Datas e voo da Paula",
+   "who": "os dois",
+   "due": "ter 20/10",
+   "color": "#E17A18",
+   "context": "Hoje: voo de ~13h por <b>US$ 1.284–1.322</b>; o mais barato (2 escalas, 18–25h) por US$ 1.112–1.167. Minha sugestão: voo rápido, ida 08 ou 09/12.",
+   "options": [
+    {
+     "label": "08/12 → 26/01 · rápido",
+     "answer": "ida 08/12, volta 26/01, voo rápido (~13h)"
+    },
+    {
+     "label": "09/12 → 20/01 · rápido",
+     "answer": "ida 09/12, volta 20/01, voo rápido (~13h)"
+    },
+    {
+     "label": "10/12 → 19/01 · rápido",
+     "answer": "ida 10/12, volta 19/01, voo rápido (~13h)"
+    },
+    {
+     "label": "Mais barato (2 escalas)",
+     "answer": "prefiro o mais barato, mesmo com 2 escalas"
+    }
+   ]
+  },
+  {
+   "id": "D1",
+   "title": "🏔️ Destino",
+   "who": "os dois",
+   "due": "qui 22/10",
+   "context": "① Sto. Antônio do Pinhal/Gonçalves (fresco, R$ 7–8 mil/mês) · ② Cunha + praias de Paraty (água, R$ 6,4–9,6 mil/mês) · ③ São Francisco Xavier (rio e cachoeiras, R$ 9,3 mil/mês). Detalhes no e-mail “Nossa viagem”.",
+   "options": [
+    {
+     "label": "Opção 1",
+     "answer": "opção 1 — Sto. Antônio do Pinhal / Gonçalves"
+    },
+    {
+     "label": "Opção 2",
+     "answer": "opção 2 — Cunha + praias de Paraty"
+    },
+    {
+     "label": "Opção 3",
+     "answer": "opção 3 — São Francisco Xavier"
+    }
+   ]
+  },
+  {
+   "id": "D3",
+   "title": "⚖️ Desistência do divórcio (DR25030206)",
+   "who": "Paula (João acompanha)",
+   "due": "sex 23/10",
+   "color": "#B3261E",
+   "context": "Sem a desistência protocolada antes do decreto, o pedido de Green Card não existe. Como está?",
+   "options": [
+    {
+     "label": "Já protocolei",
+     "answer": "já protocolei a desistência"
+    },
+    {
+     "label": "Vou protocolar esta semana",
+     "answer": "vou protocolar esta semana"
+    },
+    {
+     "label": "Preciso de ajuda",
+     "answer": "preciso de ajuda para protocolar"
+    }
+   ]
+  },
+  {
+   "id": "D4",
+   "title": "🇺🇸 Impressões sobre o plano de visto",
+   "who": "os dois",
+   "due": "sex 23/10",
+   "context": "Green Card pelo consulado do Rio (principal) + O-1B como ponte opcional. Estamos de acordo?",
+   "options": [
+    {
+     "label": "De acordo",
+     "answer": "de acordo com o plano"
+    },
+    {
+     "label": "De acordo, com ajustes",
+     "answer": "de acordo, mas quero ajustar: "
+    },
+    {
+     "label": "Quero conversar antes",
+     "answer": "quero conversar antes de seguir"
+    }
+   ]
+  }
+ ],
+ "pre": "<div style=\"padding:4px 20px\"><table role=\"presentation\" style=\"width:100%;border-collapse:collapse\"><tr><td style=\"font-size:20px;vertical-align:top;padding:6px 10px 6px 0\">🤖</td><td style=\"padding:6px 0;font-size:13px;color:#333333\"><b style=\"color:#1B7A7A\">Quem escreve</b><br>Sou o Claude, uma IA, atuando como <b>gerente do projeto</b> a pedido do João. Eu pesquiso, organizo e cobro; <b>quem decide são vocês dois</b>. Nada é comprado ou reservado sem vocês.</td></tr><tr><td style=\"font-size:20px;vertical-align:top;padding:6px 10px 6px 0\">✈️</td><td style=\"padding:6px 0;font-size:13px;color:#333333\"><b style=\"color:#1B7A7A\">Passagem</b><br>Toda manhã consulto o <b>Kayak</b> em 12 combinações de datas Cincinnati → Guarulhos e mando a tabela com a recomendação (comprar, esperar ou oportunidade). O Google Flights bloqueia consultas automáticas.</td></tr><tr><td style=\"font-size:20px;vertical-align:top;padding:6px 10px 6px 0\">🏔️</td><td style=\"padding:6px 0;font-size:13px;color:#333333\"><b style=\"color:#1B7A7A\">Destino</b><br>Pesquisei no <b>Airbnb</b> casas com piscina para 10/12–22/01 em cidades de serra (fresco para o João, água para você). As 3 melhores estão no e-mail “Nossa viagem”.</td></tr><tr><td style=\"font-size:20px;vertical-align:top;padding:6px 10px 6px 0\">🇺🇸</td><td style=\"padding:6px 0;font-size:13px;color:#333333\"><b style=\"color:#1B7A7A\">Visto</b><br>Juntei documentos e histórico. Plano: <b>Green Card pelo consulado do Rio</b>. O primeiro passo é a desistência do processo de divórcio.</td></tr><tr><td style=\"font-size:20px;vertical-align:top;padding:6px 10px 6px 0\">📋</td><td style=\"padding:6px 0;font-size:13px;color:#333333\"><b style=\"color:#1B7A7A\">Como funciona</b><br>Seg–sáb, ~8h e ~18h, leio as respostas de vocês. Com as <b>duas</b>, mando uma proposta; com o “confirmo” dos dois, sigo. Quem não responder recebe lembrete.</td></tr></table></div><div style=\"padding:6px 20px 0;font-size:15px;font-weight:bold;color:#1B7A7A\">As 4 decisões de agora</div>"
+}
