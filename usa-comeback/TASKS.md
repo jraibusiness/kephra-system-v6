@@ -4,7 +4,7 @@ Legenda: 🔴 bloqueante · 🟠 alta · 🟡 normal · ⛔ bloqueado por regra
 
 ## 🔴 Esta semana (19–25/10)
 
-- [ ] 🔴 **João ↔ Paula:** conversar sobre o divórcio DR25030206 pendente → Paula protocola **Notice of Voluntary Dismissal** antes do decreto — *Paula* — [detalhes](01-visto/divorcio-DR25030206.md)
+- [ ] 🔴 **João ↔ Paula:** (EM ANDAMENTO 18/10 — João vai pedir o cancelamento) conversar sobre o divórcio DR25030206 pendente → Paula protocola **Notice of Voluntary Dismissal** antes do decreto — *Paula* — [detalhes](01-visto/divorcio-DR25030206.md)
 - [ ] 🔴 Checar docket em clerkofcourts.bcohio.gov (já há decreto?) — *João*
 - [ ] 🔴 Perguntar à Santos Lloyd (Flávia) **por que** o contrato de 2024 incluía **I-601 waiver** — *João*
 - [ ] 🟠 Confirmar e-mail da Paula para automações (gandarp@gmail.com vs gandarp107@gmail.com) — *João*
