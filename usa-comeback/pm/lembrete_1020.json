@@ -1,0 +1,55 @@
+{
+ "kicker": "LEMBRETE · TER 20/10 · GERENTE DO PROJETO",
+ "title": "⏰ Hoje vence a decisão da passagem",
+ "intro": "Ainda sem resposta de vocês dois. <b>O preço começou a subir hoje</b>: saindo em 08/12, o voo de ~13h ficou US$ 143 mais caro. Saindo em <b>09/12 o preço ainda segurou</b> (US$ 1.322–1.334). Minha recomendação é a <b>D2-B</b>. Preciso da resposta dos <b>dois</b> para propor a compra. A D3 (divórcio) segue urgente; D1 e D4 vencem qui/sex — códigos: <b>D2-B, D3-B, D1-A, D4-A</b>.",
+ "decisions": [
+  {
+   "id": "D2",
+   "title": "✈️ Datas e voo da Paula",
+   "who": "faltam João e Paula",
+   "due": "HOJE, ter 20/10",
+   "color": "#E17A18",
+   "context": "Hoje (20/10): ida <b>09/12</b> → ~13h por <b>US$ 1.322</b> (volta 19/01) ou <b>US$ 1.334</b> (volta 20/01); 1 escala US$ 1.284. Ida 08/12 subiu para US$ 1.465. Ida 10/12: US$ 1.508–1.529.",
+   "options": [
+    {
+     "label": "08/12 → 26/01 · rápido",
+     "answer": "ida 08/12, volta 26/01, voo rápido (~13h)"
+    },
+    {
+     "label": "09/12 → 20/01 · rápido",
+     "answer": "ida 09/12, volta 20/01, voo rápido (~13h)"
+    },
+    {
+     "label": "10/12 → 19/01 · rápido",
+     "answer": "ida 10/12, volta 19/01, voo rápido (~13h)"
+    },
+    {
+     "label": "Mais barato (2 escalas)",
+     "answer": "prefiro o mais barato, mesmo com 2 escalas"
+    }
+   ]
+  },
+  {
+   "id": "D3",
+   "title": "⚖️ Desistência do divórcio (DR25030206)",
+   "who": "falta Paula (João acompanha)",
+   "due": "sex 23/10",
+   "color": "#B3261E",
+   "context": "Sem a desistência protocolada antes do decreto, o pedido de Green Card não existe. Como está?",
+   "options": [
+    {
+     "label": "Já protocolei",
+     "answer": "já protocolei a desistência"
+    },
+    {
+     "label": "Vou protocolar esta semana",
+     "answer": "vou protocolar esta semana"
+    },
+    {
+     "label": "Preciso de ajuda",
+     "answer": "preciso de ajuda para protocolar"
+    }
+   ]
+  }
+ ]
+}

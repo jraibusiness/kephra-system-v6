@@ -44,13 +44,30 @@ const prev1 = yesterday ? minOn(yesterday, 'one_stop') : null;
 const daysOut = Math.round((FIRST_DEP - new Date(day + 'T00:00:00Z')) / 864e5);
 const delta = (a, b) => (b == null ? '—' : (a - b === 0 ? '= 0' : (a > b ? '▲ +' : '▼ ') + (a - b)));
 
+// Alta por data: compara 1 escala e mais rápido de cada par de datas com o dia anterior
+const prevOf = (dep, ret, tag) => {
+  if (!yesterday) return null;
+  const v = hist.filter(h => h[0] === yesterday && h[3] === dep && h[4] === ret && h[9].startsWith(tag)).map(h => Number(h[7]));
+  return v.length ? v[0] : null;
+};
+const rises = [];
+for (const r of ok) {
+  for (const [tag, val] of [['one_stop', r.stopsMin && r.stopsMin.one_stop], ['quickest', r.quickest && r.quickest.usd]]) {
+    const p = prevOf(r.dep, r.ret, tag);
+    if (val && p && val - p >= 75) rises.push({ dep: r.dep, ret: r.ret, tag, from: p, to: val });
+  }
+}
+const maxRise = rises.sort((a, b) => (b.to - b.from) - (a.to - a.from))[0];
+
 let verdict, color, why;
 if (min1 <= OPPORTUNITY_1STOP) {
   verdict = 'OPORTUNIDADE — COMPRAR HOJE'; color = '#2E7D32';
   why = `1 escala abaixo de US$ ${OPPORTUNITY_1STOP}: fora da curva para alta temporada.`;
-} else if (daysOut <= 45 || (prev1 && min1 > prev1)) {
-  verdict = 'COMPRAR JÁ'; color = OCHRE;
-  why = daysOut <= 45 ? `Faltam ${daysOut} dias: a partir daqui a tarifa de fim de ano tende a subir.` : 'A tarifa de 1 escala subiu desde ontem.';
+} else if (daysOut <= 45 || (prev1 && min1 > prev1) || maxRise) {
+  verdict = 'COMPRAR JÁ'; color = '#B4570A';
+  why = maxRise
+    ? `Preços começaram a subir: ida ${maxRise.dep.slice(8)}/12 → volta ${maxRise.ret.slice(8)}/01 foi de US$ ${maxRise.from} para US$ ${maxRise.to} (${rises.length} alta(s) ≥ US$ 75 desde ontem).`
+    : daysOut <= 45 ? `Faltam ${daysOut} dias: a partir daqui a tarifa de fim de ano tende a subir.` : 'A tarifa de 1 escala subiu desde ontem.';
 } else {
   verdict = 'MONITORAR (pode esperar alguns dias)'; color = TEAL;
   why = `Faltam ${daysOut} dias para a 1ª data de ida. Preço estável; janela boa de compra vai até ~45 dias antes.`;
@@ -86,4 +103,4 @@ ${ok.map(row).join('\n')}
 </div>`;
 
 process.stdout.write(html);
-process.stderr.write(JSON.stringify({ day, minCheap, min1, prevCheap, prev1, daysOut, verdict, failed: grid.results.length - ok.length }) + '\n');
+process.stderr.write(JSON.stringify({ day, minCheap, min1, prevCheap, prev1, daysOut, verdict, rises: rises.length, failed: grid.results.length - ok.length }) + '\n');
