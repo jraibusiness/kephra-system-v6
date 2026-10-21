@@ -1,0 +1,68 @@
+{
+ "kicker": "LEMBRETE · QUA 21/10 · 18H · GERENTE DO PROJETO",
+ "title": "⏰ Falta o João na D2 e os dois no tipo de voo",
+ "intro": "Ainda sem resposta desde a manhã. A <b>Paula</b> já escolheu <b>06/12 → 20/01</b>; falta o <b>João</b> confirmar (D2) e <b>os dois</b> escolherem o tipo de voo (D2t). Hoje de manhã o voo de ~13h nessas datas estava em <b>US$ 1.418</b> (Kayak, 07h59 BRT), e outras datas subiram até US$ 150 em um dia. Uma linha resolve, ex.: <b>D2-A, D2t-A</b>. O destino (D1) vence amanhã.",
+ "decisions": [
+  {
+   "id": "D2",
+   "title": "✈️ João: concorda com 06/12 → 20/01?",
+   "who": "falta João",
+   "due": "hoje, qua 21/10 — prazo vence hoje",
+   "color": "#E17A18",
+   "context": "Escolha da Paula. Hoje (21/10): voo de ~13h por <b>US$ 1.418</b>; 1 escala US$ 1.359; mais barato US$ 1.167 (~18h). Ida 08–09/12 subiu para US$ 1.465.",
+   "options": [
+    {
+     "label": "Concordo · 06/12 → 20/01",
+     "answer": "concordo com ida 06/12 e volta 20/01"
+    },
+    {
+     "label": "Prefiro outra data",
+     "answer": "prefiro outra data: "
+    }
+   ]
+  },
+  {
+   "id": "D2t",
+   "title": "🕐 Tipo de voo (06/12 → 20/01)",
+   "who": "faltam João e Paula",
+   "due": "hoje, qua 21/10 — prazo vence hoje",
+   "color": "#E17A18",
+   "context": "Diferença entre o mais rápido e o mais barato: US$ 251 por ~5h a menos de viagem em cada trecho.",
+   "options": [
+    {
+     "label": "Rápido ~13h · US$ 1.418",
+     "answer": "voo rápido (~13h), US$ 1.418"
+    },
+    {
+     "label": "1 escala · US$ 1.359",
+     "answer": "1 escala, US$ 1.359"
+    },
+    {
+     "label": "Mais barato · US$ 1.167",
+     "answer": "mais barato (~18h), US$ 1.167"
+    }
+   ]
+  },
+  {
+   "id": "D1",
+   "title": "🏔️ Destino",
+   "who": "faltam João e Paula",
+   "due": "amanhã, qui 22/10",
+   "context": "① Sto. Antônio do Pinhal/Gonçalves (fresco, R$ 7–8 mil/mês) · ② Cunha + praias de Paraty (água, R$ 6,4–9,6 mil/mês) · ③ São Francisco Xavier (rio e cachoeiras, R$ 9,3 mil/mês). Detalhes no e-mail “Nossa viagem”.",
+   "options": [
+    {
+     "label": "Opção 1",
+     "answer": "opção 1 — Sto. Antônio do Pinhal / Gonçalves"
+    },
+    {
+     "label": "Opção 2",
+     "answer": "opção 2 — Cunha + praias de Paraty"
+    },
+    {
+     "label": "Opção 3",
+     "answer": "opção 3 — São Francisco Xavier"
+    }
+   ]
+  }
+ ]
+}
