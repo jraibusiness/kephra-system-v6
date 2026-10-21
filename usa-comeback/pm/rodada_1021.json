@@ -1,0 +1,90 @@
+{
+ "kicker": "GERENTE DO PROJETO · QUA 21/10",
+ "title": "✈️ A Paula respondeu: 06/12 → 20/01. Falta o João.",
+ "intro": "<b>Paula escolheu a D2: ida 06/12, volta 20/01.</b> Hoje essas datas estão entre as melhores da grade (detalhes no alerta de voos de hoje). Para eu propor a compra, preciso de duas coisas: <b>João</b> confirmar as datas (D2) e <b>os dois</b> escolherem o tipo de voo (D2t). Uma linha resolve, ex.: <b>D2-A, D2t-A</b>.",
+ "decisions": [
+  {
+   "id": "D2",
+   "title": "✈️ João: concorda com 06/12 → 20/01?",
+   "who": "falta João",
+   "due": "hoje, qua 21/10",
+   "color": "#E17A18",
+   "context": "Escolha da Paula. Hoje (21/10): voo de ~13h por <b>US$ 1.418</b>; 1 escala US$ 1.359; mais barato US$ 1.167 (~18h). Ida 08–09/12 subiu para US$ 1.465.",
+   "options": [
+    {
+     "label": "Concordo · 06/12 → 20/01",
+     "answer": "concordo com ida 06/12 e volta 20/01"
+    },
+    {
+     "label": "Prefiro outra data",
+     "answer": "prefiro outra data: "
+    }
+   ]
+  },
+  {
+   "id": "D2t",
+   "title": "🕐 Tipo de voo (06/12 → 20/01)",
+   "who": "faltam João e Paula",
+   "due": "hoje, qua 21/10",
+   "color": "#E17A18",
+   "context": "Diferença entre o mais rápido e o mais barato: US$ 251 por ~5h a menos de viagem em cada trecho.",
+   "options": [
+    {
+     "label": "Rápido ~13h · US$ 1.418",
+     "answer": "voo rápido (~13h), US$ 1.418"
+    },
+    {
+     "label": "1 escala · US$ 1.359",
+     "answer": "1 escala, US$ 1.359"
+    },
+    {
+     "label": "Mais barato · US$ 1.167",
+     "answer": "mais barato (~18h), US$ 1.167"
+    }
+   ]
+  },
+  {
+   "id": "D1",
+   "title": "🏔️ Destino",
+   "who": "faltam João e Paula",
+   "due": "amanhã, qui 22/10",
+   "context": "① Sto. Antônio do Pinhal/Gonçalves (fresco, R$ 7–8 mil/mês) · ② Cunha + praias de Paraty (água, R$ 6,4–9,6 mil/mês) · ③ São Francisco Xavier (rio e cachoeiras, R$ 9,3 mil/mês). Detalhes no e-mail “Nossa viagem”.",
+   "options": [
+    {
+     "label": "Opção 1",
+     "answer": "opção 1 — Sto. Antônio do Pinhal / Gonçalves"
+    },
+    {
+     "label": "Opção 2",
+     "answer": "opção 2 — Cunha + praias de Paraty"
+    },
+    {
+     "label": "Opção 3",
+     "answer": "opção 3 — São Francisco Xavier"
+    }
+   ]
+  },
+  {
+   "id": "D3",
+   "title": "⚖️ Desistência do divórcio (DR25030206)",
+   "who": "falta Paula (João acompanha)",
+   "due": "sex 23/10",
+   "color": "#B3261E",
+   "context": "Sem a desistência protocolada antes do decreto, o pedido de Green Card não existe. Como está?",
+   "options": [
+    {
+     "label": "Já protocolei",
+     "answer": "já protocolei a desistência"
+    },
+    {
+     "label": "Vou protocolar esta semana",
+     "answer": "vou protocolar esta semana"
+    },
+    {
+     "label": "Preciso de ajuda",
+     "answer": "preciso de ajuda para protocolar"
+    }
+   ]
+  }
+ ]
+}

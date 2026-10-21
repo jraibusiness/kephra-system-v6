@@ -3,7 +3,7 @@
 const { chromium } = require('playwright');
 
 const [orig = 'CVG', dest = 'GRU',
-  deps = '2026-12-08,2026-12-09,2026-12-10,2026-12-12',
+  deps = '2026-12-06,2026-12-07,2026-12-08,2026-12-09,2026-12-10',
   rets = '2027-01-19,2027-01-20,2027-01-22,2027-01-26'] = process.argv.slice(2);
 
 const money = s => (s && s.match(/\$[\d,]+/) ? Number(s.match(/\$([\d,]+)/)[1].replace(/,/g, '')) : null);

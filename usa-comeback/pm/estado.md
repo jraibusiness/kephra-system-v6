@@ -3,7 +3,8 @@
 | ID | Decisão | Aberta em | Prazo | João | Paula | Proposta | Conf. João | Conf. Paula | Status |
 |---|---|---|---|---|---|---|---|---|---|
 | D1 | Destino da viagem (opção 1, 2 ou 3) | 18/10 | 22/10 | — | — | — | — | — | aguardando respostas |
-| D2 | Datas e tipo de voo da Paula | 18/10 | 21/10 (comprar até ~24/10) | — | — | — | — | — | aguardando respostas |
+| D2 | Datas do voo da Paula | 18/10 | 21/10 (comprar até ~24/10) | — | 06/12 → 20/01 (21/10) | — | — | — | aguardando João |
+| D2t | Tipo de voo (~13h direto-rápido / 1 escala / mais barato) | 21/10 | 22/10 | — | — | — | — | — | aguardando respostas |
 | D3 | Desistência do divórcio DR25030206 | 18/10 | 23/10 | — | — | — | — | — | aguardando respostas |
 | D4 | Impressões gerais sobre o plano de visto | 18/10 | 23/10 | — | — | — | — | — | aguardando respostas |
 
@@ -14,3 +15,4 @@
 - 19/10 18h BRT — rodada da tarde: ainda **nenhuma resposta**. Lembrete ⏰ curto (D2 vence amanhã + D3). QA OK; HTML no Gmail conferido.
 - 20/10 08h BRT — rodada da manhã: **nenhuma resposta** (sem devoluções de e-mail). Preços **começaram a subir**: ida 08/12 ~13h US$ 1.322 → 1.465; ida 09/12 segurou (US$ 1.322–1.334). Enviados: lembrete ⏰ "D2 vence hoje" (recomendação D2-B) + alerta de voos com veredito **COMPRAR JÁ (ida 09/12)**. QA OK nos dois. Regra do veredito no report.js corrigida (detecta alta ≥ US$ 75 por par de datas).
 - 20/10 18h BRT — rodada da tarde: **nenhuma resposta**; D2 venceu sem decisão. Lembrete ⏰ curto (D2 + D3). Obs.: João moveu para a lixeira os lembretes de 19/10 e as versões duplicadas do kickoff (sem resposta escrita). QA OK.
+- 21/10 08h BRT — rodada da manhã: **Paula respondeu D2: ida 06/12, volta 20/01** (21/10 02h18 UTC). João: sem resposta. Aberta D2t (tipo de voo, os dois). Preços: ida 09/12 ~13h subiu para US$ 1.465; 06/12 → 20/01 ~13h US$ 1.418 · 1 escala US$ 1.359 · mais barato US$ 1.167 (Copa ~18h). Enviados: rodada PM (thread do kickoff) + alerta de voos **COMPRAR JÁ (06/12 → 20/01)**. QA OK nos dois; HTML no Gmail conferido. Default do scraper passa a incluir 06–07/12.

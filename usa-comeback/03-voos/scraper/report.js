@@ -5,7 +5,7 @@ const path = require('path');
 
 const CSV = path.join(__dirname, '..', 'precos.csv');
 const TEAL = '#1B7A7A', OCHRE = '#E17A18', GRAY = '#F5F5F5', TEXT = '#333333';
-const FIRST_DEP = new Date('2026-12-08T00:00:00Z');
+const FIRST_DEP = new Date('2026-12-06T00:00:00Z');
 const OPPORTUNITY_1STOP = 1250; // US$ — abaixo disso, 1 escala, é fora da curva para dez/jan
 
 const grid = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
@@ -92,7 +92,7 @@ const html = `<div style="font-family:Arial,Helvetica,sans-serif;color:${TEXT};m
 <table style="width:100%;border-collapse:separate;border-spacing:8px"><tr>
 ${tile('Mais barato hoje', '$' + minCheap.toLocaleString('en-US'), `${delta(minCheap, prevCheap)} vs ontem · ${best.dep.slice(8)}/12 → ${best.ret.slice(8)}/01`)}
 ${tile('Melhor com 1 escala', isFinite(min1) ? '$' + min1.toLocaleString('en-US') : '—', `${delta(min1, prev1)} vs ontem${best1 ? ` · ${best1.dep.slice(8)}/12 → ${best1.ret.slice(8)}/01` : ''}`)}
-${tile('Dias até a 1ª ida', String(daysOut), '08/12/2026')}
+${tile('Dias até a 1ª ida', String(daysOut), FIRST_DEP.toISOString().slice(0, 10).split('-').reverse().join('/'))}
 </tr></table>
 <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:4px">
 <tr style="background-color:${GRAY};text-align:left"><th style="padding:6px 8px">Datas</th><th style="padding:6px 8px;text-align:right">Mais barato</th><th style="padding:6px 8px">Cia · duração</th><th style="padding:6px 8px;text-align:right">1 escala</th><th style="padding:6px 8px;text-align:right">Mais rápido</th><th></th></tr>
