@@ -1,7 +1,7 @@
 # Regras para sessões automáticas (USA Comeback)
 
 - Idioma: português do Brasil. Tom curto e objetivo.
-- Destinatários do alerta de voos: jr.conductor83@gmail.com e gandarp@gmail.com. Não usar outros endereços da Paula.
+- Destinatários do alerta de voos: jr.conductor83@gmail.com, gandarp@gmail.com e gandarp107@gmail.com (os dois da Paula, autorizado 24/10).
 - Transparência com a Paula está liberada (inclusive sobre visto).
 - **NUNCA** mencionar outras mulheres / relacionamentos do João no Brasil em nenhum e-mail, documento ou commit.
 - Nunca incluir senhas, conteúdo íntimo de e-mails ou dados financeiros pessoais.
