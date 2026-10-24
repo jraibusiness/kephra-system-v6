@@ -8,3 +8,4 @@
 - Identidade visual: teal #1B7A7A, ochre #E17A18 (só borda/detalhe; texto e fundos com texto branco usam #A8520C / #B4570A), cinza #F5F5F5, texto #333333, flat.
 - E-mail: seguir o QA obrigatório de `pm/PROTOCOLO.md` — nenhum envio sem `QA OK`.
 - Preços: sempre dizer a fonte e o horário da consulta; nunca inventar tarifa. Se o scraper falhar, dizer que falhou.
+- **NUNCA enviar e-mail sem confirmação prévia do João** (24/10). Juntar tudo num único e-mail por envio.
