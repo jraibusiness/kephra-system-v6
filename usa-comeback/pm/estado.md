@@ -23,3 +23,4 @@
 - 24/10 — João: CONFIRMO. D2/D1 fechadas pelos dois (voo rápido 06/12→20/01; Paraty). Enviado link da passagem (Kayak/Google Flights) + 6 casas Airbnb Paraty 07/12→19/01 (A–F, R$ 6,6–9,5 mil). Nova decisão D5: casa (aguarda os dois). Paula agora em gandarp + gandarp107.
 - 24/10 — Enviado: aluguel de carro GRU 07/12→19/01 (Kayak: Polo R$ 3.463 … Pulse auto R$ 5.118; histórico Kayak dez ~R$190/dia, jan ~R$97/dia) + aviso de possível adiamento (OS-UZP, Natal) → estadia antes em SP: interior ou Baixada. Pendentes: D5 casa; D6 adiamento (conversa João/Paula).
 - 24/10 — Correção João: carro só de ida (GRU→destino, devolve lá; no destino Uber; outro carro na volta). Paraty não tem grandes locadoras (só Luma, local); alternativa: devolver em Angra (Localiza) ou transfer. Regra: e-mails só após confirmação do João.
+- 24/10 — Enviado (aprovado pelo João): correção carro só de ida; recomendação transfer.
