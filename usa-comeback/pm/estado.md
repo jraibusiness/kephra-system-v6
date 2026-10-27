@@ -25,3 +25,4 @@
 - 24/10 — Correção João: carro só de ida (GRU→destino, devolve lá; no destino Uber; outro carro na volta). Paraty não tem grandes locadoras (só Luma, local); alternativa: devolver em Angra (Localiza) ou transfer. Regra: e-mails só após confirmação do João.
 - 24/10 — Enviado (aprovado pelo João): correção carro só de ida; recomendação transfer.
 - 26/10 08h BRT — sem respostas novas desde 24/10 (Paula: última 22/10). Voo 06/12→20/01: ~13h US$ 1.382 (−35), mais barato US$ 1.179. Nada enviado (regra: aguarda aprovação do João).
+- 27/10 08h BRT — sem respostas. Voo ~13h US$ 1.407 (+25). Nada enviado (aguarda João).
