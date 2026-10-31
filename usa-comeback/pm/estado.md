@@ -29,3 +29,4 @@
 - 28/10 08h BRT — sem respostas. Voo ~13h US$ 1.417; mais barato subiu p/ US$ 1.372. Nada enviado.
 - 29/10 08h BRT — sem respostas. Voo ~13h US$ 1.381 (−36). Nada enviado.
 - 30/10 08h BRT — sem respostas. Voo ~13h US$ 1.366 (menor da série). Nada enviado.
+- 31/10 08h BRT — sem respostas. Voo ~13h US$ 1.358 (−8). Nada enviado.
