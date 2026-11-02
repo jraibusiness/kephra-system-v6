@@ -31,3 +31,4 @@
 - 30/10 08h BRT — sem respostas. Voo ~13h US$ 1.366 (menor da série). Nada enviado.
 - 31/10 08h BRT — sem respostas. Voo ~13h US$ 1.358 (−8). Nada enviado.
 - 31/10 18h BRT — sem respostas. Nada enviado.
+- 02/11 08h BRT — sem respostas (01/11 domingo sem rodada). Voo ~13h US$ 1.364 (= mais barato agora). Nada enviado.
