@@ -87,6 +87,7 @@ ${baseCss}
 html,body,*{hyphens:manual;-webkit-hyphens:manual}
 p,.lead,.body,.spec dd,.notes p,.obs p,.timeline p{text-wrap:pretty}
 .j{text-align:justify;text-align-last:left}
+.jl{text-align:left}
 .tag{display:inline-block;vertical-align:2px;margin-left:8px;font-size:10px;letter-spacing:.18em;padding:4px 9px 3px;border:1px solid var(--red);color:var(--red);border-radius:999px}
 .tag.fresh{background:var(--red);color:#fff}
 .tip{font-size:16px;line-height:1.5;color:var(--muted);margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
@@ -248,6 +249,14 @@ ${[1,2,3,4,5,6,7,8].map(i=>`.anim .stagger.in>*:nth-child(${i}){transition-delay
   <p class="tip reveal j"><b>Legumes extras em vasilha separada</b>, no lugar da salada. Cardápio sujeito a ajustes conforme preferências e rotina do casal.</p>
 </div></section>
 
+<section class="block" id="jantares"><div class="wrap">
+  ${kicker('04', 'Complemento · jantares')}
+  <h2 class="reveal">5 travessas <em>de prato único.</em></h2>
+  <p class="body reveal j">Preparações completas, de forno, que <em>reaquecem bem sem perder a textura</em>. Rendem aproximadamente <b>10 jantares para duas pessoas</b>.</p>
+  <ol class="list stagger">${travessas.map((t, i) => `<li><b>${i + 1}</b><div><strong>${t[0]}${t[2] ? '\u00A0<span class="novo">novo</span>' : ''}</strong><small>${t[1]}</small></div></li>`).join('')}</ol>
+  <p class="alt reveal j"><b>Opção alternativa:</b> panqueca gratinada de espinafre e ricota com molho de tomate.</p>
+</div></section>
+
 <section class="block" id="lanches"><div class="wrap">
   ${kicker('04', 'Complemento · lanches')}
   <h2 class="reveal">10 dias de lanches, <em>mais sanduíche, mais recheio.</em></h2>
@@ -343,6 +352,7 @@ for(let i=0;i<fixed.length-1;i++){
   else if(/^\s+\S+\s*$/.test(t)&&/^<\/(i|b|em|span|strong)>$/.test(fixed[i-1]||''))fixed[i]=t.replace(/^\s+/,NB);
 }
 for(let i=0;i<fixed.length;i++){if(!fixed[i].startsWith('<'))fixed[i]=fixed[i].replace(/([\p{L}]+(?:-[\p{L}]+)+)/gu,'<span class="nb">$1</span>')}
-const out=fixed.join('');
+let jn=0;
+const out=fixed.join('').replace(/class="([^"]*\bj)"/g,(m,c)=>`class="${c}" data-j="${jn++}"`);
 fs.writeFileSync('Proposta_Cacarola_Plano_Mensal_Mes2.html', out);
 console.log('ok', (html.length / 1024).toFixed(0) + 'KB');

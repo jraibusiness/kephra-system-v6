@@ -180,6 +180,7 @@ h2{font-weight:500;font-size:clamp(40px,10.5vw,64px);line-height:1;letter-spacin
 html,body,*{hyphens:manual;-webkit-hyphens:manual}
 p,.lead,.body,.spec dd,.notes p,.obs p,.timeline p{text-wrap:pretty}
 .j{text-align:justify;text-align-last:left}
+.jl{text-align:left}
 .tag{display:inline-block;vertical-align:2px;margin-left:8px;font-size:10px;letter-spacing:.18em;padding:4px 9px 3px;border:1px solid var(--red);color:var(--red);border-radius:999px}
 .tag.fresh{background:var(--red);color:#fff}
 .tip{font-size:16px;line-height:1.5;color:var(--muted);margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
@@ -297,7 +298,7 @@ h2{text-wrap:wrap;font-size:clamp(30px,9vw,60px)}
 <section class="block" id="apresentacao"><div class="wrap">
   <div class="kicker reveal"><b>—</b><span class="rule"></span><span>Apresentação</span></div>
   <h2 class="reveal">Praticidade, variedade e <em>comida de verdade.</em></h2>
-  <p class="lead reveal j">Um segundo mês construído a partir do que vocês mais amaram no primeiro: <b>os favoritos ficam</b>, <em>o porcionamento aumenta</em> e entram <em>novas preparações pensadas para congelar bem</em>.</p>
+  <p class="lead reveal jl" data-j="0">Um segundo mês construído a partir do que vocês mais amaram no primeiro: <b>os favoritos ficam</b>, <em>o porcionamento aumenta</em> e entram <em>novas preparações pensadas para congelar bem</em>.</p>
   <div class="stats stagger">
     <div><strong>2</strong><span>pessoas</span></div>
     <div><strong>40</strong><span>marmitas<br>de almoço</span></div>
@@ -338,7 +339,7 @@ h2{text-wrap:wrap;font-size:clamp(30px,9vw,60px)}
     <li><span><b>Mais proteína e carboidrato</b> nos pratos leves (frango, peixe, salmão, cuscuz).</span></li>
     <li><span><b>Legumes extras em vasilha separada</b>, no lugar da salada.</span></li>
   </ul>
-  <p class="alt reveal j"><b>Abóbora saiu das marmitas de carne desfiada.</b> Quando houver abóbora ou <span class="nb">batata-doce</span>, contam como carboidrato.</p>
+  <p class="alt reveal jl" data-j="1"><b>Abóbora saiu das marmitas de carne desfiada.</b> Quando houver abóbora ou <span class="nb">batata-doce</span>, contam como carboidrato.</p>
 </div></section>
 
 <section class="block" id="cardapio"><div class="wrap">
@@ -361,20 +362,28 @@ h2{text-wrap:wrap;font-size:clamp(30px,9vw,60px)}
     <div class="weekhead"><div class="weekno">Semana 4 <span class="tag ">Para congelar</span></div><h3>Preparações especiais</h3></div>
     <ol class="days"><li><span class="day" title="Segunda">Seg</span><div><strong>Ragu de carne</strong><small>Purê de batata <i>·</i> Legumes verdes</small></div></li><li><span class="day" title="Terça">Ter</span><div><strong>Sobrecoxa ao molho de tomate e azeitonas</strong><small>Arroz <i>·</i> Abobrinha</small></div></li><li><span class="day" title="Quarta">Qua</span><div><strong>Salmão em molho cremoso de limão</strong><small>Arroz de jasmim <i>·</i> Brócolis</small></div></li><li><span class="day" title="Quinta">Qui</span><div><strong>Kafta de carne ao molho</strong><small>Arroz com lentilha <i>·</i> Legumes</small></div></li><li><span class="day" title="Sexta">Sex</span><div><strong>Filet mignon ao molho de vinho</strong><small>Purê de <span class="nb">batata-doce</span> <i>·</i> Legumes</small></div></li></ol>
   </div></div>
-  <p class="tip reveal j"><b>Legumes extras em vasilha separada</b>, no lugar da salada. Cardápio sujeito a ajustes conforme preferências e rotina do casal.</p>
+  <p class="tip reveal jl" data-j="2"><b>Legumes extras em vasilha separada</b>, no lugar da salada. Cardápio sujeito a ajustes conforme preferências e rotina do casal.</p>
+</div></section>
+
+<section class="block" id="jantares"><div class="wrap">
+  <div class="kicker reveal"><b>04</b><span class="rule"></span><span>Complemento · jantares</span></div>
+  <h2 class="reveal">5 travessas <em>de prato único.</em></h2>
+  <p class="body reveal jl" data-j="3">Preparações completas, de forno, que <em>reaquecem bem sem perder a textura</em>. Rendem aproximadamente <b>10 jantares para duas pessoas</b>.</p>
+  <ol class="list stagger"><li><b>1</b><div><strong>Lasanha de berinjela</strong><small>com ragu de carne</small></div></li><li><b>2</b><div><strong>Fricassê de frango</strong><small>em travessa maior</small></div></li><li><b>3</b><div><strong>Escondidinho de mandioca</strong><small>com carne seca e bastante carne desfiada</small></div></li><li><b>4</b><div><strong>Moussaka de carne <span class="novo">novo</span></strong><small>com berinjela e batata</small></div></li><li><b>5</b><div><strong>Massa ao forno <span class="novo">novo</span></strong><small>com ragu de linguiça e abobrinha</small></div></li></ol>
+  <p class="alt reveal jl" data-j="4"><b>Opção alternativa:</b> panqueca gratinada de espinafre e ricota com molho de tomate.</p>
 </div></section>
 
 <section class="block" id="lanches"><div class="wrap">
   <div class="kicker reveal"><b>04</b><span class="rule"></span><span>Complemento · lanches</span></div>
   <h2 class="reveal">10 dias de lanches, <em>mais sanduíche, mais recheio.</em></h2>
-  <p class="body reveal j">Sem wraps, muffins ou madeleine. <em>Mais quantidade e mais proteína</em> nos sanduíches que vocês adoraram.</p>
+  <p class="body reveal jl" data-j="5">Sem wraps, muffins ou madeleine. <em>Mais quantidade e mais proteína</em> nos sanduíches que vocês adoraram.</p>
   <ul class="list stagger"><li><b>4</b><div><strong>Sanduíches caprese com frango</strong></div></li><li><b>3</b><div><strong>Sanduíches caprese com carne (rosbife)</strong></div></li><li><b>1</b><div><strong>Frango desfiado com cenoura e ricota</strong></div></li><li><b>1</b><div><strong>Peru com queijo e rúcula</strong></div></li><li><b>1</b><div><strong>Carne louca com queijo</strong></div></li></ul>
   <div class="torta reveal"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjI3NC4wNSAxNDYuNTcgMzE4LjYzIDEyMy44OCI+PHBhdGggZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA5KSIgZD0iTSA1OTIuNjc5Njg4IDE5OC40Mjk2ODggTCA1OTIuNjc5Njg4IDE5MC42NDQ1MzEgQyA1OTIuNTk3NjU2IDE4OC43NjU2MjUgNTkxLjA2NjQwNiAxODcuMzk0NTMxIDU4OS4xNjc5NjkgMTg3LjM2NzE4OCBMIDU1MC44NDM3NSAxODcuMzY3MTg4IEwgNTUwLjg0Mzc1IDE4My41MzkwNjIgQyA1NTAuODQzNzUgMTgyLjgwMDc4MSA1NTAuMzk4NDM4IDE4Mi4xMzY3MTkgNTQ5LjcxMDkzOCAxODEuODkwNjI1IEwgNDg5LjY2NDA2MiAxNjAuMjY1NjI1IEMgNDg5LjQ4NDM3NSAxNjAuMTk5MjE5IDQ4OS4yOTY4NzUgMTYwLjE2Nzk2OSA0ODkuMTA1NDY5IDE2MC4xNjc5NjkgTCA0MzguMjYxNzE5IDE2MC4xNjc5NjkgTCA0MzguMjYxNzE5IDE1Ny41ODIwMzEgQyA0MzguMjYxNzE5IDE1Ni43MzgyODEgNDM4LjI2MTcxOSAxNTQuMTc1NzgxIDQ0NS40ODgyODEgMTU0LjE3NTc4MSBDIDQ1MC43NDYwOTQgMTU0LjE3NTc4MSA0NTIuNjA5Mzc1IDE1My4wMDM5MDYgNDUyLjYwOTM3NSAxNDkuNjk5MjE5IEwgNDUyLjYwOTM3NSAxNDYuNzE4NzUgTCA0NTIuNTkzNzUgMTQ2LjU3NDIxOSBMIDQxNC4wMDM5MDYgMTQ2LjU3NDIxOSBMIDQxMy45ODgyODEgMTQ2LjcxODc1IEwgNDEzLjk4ODI4MSAxNDkuNjk5MjE5IEMgNDEzLjk4ODI4MSAxNTMuMDAzOTA2IDQxNS44MjgxMjUgMTU0LjE3NTc4MSA0MjEuMDE5NTMxIDE1NC4xNzU3ODEgQyA0MjguMTYwMTU2IDE1NC4xNzU3ODEgNDI4LjE2MDE1NiAxNTYuNzM4MjgxIDQyOC4xNjAxNTYgMTU3LjU4MjAzMSBMIDQyOC4xNjAxNTYgMTYwLjE2Nzk2OSBMIDM3OS4zODI4MTIgMTYwLjE2Nzk2OSBDIDM3OS4xOTE0MDYgMTYwLjE2Nzk2OSAzNzguOTk2MDk0IDE2MC4xOTkyMTkgMzc4LjgwODU5NCAxNjAuMjY1NjI1IEwgMzE2LjkyNTc4MSAxODEuODkwNjI1IEMgMzE2LjIxODc1IDE4Mi4xMzY3MTkgMzE1Ljc1IDE4Mi44MDA3ODEgMzE1Ljc1IDE4My41MzkwNjIgTCAzMTUuNzUgMTg3LjM2NzE4OCBMIDI3Ny42Mjg5MDYgMTg3LjM2NzE4OCBDIDI3NS42NTIzNDQgMTg3LjM5NDUzMSAyNzQuMDU0Njg4IDE4OC44Mzk4NDQgMjc0LjA1NDY4OCAxOTAuODAwNzgxIEwgMjc0LjA1NDY4OCAxOTguMjY5NTMxIEMgMjc0LjA1NDY4OCAyMDAuMTkxNDA2IDI3NS41OTc2NTYgMjAxLjc1MzkwNiAyNzcuNTIzNDM4IDIwMS44Mzk4NDQgTCAyODcuMjI2NTYyIDIwMS44Mzk4NDQgQyAyOTUuNzA3MDMxIDIwMS44Mzk4NDQgMzA1LjQ0MTQwNiAyMDMuOTE0MDYyIDMwNS40NDE0MDYgMjIwLjA1ODU5NCBDIDMwNS40NDE0MDYgMjI5LjM1MTU2MiAzMDUuNDE0MDYyIDIyMi40NDUzMTIgMzA1LjM5NDUzMSAyMjQuNzk2ODc1IEMgMzA1LjM3MTA5NCAyMjYuNTMxMjUgMzA1LjM2MzI4MSAyMjguMDIzNDM4IDMwNS4zNjMyODEgMjMxLjg2MzI4MSBDIDMwNS4zNjMyODEgMjMzLjk0NTMxMiAzMDUuNzczNDM4IDI0NC44MjAzMTIgMzEzLjk5MjE4OCAyNTQuNjY3OTY5IEMgMzIyLjczNDM3NSAyNjUuMTQ0NTMxIDMzNi43MzA0NjkgMjcwLjQ1NzAzMSAzNTUuNjAxNTYyIDI3MC40NTcwMzEgTCA1MTAuNDY4NzUgMjcwLjQ1NzAzMSBDIDUyOS40NjQ4NDQgMjcwLjQ1NzAzMSA1NDMuNTUwNzgxIDI2NS4xNDQ1MzEgNTUyLjM0NzY1NiAyNTQuNjY3OTY5IEMgNTYwLjYyMTA5NCAyNDQuODIwMzEyIDU2MS4wMzkwNjIgMjMzLjk0NTMxMiA1NjEuMDM5MDYyIDIzMS44NjMyODEgQyA1NjEuMDM5MDYyIDIyOC4wMjM0MzggNTYxLjAyMzQzOCAyMjYuNTMxMjUgNTYxLjAxMTcxOSAyMjQuNzk2ODc1IEMgNTYwLjk4MDQ2OSAyMjIuNDQ1MzEyIDU2MC45NTMxMjUgMjI5LjM1MTU2MiA1NjAuOTUzMTI1IDIyMC4wNTg1OTQgQyA1NjAuOTUzMTI1IDIwMy45MTQwNjIgNTcwLjc1MzkwNiAyMDEuODM5ODQ0IDU3OS4yODkwNjIgMjAxLjgzOTg0NCBMIDU4OS4yNzM0MzggMjAxLjgzOTg0NCBDIDU5MS4xMjEwOTQgMjAxLjc1MzkwNiA1OTIuNTk3NjU2IDIwMC4yODEyNSA1OTIuNjc5Njg4IDE5OC40Mjk2ODggIi8+PC9zdmc+" alt="">
     <div class="t-h">1 torta na travessa</div>
     <h4>Torta sem glúten</h4>
     <p>Recheio de ricota, frango desfiado e espinafre: <b>mais proteína e mais ricota</b>, como vocês pediram.</p>
   </div>
-  <p class="tip reveal j"><b>Dica:</b> os sanduíches com folhas e tomate são montados na hora; combinamos a melhor forma de entrega.</p>
+  <p class="tip reveal jl" data-j="6"><b>Dica:</b> os sanduíches com folhas e tomate são montados na hora; combinamos a melhor forma de entrega.</p>
 </div></section>
 
 <section class="block" id="cronograma"><div class="wrap">
