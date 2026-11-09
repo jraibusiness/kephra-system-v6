@@ -65,7 +65,7 @@ const kicker = (num, txt) => `<div class="kicker reveal"><b>${num}</b><span clas
 const waIcon = (c) => `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="${c}" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.13c-.25.69-1.44 1.32-1.98 1.37-.51.05-.99.24-3.33-.69-2.81-1.11-4.6-3.99-4.74-4.17-.14-.18-1.13-1.5-1.13-2.87 0-1.36.71-2.03.97-2.31.25-.28.55-.35.73-.35l.53.01c.17.01.4-.06.62.48.23.55.78 1.91.85 2.05.07.14.11.3.02.48-.09.18-.14.3-.28.46-.14.16-.29.36-.41.48-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.16-.18.69-.81.88-1.09.18-.28.37-.23.62-.14.25.09 1.6.76 1.88.89.28.14.46.21.53.32.07.12.07.67-.18 1.36z"/></svg>`;
 
 const weeks = semanas.map((s, k) => `
-  <div class="week" id="semana-${s.n}" role="tabpanel" aria-labelledby="tab-${s.n}" ${k ? 'data-hide' : ''}>
+  <div class="week" id="semana-${s.n}" aria-label="Semana ${s.n}">
     <div class="weekhead"><div class="weekno">Semana ${s.n} <span class="tag ${s.n === 1 ? 'fresh' : ''}">${s.tag}</span></div><h3>${s.tema}</h3></div>
     <ol class="days">${s.dias.map((d, i) => `<li><span class="day" title="${DIAS[i][1]}">${DIAS[i][0]}</span><div><strong>${d[0]}</strong><small>${d.slice(1).join('<i>·</i>')}</small></div></li>`).join('')}</ol>
   </div>`).join('');
@@ -139,6 +139,20 @@ section.block{position:relative;overflow:hidden}
 section.block:before{content:"";position:absolute;width:260px;height:260px;left:-150px;top:40px;border-radius:50%;border:1px solid rgba(227,29,38,.08);box-shadow:0 0 0 26px rgba(227,29,38,.025);pointer-events:none}
 section.block>.wrap{position:relative}
 .wm{position:absolute;right:-90px;bottom:-10px;width:300px;opacity:1;pointer-events:none}
+/* barra superior com as semanas */
+.bar{display:block;padding-bottom:8px}
+.bar-top{display:flex;justify-content:space-between;align-items:center}
+.weeknav{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.weeknav a{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:44px;border:1px solid rgba(227,29,38,.45);color:var(--red);text-decoration:none;font-size:18px;font-weight:600;line-height:1;border-radius:4px;transition:background .25s,color .25s;-webkit-tap-highlight-color:transparent}
+.weeknav a small{font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;margin-bottom:3px;color:var(--ink)}
+.weeknav a.on{background:var(--red);color:#fff;border-color:var(--red)}
+.weeknav a.on small{color:#fff}
+.week{scroll-margin-top:calc(128px + env(safe-area-inset-top))}
+.week+.week{margin-top:64px}
+/* sem quebras órfãs */
+h1,h2,h3,h4,.when,.motto{text-wrap:balance}
+.nb,.pcard dt{white-space:nowrap}
+.pcard dt{font-size:clamp(24px,6.8vw,34px)}
 /* animação: só esconde se o JS rodou (classe .anim no <html>) */
 .reveal{opacity:1;transform:none}
 .anim .reveal{opacity:0;transform:translateY(18px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
@@ -155,8 +169,13 @@ ${[1,2,3,4,5,6,7,8].map(i=>`.anim .stagger.in>*:nth-child(${i}){transition-delay
 <div class="progress" id="progress" aria-hidden="true"></div>
 
 <header class="bar" id="bar">
-  <a href="#topo" aria-label="Voltar ao início"><img src="${logo.red}" alt="Caçarola Personal Chef"></a>
-  <a class="pill" href="${WA}" target="_blank" rel="noopener">${waIcon('#fff')}Falar com a chef</a>
+  <div class="bar-top">
+    <a href="#topo" aria-label="Voltar ao início"><img src="${logo.red}" alt="Caçarola Personal Chef"></a>
+    <a class="pill" href="${WA}" target="_blank" rel="noopener">${waIcon('#fff')}Falar com a chef</a>
+  </div>
+  <nav class="weeknav" aria-label="Ir para a semana do cardápio">
+    ${semanas.map((s) => `<a href="#semana-${s.n}" data-w="${s.n}"><small>Semana</small>${s.n}</a>`).join('')}
+  </nav>
 </header>
 
 <main>
@@ -222,68 +241,12 @@ ${[1,2,3,4,5,6,7,8].map(i=>`.anim .stagger.in>*:nth-child(${i}){transition-delay
 <section class="block" id="cardapio"><div class="wrap">
   ${kicker('03', 'Cardápio sugerido · 2º mês')}
   <h2 class="reveal">Quatro semanas, <em>quatro viagens.</em></h2>
-  <div class="tabs reveal" role="tablist" aria-label="Semanas do cardápio">
-    ${semanas.map((s, k) => `<button role="tab" id="tab-${s.n}" aria-controls="semana-${s.n}" aria-selected="${k === 0}">Sem ${s.n}</button>`).join('')}
-  </div>
   <div id="weeks">${weeks}</div>
-  <p class="swipe-hint" aria-hidden="true">Deslize para trocar de semana</p>
   <p class="tip reveal j"><b>Legumes extras em vasilha separada</b>, no lugar da salada. Cardápio sujeito a ajustes conforme preferências e rotina do casal.</p>
 </div></section>
 
-<section class="block" id="jantares"><div class="wrap">
-  ${kicker('04', 'Complemento · jantares')}
-  <h2 class="reveal"><em>5 travessas</em> de prato único.</h2>
-  <p class="body reveal j">Preparações completas, de forno, que <em>reaquecem bem sem perder a textura</em>. Rendem aproximadamente <b>10 jantares para duas pessoas</b>.</p>
-  <ol class="list stagger">${travessas.map((t, i) => `<li><b>${i + 1}</b><div><strong>${t[0]}${t[2] ? '<span class="novo">novo</span>' : ''}</strong><small>${t[1]}</small></div></li>`).join('')}</ol>
-  <p class="alt reveal"><b>Opção alternativa:</b> panqueca gratinada de espinafre e ricota com molho de tomate.</p>
-</div></section>
-
-<section class="block" id="lanches"><div class="wrap">
-  ${kicker('04', 'Complemento · lanches')}
-  <h2 class="reveal">10 dias de lanches, <em>mais sanduíche, mais recheio.</em></h2>
-  <p class="body reveal j">Sem wraps, muffins ou madeleine. <em>Mais quantidade e mais proteína</em> nos sanduíches que vocês adoraram.</p>
-  <ul class="list stagger">${lanches.map((l) => `<li><b>${l[0]}</b><div><strong>${l[1]}</strong></div></li>`).join('')}</ul>
-  <div class="torta reveal"><img src="${pot.redSoft}" alt="">
-    <div class="t-h">1 torta na travessa</div>
-    <h4>Torta sem glúten</h4>
-    <p>Recheio de ricota, frango desfiado e espinafre: <b>mais proteína e mais ricota</b>, como vocês pediram.</p>
-  </div>
-  <p class="tip reveal j"><b>Dica:</b> os sanduíches com folhas e tomate são montados na hora; combinamos a melhor forma de entrega.</p>
-</div></section>
-
-<section class="block" id="frequencia"><div class="wrap">
-  ${kicker('04', 'Complemento · frequência')}
-  <h2 class="reveal">Escolha o ritmo <em>de entrega.</em></h2>
-  <p class="subnote reveal">Toque em uma opção para ver o investimento mensal.</p>
-  <div class="opts stagger" role="radiogroup" aria-label="Frequência de entrega">${opcoes.map((o) => `
-    <label class="opt"><input type="radio" name="freq" value="${o.valor}" data-nome="${o.nome}" ${o.checked ? 'checked' : ''}>
-      <span class="opt-box"><span class="opt-top"><span class="opt-name">${o.nome}</span><span class="add"><small>+ R$</small>${o.valor}</span></span><span class="opt-desc">${o.desc}</span></span></label>`).join('')}
-  </div>
-  <p class="ritmo reveal"><svg viewBox="0 0 24 24" fill="none" stroke="${RED}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="1.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span><b>Ritmo previsto para este mês:</b> <em>entrega única em 22/11</em>, com as semanas 2, 3 e 4 congeladas.</span></p>
-</div></section>
-
-<section class="block" id="investimento"><div class="wrap">
-  ${kicker('05', 'Investimento')}
-  <h2 class="reveal">Resumo do <em>investimento.</em></h2>
-  <div class="reveal"><div class="kicker" style="margin-bottom:6px"><span>Plano mensal de almoço</span></div>
-  <div class="big"><span class="cur">R$</span><span class="val">450</span><span class="per">,00</span></div>
-  <p class="small-note">Ingredientes pagos separadamente pelo casal.</p></div>
-  <div class="kicker reveal" style="margin-bottom:8px"><span>Valor mensal do serviço por modalidade</span></div>
-  <div class="modes stagger" id="modes">
-    <div class="m" data-v="200"><span><small>Entrega mensal</small>Almoço + jantar e lanches</span><b>R$ 650</b></div>
-    <div class="m" data-v="300"><span><small>Entrega quinzenal</small>Almoço + jantar e lanches</span><b>R$ 750</b></div>
-    <div class="m" data-v="400"><span><small>Entrega semanal</small>Almoço + jantar e lanches</span><b>R$ 850</b></div>
-  </div>
-  <div class="total reveal" aria-live="polite">
-    <div class="t-h">Sua escolha</div>
-    <div class="t-v"><small>R$</small><span id="tv">650</span><span class="mo">/ mês</span></div>
-    <div class="t-s">Almoço <span aria-hidden="true">+</span> jantar e lanches com <strong id="tn">entrega mensal</strong></div>
-    <div class="t-f">Ingredientes pagos à parte · <a href="#frequencia">alterar frequência</a></div>
-  </div>
-</div></section>
-
 <section class="block" id="cronograma"><div class="wrap">
-  ${kicker('06', 'Cronograma')}
+  ${kicker('04', 'Cronograma')}
   <h2 class="reveal">Próximos <em>passos.</em></h2>
   <ol class="timeline stagger">
     <li class="first"><span class="dot"></span><div class="when">A confirmar</div><strong>Vasilhas e cartões</strong><p>Envio das vasilhas de marmita e dos cartões (10/11 ou 19/11).</p></li>
@@ -292,14 +255,6 @@ ${[1,2,3,4,5,6,7,8].map(i=>`.anim .stagger.in>*:nth-child(${i}){transition-delay
   </ol>
 </div></section>
 
-<section class="block" id="entrega"><div class="wrap">
-  ${kicker('07', 'Armazenamento e entrega')}
-  <h2 class="reveal">Do nosso fogão <em>para a sua casa.</em></h2>
-  <p class="body reveal j">Na modalidade de <em>entrega mensal</em>, toda a produção contratada é organizada e entregue em uma única ocasião. A partir do recebimento, o armazenamento e a conservação dos alimentos ficam sob responsabilidade do cliente, seguindo as <b>orientações de conservação fornecidas pela Caçarola</b>. As vasilhas/embalagens e a logística de devolução serão combinadas previamente entre as partes.</p>
-  <aside class="obs reveal"><h4>Observação sobre o cardápio</h4><p class="j">Este é um cardápio sugerido. As preparações podem ser ajustadas conforme preferências, rotina e eventuais orientações nutricionais do casal.</p></aside>
-  <aside class="obs reveal"><h4>Pensado para congelar</h4><p class="j"><b>Semanas 2, 3 e 4</b> foram pensadas para congelamento: pratos de molho, assados e braseados, que reaquecem bem.</p></aside>
-  <img class="wm" src="data:image/svg+xml;base64,${Buffer.from(fs.readFileSync(__dirname + '/pot.svg', 'utf8').replace(/currentColor/g, 'rgba(227,29,38,0.05)')).toString('base64')}" alt="">
-</div></section>
 </main>
 
 <footer class="closing">
@@ -317,22 +272,12 @@ ${[1,2,3,4,5,6,7,8].map(i=>`.anim .stagger.in>*:nth-child(${i}){transition-delay
 <script>
 (function(){
   var d=document.documentElement;
-  // Abas do cardápio (sem JS, todas as semanas ficam visíveis)
+  // Botões de semana: realça a semana que está na tela
   try{
-    var tabs=[].slice.call(document.querySelectorAll('[role=tab]')),cur=0;
-    function show(i){cur=(i+tabs.length)%tabs.length;tabs.forEach(function(t,k){var on=k===cur;t.setAttribute('aria-selected',on);t.tabIndex=on?0:-1;document.getElementById(t.getAttribute('aria-controls')).hidden=!on})}
-    tabs.forEach(function(t,k){t.addEventListener('click',function(){show(k)});t.addEventListener('keydown',function(e){if(e.key==='ArrowRight'){show(cur+1);tabs[cur].focus()}if(e.key==='ArrowLeft'){show(cur-1);tabs[cur].focus()}})});
-    show(0);
-    var w=document.getElementById('weeks'),sx=0,sy=0;
-    w.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
-    w.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){show(cur+(dx<0?1:-1))}},{passive:true});
-  }catch(e){}
-  // Total conforme frequência
-  try{
-    var tv=document.getElementById('tv'),tn=document.getElementById('tn'),ms=document.querySelectorAll('#modes .m');
-    function total(){var r=document.querySelector('input[name=freq]:checked');tv.textContent=(450+ +r.value).toLocaleString('pt-BR');tn.textContent=r.dataset.nome.toLowerCase();for(var k=0;k<ms.length;k++)ms[k].classList.toggle('on',ms[k].getAttribute('data-v')===r.value)}
-    document.querySelectorAll('input[name=freq]').forEach(function(r){r.addEventListener('change',total)});
-    total();
+    var links=document.querySelectorAll('.weeknav a'),wk=[1,2,3,4].map(function(n){return document.getElementById('semana-'+n)});
+    function act(){var y=window.innerHeight*0.35,cur=0;for(var k=0;k<wk.length;k++){if(wk[k].getBoundingClientRect().top<y)cur=k+1}for(var k=0;k<links.length;k++){links[k].classList.toggle('on',k+1===cur)}}
+    window.addEventListener('scroll',act,{passive:true});act();
+    for(var k=0;k<links.length;k++)links[k].addEventListener('click',function(e){var t=document.getElementById('semana-'+this.getAttribute('data-w'));if(!t)return;e.preventDefault();t.querySelectorAll('.reveal,.stagger').forEach(function(x){x.classList.add('in')});t.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState&&history.replaceState(null,'','#semana-'+this.getAttribute('data-w'))});
   }catch(e){}
   // Barra superior e progresso de leitura
   try{
@@ -363,5 +308,23 @@ ${[1,2,3,4,5,6,7,8].map(i=>`.anim .stagger.in>*:nth-child(${i}){transition-delay
 </body>
 </html>`;
 
-fs.writeFileSync('Proposta_Cacarola_Plano_Mensal_Mes2.html', html);
+const NB='\u00A0';
+const fix=(t)=>t
+  .replace(/(\d)\s+(?=[^\s<])/g,'$1'+NB)            // número + palavra/unidade (150 g, 20 dias, 22/11 com…)
+  .replace(/R\$\s+/g,'R$'+NB)                         // R$ 450
+  .replace(/\s+([–—·+])\s+/g,NB+'$1 ')               // separadores não começam linha
+  .replace(/(^|\s)([aeoàéAEO]|de|da|do|em|no|na|um|ao|os|as|e)\s+/g,(m,p,w)=>p+w+NB); // palavra curta não fica sozinha no fim da linha
+const parts=html.split(/(<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<[^>]+>)/);
+const fixed=parts.map((p)=>p.startsWith('<')?p:fix(p));
+// última linha nunca com uma palavra só: cola as duas últimas palavras antes do fechamento de um bloco de texto
+for(let i=0;i<fixed.length-1;i++){
+  const t=fixed[i];
+  if(t.startsWith('<')||!/\S/.test(t))continue;
+  let k=i+1;while(k<fixed.length&&(fixed[k]===''||/^<\/(em|b|i|span)>$/.test(fixed[k])))k++;
+  if(!/^<\/(p|strong|small|h[1-4]|li|dd|dt|div|span|a|aside)>$/.test(fixed[k]||''))continue;
+  const m=t.match(/^([\s\S]*\S)\s+(\S+\s*)$/);
+  if(m&&(m[1].split(/\s/).pop().length+m[2].length)<=24)fixed[i]=m[1]+NB+m[2];
+}
+const out=fixed.join('');
+fs.writeFileSync('Proposta_Cacarola_Plano_Mensal_Mes2.html', out);
 console.log('ok', (html.length / 1024).toFixed(0) + 'KB');
