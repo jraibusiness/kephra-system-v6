@@ -67,7 +67,7 @@ const waIcon = (c) => `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="$
 const weeks = semanas.map((s, k) => `
   <div class="week" id="semana-${s.n}" aria-label="Semana ${s.n}">
     <div class="weekhead"><div class="weekno">Semana ${s.n} <span class="tag ${s.n === 1 ? 'fresh' : ''}">${s.tag}</span></div><h3>${s.tema}</h3></div>
-    <ol class="days">${s.dias.map((d, i) => `<li><span class="day" title="${DIAS[i][1]}">${DIAS[i][0]}</span><div><strong>${d[0]}</strong><small>${d.slice(1).join('<i>·</i>')}</small></div></li>`).join('')}</ol>
+    <ol class="days">${s.dias.map((d, i) => `<li><span class="day" title="${DIAS[i][1]}">${DIAS[i][0]}</span><div><strong>${d[0]}</strong><small>${d.slice(1).join('\u00A0<i>·</i> ')}</small></div></li>`).join('')}</ol>
   </div>`).join('');
 
 const html = `<!doctype html>
@@ -84,7 +84,8 @@ const html = `<!doctype html>
 <style>
 ${baseCss}
 /* —— 2º mês —— */
-p,.lead,.body,.spec dd,.notes p,.obs p,.timeline p{text-wrap:pretty;hyphens:auto;-webkit-hyphens:auto}
+html,body,*{hyphens:manual;-webkit-hyphens:manual}
+p,.lead,.body,.spec dd,.notes p,.obs p,.timeline p{text-wrap:pretty}
 .j{text-align:justify;text-align-last:left}
 .tag{display:inline-block;vertical-align:2px;margin-left:8px;font-size:10px;letter-spacing:.18em;padding:4px 9px 3px;border:1px solid var(--red);color:var(--red);border-radius:999px}
 .tag.fresh{background:var(--red);color:#fff}
@@ -150,7 +151,9 @@ section.block>.wrap{position:relative}
 .week{scroll-margin-top:calc(128px + env(safe-area-inset-top))}
 .week+.week{margin-top:64px}
 /* sem quebras órfãs */
-h1,h2,h3,h4,.when,.motto{text-wrap:balance}
+h3,h4,.when,.motto{text-wrap:balance}
+h2{text-wrap:wrap;font-size:clamp(30px,9vw,60px)}
+.days small i{margin:0 2px}
 .nb,.pcard dt{white-space:nowrap}
 .pcard dt{font-size:clamp(24px,6.8vw,34px)}
 /* animação: só esconde se o JS rodou (classe .anim no <html>) */
@@ -245,8 +248,21 @@ ${[1,2,3,4,5,6,7,8].map(i=>`.anim .stagger.in>*:nth-child(${i}){transition-delay
   <p class="tip reveal j"><b>Legumes extras em vasilha separada</b>, no lugar da salada. Cardápio sujeito a ajustes conforme preferências e rotina do casal.</p>
 </div></section>
 
+<section class="block" id="lanches"><div class="wrap">
+  ${kicker('04', 'Complemento · lanches')}
+  <h2 class="reveal">10 dias de lanches, <em>mais sanduíche, mais recheio.</em></h2>
+  <p class="body reveal j">Sem wraps, muffins ou madeleine. <em>Mais quantidade e mais proteína</em> nos sanduíches que vocês adoraram.</p>
+  <ul class="list stagger">${lanches.map((l) => `<li><b>${l[0]}</b><div><strong>${l[1]}</strong></div></li>`).join('')}</ul>
+  <div class="torta reveal"><img src="${pot.redSoft}" alt="">
+    <div class="t-h">1 torta na travessa</div>
+    <h4>Torta sem glúten</h4>
+    <p>Recheio de ricota, frango desfiado e espinafre: <b>mais proteína e mais ricota</b>, como vocês pediram.</p>
+  </div>
+  <p class="tip reveal j"><b>Dica:</b> os sanduíches com folhas e tomate são montados na hora; combinamos a melhor forma de entrega.</p>
+</div></section>
+
 <section class="block" id="cronograma"><div class="wrap">
-  ${kicker('04', 'Cronograma')}
+  ${kicker('05', 'Cronograma')}
   <h2 class="reveal">Próximos <em>passos.</em></h2>
   <ol class="timeline stagger">
     <li class="first"><span class="dot"></span><div class="when">A confirmar</div><strong>Vasilhas e cartões</strong><p>Envio das vasilhas de marmita e dos cartões (10/11 ou 19/11).</p></li>
@@ -275,7 +291,7 @@ ${[1,2,3,4,5,6,7,8].map(i=>`.anim .stagger.in>*:nth-child(${i}){transition-delay
   // Botões de semana: realça a semana que está na tela
   try{
     var links=document.querySelectorAll('.weeknav a'),wk=[1,2,3,4].map(function(n){return document.getElementById('semana-'+n)});
-    function act(){var y=window.innerHeight*0.35,cur=0;for(var k=0;k<wk.length;k++){if(wk[k].getBoundingClientRect().top<y)cur=k+1}for(var k=0;k<links.length;k++){links[k].classList.toggle('on',k+1===cur)}}
+    function act(){var y=window.innerHeight*0.35,cur=0;for(var k=0;k<wk.length;k++){var r=wk[k].getBoundingClientRect();if(r.top<y&&r.bottom>y*0.4)cur=k+1}for(var k=0;k<links.length;k++){links[k].classList.toggle('on',k+1===cur)}}
     window.addEventListener('scroll',act,{passive:true});act();
     for(var k=0;k<links.length;k++)links[k].addEventListener('click',function(e){var t=document.getElementById('semana-'+this.getAttribute('data-w'));if(!t)return;e.preventDefault();t.querySelectorAll('.reveal,.stagger').forEach(function(x){x.classList.add('in')});t.scrollIntoView({behavior:'smooth',block:'start'});history.replaceState&&history.replaceState(null,'','#semana-'+this.getAttribute('data-w'))});
   }catch(e){}
@@ -298,8 +314,8 @@ ${[1,2,3,4,5,6,7,8].map(i=>`.anim .stagger.in>*:nth-child(${i}){transition-delay
     var vh=window.innerHeight||800;for(var k=0;k<els.length;k++){var r=els[k].getBoundingClientRect();if(r.top<vh)els[k].classList.add('in')}
     d.classList.add('anim');
     // travas: se o observador não disparar, revela tudo
-    var safety=setTimeout(revealAll,4000);
-    window.addEventListener('scroll',function(){clearTimeout(safety);safety=setTimeout(revealAll,4000)},{passive:true});
+    var safety=setTimeout(revealAll,2500);
+    window.addEventListener('scroll',function(){clearTimeout(safety);safety=setTimeout(revealAll,2500)},{passive:true});
     window.addEventListener('beforeprint',revealAll);window.addEventListener('pagehide',revealAll);
     document.addEventListener('visibilitychange',function(){if(document.hidden)revealAll()});
   }catch(e){d.classList.remove('anim')}
@@ -324,7 +340,9 @@ for(let i=0;i<fixed.length-1;i++){
   if(!/^<\/(p|strong|small|h[1-4]|li|dd|dt|div|span|a|aside)>$/.test(fixed[k]||''))continue;
   const m=t.match(/^([\s\S]*\S)\s+(\S+\s*)$/);
   if(m&&(m[1].split(/\s/).pop().length+m[2].length)<=24)fixed[i]=m[1]+NB+m[2];
+  else if(/^\s+\S+\s*$/.test(t)&&/^<\/(i|b|em|span|strong)>$/.test(fixed[i-1]||''))fixed[i]=t.replace(/^\s+/,NB);
 }
+for(let i=0;i<fixed.length;i++){if(!fixed[i].startsWith('<'))fixed[i]=fixed[i].replace(/([\p{L}]+(?:-[\p{L}]+)+)/gu,'<span class="nb">$1</span>')}
 const out=fixed.join('');
 fs.writeFileSync('Proposta_Cacarola_Plano_Mensal_Mes2.html', out);
 console.log('ok', (html.length / 1024).toFixed(0) + 'KB');
