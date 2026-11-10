@@ -35,3 +35,4 @@
 - 03/11 08h BRT — sem respostas. Voo ~13h US$ 1.358. Nada enviado.
 - 07/11 08h BRT — rodadas de 04–06/11 não rodaram (sessão inativa). Sem respostas desde 22/10. Voo ~13h subiu p/ US$ 1.464 (+106 vs 03/11). Nada enviado (aguarda João).
 - 09/11 08h BRT — sem respostas. Voo ~13h US$ 1.461 (estável no patamar alto). Nada enviado.
+- 10/11 08h BRT — sem respostas. Voo ~13h US$ 1.461; mais barato subiu p/ US$ 1.428. Nada enviado.
