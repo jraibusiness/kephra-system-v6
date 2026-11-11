@@ -278,7 +278,7 @@ Fora da temporada:
 ## 5. Plano por fases
 
 ### Fase 0: Decolagem (12–21/11)
-1. Mercor: começar em 12/11.
+1. Arranjo de encerramento do medley: pronto sexta, 13/11, às 16h (prazo final 14/11). Mercor: pegar 1 tarefa até 13/11 por causa do alerta de atividade baixa; a rotina diária começa em 16/11.
 2. Estilista resolvido até 16/11.
 3. Campanha do Prelúdio: 12, 13 e 14/11.
 4. Checar as automações, cada uma antes do próximo disparo:
@@ -384,7 +384,7 @@ Fora da temporada:
 
 ## 9. Sistema: decisão do Conselho
 1. **Google Calendar:** só a semana-modelo (blocos grandes) e os compromissos reais. O calendário "Kephra · Rotina", agora vazio, recebe os blocos novos.
-2. **E-mail diário às 5h ("Briefing do Maestro"):** agenda do dia, as 3 ações de dinheiro e o placar da semana. Gerado por uma tarefa agendada do Claude que lê este repositório e a agenda.
+2. **E-mail diário às 4h40 ("Briefing do Maestro"):** agenda do dia, as 3 ações de dinheiro e o placar da semana. Gerado por uma tarefa agendada do Claude que lê o Google Doc "Kephra · Prioridades da Semana" e a agenda (seção 15).
 3. **Revisão semanal:** sexta às 14h30, 30 min. Atualizar o placar e definir as 3 ações de cada dia da semana seguinte.
 4. **Revisão mensal:** última sexta do mês. Rever a escada de renda e a Lista do NÃO.
 5. **Kephra System:** congelado como painel de consulta. Desligar o acionador diário do Apps Script.
@@ -394,8 +394,8 @@ Fora da temporada:
 ## 10. Os próximos 10 dias
 | Dia | O essencial |
 |---|---|
-| **Qui 12/11** | Mercor (1ª sessão) · post 1 do Prelúdio · contatar 3 estilistas · checar os e-mails do curso de arranjo · 13h–16h preparar a aula · 16h45 aula OSB · 19h30 QJ (anunciar o Prelúdio) |
-| **Sex 13/11** | Mercor 6h–8h · post 2 do Prelúdio · recorte do QJ · prova de roupa · começar o site · 14h30 revisão semanal |
+| **Qui 12/11** | 5h–8h e 9h45–12h **arranjo de encerramento** · 9h post 1 do Prelúdio + contatar 3 estilistas + pegar 1 tarefa na Mercor · 13h–16h preparar a aula · 16h45 aula OSB · 19h30 QJ (anunciar o Prelúdio) |
+| **Sex 13/11** | 6h–9h e 10h15–12h **arranjo de encerramento** (pronto às 16h) · 9h30 post 2 do Prelúdio + conferir o e-mail de sábado do curso · 13h Mercor (fazer a tarefa) · 14h30 partes do arranjo + prova de roupa |
 | **Sáb 14/11** | **Prelúdio, TV Cultura:** stories e vídeos no dia · checar se a newsletter saiu |
 | Dom 15/11 | Descanso |
 | **Seg 16/11** | Mercor · follow-up com Medaglia, Molina e Vrona + páginas HTML · pedir a lista de patrocinadores do Troféu · convite do QJ (checar a automação) · LinkedIn de volta com post sobre o Prelúdio |
@@ -407,13 +407,27 @@ Fora da temporada:
 
 ---
 
-## 11. Perguntas do Conselho (respostas pendentes)
-1. **AFMC / PRONAC 260661 (R$ 1,44 mi):** você ainda é diretor? A captação está ativa? Pode ser o caminho mais rápido para pagar a equipe.
-2. **EUA (Astin, visto O-1/Green Card, Frank):** vivo ou arquivado? O Kephra ainda gerava tarefas de visto hoje.
-3. **Projetos sem status:** Curso Porto Seguro (CCB, 5 pessoas na lista de espera), Tau Marketing, Camerata 21, Cripta da Sé. Vivos ou arquivados?
-4. **Mercor:** qual projeto, qual o teto de horas e como é o pagamento?
-5. **Moradia:** qual o custo fixo mensal hoje e qual o prazo para se mudar?
-6. **OSB:** o contrato permite reaproveitar o material do curso?
+## 11. Perguntas do Conselho: respostas (11/11, à noite)
+1. **AFMC / PRONAC 260661.** Você não se lembrava, mas está no Gmail, no fio "Projeto 13 de Maio" (mai/2026).
+   - Você propôs ao reitor José Vicente que a AFMC (Associação de Formação Musical e Cidadania) fosse a estrutura legal da orquestra. A AFMC é presidida pelo Maestro João Carlos Pinheiro.
+   - Ela tem um projeto aprovado na Rouanet: PRONAC 260661, R$ 1,44 milhão.
+   - **Ação:** levar à reunião de terça com o Vitor e perguntar ao João Carlos Pinheiro se o projeto ainda está válido para captar. A consulta pública fica no VerSALIC, pelo número do PRONAC.
+2. **EUA (Frank).** Em pausa, mas vivo. Follow-up com o Frank Shines depois da call com Bill Neri/Sphinx (24/11), que foi marcada pelo próprio Frank.
+3. **Outros projetos.**
+   - Porto Seguro (CCB): cancelado.
+   - Tau Marketing: o acordo segue até dezembro. Confirmar a data de término; não achei o contrato no Gmail.
+   - Camerata 21 = Camerata Litorânea, que também abriga a Cripta da Sé. Tudo vira uma frente só.
+4. **Mercor.** Você está no projeto *Les Artistes Artifacts*.
+   - O e-mail de 11/11 diz que o Guild Signal V2 acaba esta semana e que as tarefas passam para o Guild Prism V2.
+   - Também diz que a sua atividade está baixa. **Pegue 1 tarefa até sexta**, ou corre o risco de perder a vaga.
+5. **Moradia.**
+   - Mudança em janeiro, ou no início de dezembro se aparecer algo bom.
+   - Em dezembro, contribuir com ~R$ 2 mil no apartamento da Mariana.
+   - Assinar o contrato de aluguel quando a Mercor já aparecer no extrato.
+6. **OSB.** Contrato atual: 7 aulas, 14h a R$ 132/h, R$ 1.848 no total. Última aula em 10/12.
+   - Vigência de novembro (aulas 1–3): R$ 792, pagos até o 5º dia útil de dezembro.
+   - Vigência de dezembro (aulas 4–7): R$ 1.056, até o 5º dia útil de janeiro.
+   - Nos e-mails não há cláusula sobre reuso do material. Usar só a estrutura, com outro nome e sem os alunos (como você planeja), é o caminho seguro. Confirmar no contrato assinado.
 
 ---
 
@@ -425,3 +439,88 @@ Fora da temporada:
 | **2. Ponte (jan–mar/27)** | 11/27 curso de arranjo (pré-venda) · 14 e-book na Amazon · 16/36 Opus AI no Instagram · 18 gravação Weddings · 30 projeto Camerata · palestras · entrevistas em podcasts |
 | **3. Escala / congeladas** | 7 Camões · 9 migrar e-mails · 32 agentes Ollama · 39 Almirante Negro (planejado dentro da temporada, estreia nov/27) · 40 podcast próprio |
 | **Rotina** | 8 networking diário + almoço semanal (a partir de 23/11) |
+
+---
+
+## 13. Contratar ou fazer tudo com IA? Parecer do Conselho
+**Diagnóstico.** Hoje você é, ao mesmo tempo, o artista, o vendedor, o produtor e o programador das automações.
+- O último papel é o que mais rouba tempo e o que menos rende: as automações quebram (seção 14), e consertá-las tira você da venda e da música.
+- A IA multiplica quem já tem processo e gente operando. Ela não substitui quem opera nem quem vende.
+
+**Decisão: sim, ampliar a equipe, contratando funções (não pessoas genéricas) e pagando por resultado sempre que possível.**
+
+| Quando | Função | Quem | Como pagar |
+|---|---|---|---|
+| Agora | Prospecção da Opus AI | Marcos | comissão |
+| Agora (até dez) | Execução de marketing: posts, campanha pós-20/11, carrosséis do QJ | Tau Marketing (contrato vigente) | já contratado; renovar em dezembro só se houver resultado |
+| Agora | Captação de patrocínio | Vitor/Natália com meta e comissão, ou um captador profissional | comissão; na Rouanet, a remuneração do captador pode entrar no orçamento do projeto (com teto da IN vigente) |
+| Dezembro (com o 1º pagamento da Mercor) | Assistente de operações e atendimento, meio período: opera o Metricool, responde mensagens com roteiro, atualiza o CRM, agenda as calls | freelancer | ~R$ 1,5–2,5 mil/mês, o equivalente a 8–10h de Mercor |
+
+**O que não fazer agora:** contratar vendedor fixo com carteira assinada (custo fixo sem caixa).
+
+**Dividir os louros:** 10% de algo grande vale mais que 100% de nada. A marca continua sendo você. O maestro não toca todos os instrumentos.
+
+**Seu papel daqui para frente: só 3 coisas.**
+1. Arte: compor, reger, ensaiar.
+2. Fechar vendas: a call, o aperto de mão, a proposta final.
+3. Relacionamento: patrocinadores, imprensa, colegas.
+
+Todo o resto: a IA faz o rascunho, e uma pessoa garante que sai e que alguém responde.
+
+**Como compor 2 horas em paz.** O bloco criativo só funciona se o resto tiver dono:
+- o e-mail das 4h40 diz o que importa no dia;
+- os blocos fixos garantem a venda;
+- a equipe opera.
+
+Nos dias de composição, a arte ocupa o bloco de construção (13h–15h30). Em semanas de prazo, ocupa a manhã inteira, como nesta.
+
+---
+
+## 14. Diagnóstico das automações (Gmail, 11/11)
+
+1. **AK – CRM (Junho/2026), da mentoria.**
+   - O script `monitorarRespostas` roda a cada 15 minutos e estoura a cota diária do Gmail ("Service invoked too many times for one day: gmail").
+   - Foram 55 falhas só em 10/11, e isso acontece desde pelo menos 26/10.
+   - A cota é da conta inteira: quando esse script a esgota, **os outros scripts que usam o Gmail também param.** Provavelmente é por isso que os e-mails de sábado e de segunda do curso de arranjo não saíram.
+   - **Correção:** rodar de hora em hora (ou a cada 2h) e buscar só mensagens novas (ex.: `newer_than:1d` + um marcador "processado"). Se você colar o código aqui ou subir para o repositório, eu corrijo.
+2. **E-mails do curso de arranjo.** Os de quarta (04/11 e 11/11) e o de quinta (05/11) saíram. Os de sábado (07/11) e segunda (09/11) não. O próximo é sábado, 14/11.
+3. **Kephra System (Apps Script).**
+   - Manda um e-mail diário às 6h ("Kephra · … · Fazer caixa") que fica sem ler.
+   - Recria eventos no calendário "Kephra · Plano".
+   - **Desligar os dois acionadores** em script.google.com → Acionadores. O e-mail diário agora é o Briefing das 4h40.
+4. **Limite de envio.** Contas pessoais do Gmail têm limite de envio por script, de cerca de 100 destinatários por dia. Disparo em massa de funil tem que ficar no Brevo, não no Gmail/Apps Script.
+5. **Metricool.**
+   - Só está conectada a marca "joaorocha_conductor" (Instagram, Facebook, TikTok, YouTube).
+   - **Faltam o LinkedIn e o Instagram da Academia Kefra.** Sem eles, nada é automatizado nessas contas.
+   - Conectar mais de uma marca pode exigir plano pago.
+
+### Automação nº 1: Quinta Justa → todas as redes (a próxima a ligar)
+1. **Quinta, 19h30:** o Meet grava e o Gemini gera as notas no Drive. Isso já acontece.
+2. **Sexta de manhã:** uma tarefa agendada lê as notas e escreve:
+   - 1 carrossel;
+   - 3 roteiros de vídeo curto;
+   - 1 post de LinkedIn;
+   - as legendas, todas com um único CTA.
+   Tudo vai para o Metricool como rascunho **para revisão**.
+3. **Você aprova com 1 toque** (5 min).
+4. **Porta de entrada única em todas as redes:** link → WhatsApp/formulário de triagem → e-mail (Brevo) → call.
+   - Instagram e Facebook aceitam resposta automática por palavra-chave (ManyChat/Meta).
+   - O TikTok tem suporte limitado.
+   - O LinkedIn não permite automação de mensagens sem risco de bloqueio.
+   Por isso a porta de entrada é o link, igual em todas as redes.
+
+**Para ligar, preciso de duas coisas suas:**
+- conectar o LinkedIn e o Instagram da Academia Kefra no Metricool;
+- me dizer quem gera hoje o documento "Copys Completas e Roteiros TikTok · Quinta Justa" (Tau? Gemini?), para não duplicar trabalho.
+
+---
+
+## 15. Sistema em funcionamento (11/11)
+- **Google Calendar.**
+  - "Kephra · Rotina": a semana-modelo a partir de 16/11 (17 rotinas) e os blocos especiais desta semana (arranjo, Mercor, compras).
+  - Calendário principal: prazo do arranjo (14/11), ensaios (17 e 18/11, horário a confirmar) e Troféu (20/11).
+- **Google Doc "Kephra · Prioridades da Semana"** (Drive). É a fonte do e-mail diário e deve ser atualizado toda sexta: https://docs.google.com/document/d/1u26XJCjbxKVY22N6RKzDBuNmUvVvFPxToza46jGIQKk/edit
+- **Briefing do Maestro.**
+  - Tarefa agendada que roda todo dia às 4h40 nesta sessão do Claude.
+  - Manda para o seu Gmail as 3 ações de dinheiro, a agenda e o prazo mais próximo.
+  - Depende desta sessão: se ela for arquivada, o briefing para. Para ter uma versão independente, crie uma rotina no claude.ai com os conectores Gmail, Google Calendar e Google Drive, usando o mesmo texto.
