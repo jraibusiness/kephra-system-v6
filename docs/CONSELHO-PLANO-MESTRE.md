@@ -524,3 +524,27 @@ Nos dias de composição, a arte ocupa o bloco de construção (13h–15h30). Em
   - Tarefa agendada que roda todo dia às 4h40 nesta sessão do Claude.
   - Manda para o seu Gmail as 3 ações de dinheiro, a agenda e o prazo mais próximo.
   - Depende desta sessão: se ela for arquivada, o briefing para. Para ter uma versão independente, crie uma rotina no claude.ai com os conectores Gmail, Google Calendar e Google Drive, usando o mesmo texto.
+
+---
+
+## 16. Atualização (11/11, noite)
+- **AFMC: cancelada 100%.** Esta decisão substitui o item 1 da seção 11. A captação incentivada segue pela SALIC, com o CNPJ da Natália.
+- **Ensaios 17 e 18/11:** saída às 8h, ensaio até 13h, volta às 16h. Já está no calendário. Nesses dias a manhã de vendas não acontece; a aula de quarta (18) é preparada depois das 16h.
+- **Princípio pedido pelo Maestro: nada para conferir todo dia.** O sistema trabalha por exceção.
+  - O Briefing das 4h40 agora vigia sozinho: falhas de Apps Script, alertas da Mercor e os e-mails do curso que deveriam ter saído.
+  - Ele só pede atenção (⚠️ no assunto) quando algo quebra. Sem ⚠️, está tudo funcionando.
+  - Fragilidades restantes, cada uma resolvida uma vez:
+    1. **Corrigir o AK–CRM**, a causa das falhas em cadeia (preciso do código).
+    2. **Desligar os acionadores do Kephra antigo.**
+    3. **Não arquivar esta conversa**, onde o briefing roda. A versão 100% independente é uma rotina criada no claude.ai com Gmail, Agenda e Drive (5 min, uma vez só).
+
+### Agendamento de posts sem o Metricool
+- **Grátis, a partir de agora:**
+  - Meta Business Suite: agenda posts no Instagram pessoal, no da Academia Kefra e no Facebook. Também tem respostas automáticas por palavra-chave nas mensagens, que é a porta de entrada do funil sem custo.
+  - TikTok: agendamento nativo no TikTok Studio (versão web).
+  - LinkedIn: agendamento nativo.
+  - Limite: nessas ferramentas eu não consigo postar sozinho. Eu deixo os textos e roteiros prontos numa pasta do Drive, e alguém agenda em ~20 min por semana.
+- **Pago, automação total:** Metricool, que já está conectado ao Claude.
+  - Reativar em dezembro, com o 1º pagamento da Mercor, se o plano custar até 1–2h de Mercor por mês.
+  - Conferir antes se a conta voltou ao plano grátis e o que ele ainda permite.
+- **Conteúdo da Quinta Justa:** quem gera os textos semanais é o Gemini, então não vou duplicar esse trabalho. O que falta é só publicar, o que o esquema acima resolve.
