@@ -38,3 +38,4 @@
 - 10/11 08h BRT — sem respostas. Voo ~13h US$ 1.461; mais barato subiu p/ US$ 1.428. Nada enviado.
 - 11/11 08h BRT — sem respostas. Voo ~13h US$ 1.471. Nada enviado.
 - 12/11 08h BRT — sem respostas. Voo ~13h US$ 1.471. Nada enviado.
+- 13/11 08h BRT — sem respostas. Voo ~13h US$ 1.471. Nada enviado.
