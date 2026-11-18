@@ -42,3 +42,4 @@
 - 14/11 08h BRT — sem respostas. Voo ~13h US$ 1.425 (−46). Nada enviado.
 - 16/11 08h BRT — sem respostas. Voo ~13h subiu p/ US$ 1.551 (+126, maior da série). Nada enviado.
 - 17/11 08h BRT — sem respostas. Scraper Kayak falhou (sem resultado). Nada enviado.
+- 18/11 08h BRT — sem respostas. Salto: ~13h US$ 1.809 (+258 vs 16/11); mais barato US$ 1.463 (14h26). Nada enviado.
