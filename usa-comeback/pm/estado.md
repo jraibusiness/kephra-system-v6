@@ -47,3 +47,4 @@
 - 20/11 08h BRT — sem respostas. ~13h US$ 1.809; opção 14h26 por US$ 1.463 não aparece mais (mais barato agora 33h41, US$ 1.286). Nada enviado.
 - 21/11 08h BRT — sem respostas. ~13h caiu p/ US$ 1.551 (−258). Nada enviado.
 - 24/11 08h BRT — rodadas de 23/11 não rodaram (sessão inativa). Sem respostas desde 24/10. Scraper Kayak falhou. Nada enviado.
+- 25/11 08h BRT — sem respostas do projeto. Scraper Kayak falhou de novo (2º dia). Nada enviado.
