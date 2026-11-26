@@ -230,3 +230,5 @@ data_consulta,origem,destino,ida,volta,cia,escalas,preco_usd,fonte,obs
 2026-11-20,CVG,GRU,2026-12-06,2027-01-20,,,1809,Kayak,quickest:13h 36m
 2026-11-21,CVG,GRU,2026-12-06,2027-01-20,,,1316,Kayak,cheapest
 2026-11-21,CVG,GRU,2026-12-06,2027-01-20,,,1551,Kayak,quickest:13h 20m
+2026-11-26,CVG,GRU,2026-12-06,2027-01-20,,,1094,Kayak,cheapest
+2026-11-26,CVG,GRU,2026-12-06,2027-01-20,,,1608,Kayak,quickest:13h 20m
