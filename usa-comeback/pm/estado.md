@@ -50,3 +50,4 @@
 - 25/11 08h BRT — sem respostas do projeto. Scraper Kayak falhou de novo (2º dia). Nada enviado.
 - 26/11 08h BRT — sem respostas. Scraper voltou: ~13h US$ 1.608. Nada enviado.
 - 27/11 08h BRT — sem respostas. ~13h US$ 1.552 (−56). Nada enviado.
+- 28/11 — João pediu cancelar a rotina. Tarefa agendada 'Rodada gerente USA-PM' desligada. Projeto pausado.
